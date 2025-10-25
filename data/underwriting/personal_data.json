@@ -1,0 +1,27 @@
+{
+  "users": [
+    {
+      "user_id": "user_001",
+      "full_name": "Sarah Johnson",
+      "address": "1234 Maple Street, Apt 5B, Austin, TX 78701",
+      "country": "US",
+      "employment_status": "full_time",
+      "monthly_income": 2800.00,
+      "tenure_months": 18,
+      "email_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "phone_hash": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+    },
+    {
+      "user_id": "user_002",
+      "full_name": "Marcus Chen",
+      "address": "789 Oak Avenue, Unit 12, Los Angeles, CA 90001",
+      "country": "US",
+      "employment_status": "self_employed",
+      "monthly_income": 2200.00,
+      "tenure_months": 6,
+      "email_hash": "6b86b273ff34fce19d6b804eff5a3f5747ada4eaa22f1d49c01e52ddb7875b4b",
+      "phone_hash": "d4735e3a265e16eee03f59718b9b5d03019c07d8b6c51f90da3a666eec13ab35"
+    }
+  ]
+}
+

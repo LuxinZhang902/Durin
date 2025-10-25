@@ -7,3 +7,18 @@ python-dotenv==1.0.0
 pandas==2.1.3
 pydantic==2.5.0
 aiosqlite==0.19.0
+scikit-learn==1.3.2
+numpy==1.26.2
+pillow==10.1.0
+
+# Database
+sqlalchemy==2.0.23
+
+# Face detection and deepfake detection
+deepface==0.0.92
+tf-keras==2.16.0
+tensorflow==2.16.1
+retina-face==0.0.17
+
+# Sanctions/PEP screening (lightweight)
+requests==2.31.0
