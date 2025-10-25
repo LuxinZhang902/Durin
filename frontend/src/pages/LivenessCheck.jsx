@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react'
 import { Camera, Upload, CheckCircle, XCircle, AlertTriangle, Shield, Loader2, User, Globe, Fingerprint, Video, X as CloseIcon } from 'lucide-react'
 
-function LivenessCheck() {
+function LivenessCheck({ onComplete, onBack, userData }) {
   const [selectedImage, setSelectedImage] = useState(null)
   const [imagePreview, setImagePreview] = useState(null)
   const [loading, setLoading] = useState(false)
@@ -140,6 +140,13 @@ function LivenessCheck() {
 
       if (data.success) {
         setResult(data)
+        
+        // If onComplete is provided (new flow), call it after a short delay
+        if (onComplete) {
+          setTimeout(() => {
+            onComplete(data)
+          }, 2000)
+        }
       } else {
         setError(data.message || 'Liveness check failed')
       }
