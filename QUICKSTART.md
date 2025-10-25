@@ -1,112 +1,96 @@
 # ⚡ FinShield AI - Quick Start
 
-Get up and running in **5 minutes**.
+Get the **production-ready underwriting system** running in **5 minutes**.
 
 ---
 
-## 🚀 Fastest Path (Docker)
+## 🚀 Underwriting System (Production-Ready)
+
+### Step 1: Install (One Command)
 
 ```bash
-# 1. Navigate to project
-cd FinshieldAI
-
-# 2. Create environment file
-cp .env.example .env
-
-# 3. Add your OpenAI API key
-# Edit .env and replace 'your_openai_api_key_here' with your actual key
-# Get key from: https://platform.openai.com/api-keys
-
-# 4. Start everything
-./run.sh
-
-# 5. Open browser
-# Frontend: http://localhost:3000
-# API Docs: http://localhost:8000/docs
+cd backend
+pip install -r requirements.txt
 ```
+
+⏱️ **Time:** 5-10 minutes (includes ML model downloads ~450MB)
+
+### Step 2: Start Server
+
+```bash
+cd backend
+uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+```
+
+✅ **Wait for:**
+```
+Initializing database...
+✓ Database initialized
+✓ LLM service initialized
+INFO:     Uvicorn running on http://0.0.0.0:8000
+```
+
+### Step 3: Run Demo (New Terminal)
+
+```bash
+cd backend
+python demo_underwriting.py
+```
+
+### Step 4: Verify Success
+
+✅ You should see:
+- User 001: APPROVED ✓ ($2000 limit)
+- User 002: APPROVED ✓ or DECLINED ($800 limit)
+- Database file created: `finshield_underwriting.db`
 
 **That's it!** 🎉
-
----
-
-## 📋 Step-by-Step First Demo
-
-### 1. Upload Sample Data
-- Click **"Users / KYC Data"** → Select `data/users.csv`
-- Click **"Transactions Data"** → Select `data/transactions.csv`
-
-### 2. Run Analysis
-- Click **"Run Analysis"** button
-- Wait ~1 second for results
-
-### 3. Explore Results
-- **Graph View**: See the fraud network visualization
-- Click any **red node** (high risk) to see AI explanation
-- Switch to **Table View** for detailed risk scores
-
----
-
-## 🛠️ Alternative: Local Development
-
-```bash
-# If you don't have Docker or prefer local setup
-
-# 1. Start services
-./run-local.sh
-
-# 2. Open browser
-# Frontend: http://localhost:3000
-# Backend: http://localhost:8000
-```
 
 ---
 
 ## ✅ Verify Installation
 
 ```bash
-# Run verification script
-./verify.sh
-
-# Should show all green checkmarks ✅
+cd backend
+python test_system.py
 ```
+
+Should show all tests passed ✅
 
 ---
 
 ## 🆘 Troubleshooting
 
-### "OPENAI_API_KEY not found"
+### Models not downloading?
 ```bash
-# Make sure .env exists and has your key
-cat .env
-# Should show: OPENAI_API_KEY=sk-...
+python -c "from deepface import DeepFace; DeepFace.build_model('Facenet512')"
 ```
 
-### "Port already in use"
+### Port 8000 busy?
 ```bash
-# Stop existing services
-docker-compose down
-
-# Or change ports in docker-compose.yml
+uvicorn app.main:app --reload --port 8001
+# Then update demo_underwriting.py: API_BASE = "http://localhost:8001"
 ```
 
-### "Docker not running"
+### Import errors?
 ```bash
-# Start Docker Desktop application
-# Then retry: ./run.sh
+pip install --upgrade -r requirements.txt
 ```
 
-### Graph not showing
-- Try different browser (Chrome recommended)
-- Clear browser cache
-- Check browser console for errors
+### Database locked?
+```bash
+rm finshield_underwriting.db
+# Restart server (will recreate)
+```
 
 ---
 
 ## 📚 Next Steps
 
-- **Read full docs**: [README.md](README.md)
-- **Demo preparation**: [DEMO.md](DEMO.md)
-- **Detailed setup**: [SETUP.md](SETUP.md)
+- **Interactive API Docs**: http://localhost:8000/docs
+- **Production Setup**: [SETUP_PRODUCTION.md](SETUP_PRODUCTION.md)
+- **Full API Reference**: [UNDERWRITING.md](UNDERWRITING.md)
+- **Implementation Details**: [PRODUCTION_READY_SUMMARY.md](PRODUCTION_READY_SUMMARY.md)
 
 ---
 
@@ -114,22 +98,35 @@ docker-compose down
 
 | Service | URL | Description |
 |---------|-----|-------------|
-| **Frontend** | http://localhost:3000 | Main dashboard |
 | **Backend** | http://localhost:8000 | API server |
 | **API Docs** | http://localhost:8000/docs | Interactive API documentation |
 | **Health Check** | http://localhost:8000/api/health | Service status |
 
 ---
 
-## 🎬 Quick Demo Flow
+## 🎬 Demo Highlights
 
-1. **Upload** → `data/users.csv` + `data/transactions.csv`
-2. **Analyze** → Click "Run Analysis"
-3. **Explore** → Click red nodes for AI explanations
-4. **Present** → Show graph + AI insights
+1. **SQLite Database** - Data persists across restarts
+2. **Real Face Detection** - DeepFace + RetinaFace with deepfake detection
+3. **Sanctions Screening** - OpenSanctions API (OFAC, UN, EU, PEP)
+4. **Cashflow Analysis** - 90-day transaction history metrics
+5. **Explainable AI** - Risk reasons + counterfactual improvements
 
-**Total time: 30 seconds** ⚡
+**Total demo time: 2 minutes** ⚡
 
 ---
 
-**Questions? Check [SETUP.md](SETUP.md) for detailed troubleshooting.**
+## ✅ Success Checklist
+
+- [ ] Server starts without errors
+- [ ] `finshield_underwriting.db` created
+- [ ] Demo processes 2 users
+- [ ] Both users receive decisions
+- [ ] `/docs` page accessible
+- [ ] Database has 2+ users
+
+**All checked?** 🚀 You're ready!
+
+---
+
+**Questions? See [SETUP_PRODUCTION.md](SETUP_PRODUCTION.md) for detailed documentation.**
