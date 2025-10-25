@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Upload, AlertTriangle, Shield, Network, FileText, Loader2 } from 'lucide-react'
+import { Upload, AlertTriangle, Shield, Network, FileText, Loader2, Sparkles, TrendingUp, Lock } from 'lucide-react'
 import FileUpload from './components/FileUpload'
 import GraphVisualization from './components/GraphVisualization'
 import RiskTable from './components/RiskTable'
@@ -68,40 +68,56 @@ function App() {
   }
 
   return (
-    <div className="min-h-screen bg-dark-bg text-white">
+    <div className="min-h-screen bg-gradient-to-br from-dark-bg via-dark-bg to-accent-blue/5 text-white">
+      {/* Animated Background */}
+      <div className="fixed inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-accent-blue/10 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-accent-purple/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
+      </div>
+
       {/* Header */}
-      <header className="bg-dark-surface border-b border-dark-border">
-        <div className="max-w-7xl mx-auto px-6 py-4">
+      <header className="relative bg-dark-surface/80 backdrop-blur-xl border-b border-dark-border/50 shadow-2xl">
+        <div className="max-w-7xl mx-auto px-6 py-6">
           <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-3">
-              <Shield className="w-8 h-8 text-accent-blue" />
+            <div className="flex items-center space-x-4">
+              <div className="relative">
+                <div className="absolute inset-0 bg-gradient-to-r from-accent-blue to-accent-purple blur-lg opacity-50"></div>
+                <Shield className="relative w-10 h-10 text-white drop-shadow-lg" />
+              </div>
               <div>
-                <h1 className="text-2xl font-bold bg-gradient-to-r from-accent-blue to-accent-purple bg-clip-text text-transparent">
+                <h1 className="text-3xl font-black bg-gradient-to-r from-accent-blue via-accent-purple to-accent-blue bg-clip-text text-transparent animate-gradient">
                   FinShield AI
                 </h1>
-                <p className="text-sm text-gray-400">Trust Graph Demo – AI-Powered Fraud Detection</p>
+                <div className="flex items-center space-x-2 mt-1">
+                  <Sparkles className="w-3 h-3 text-accent-purple" />
+                  <p className="text-sm text-gray-400 font-medium">AI-Powered Fraud Detection Platform</p>
+                </div>
               </div>
             </div>
             
             {analysisResults && (
-              <div className="flex items-center space-x-6 text-sm">
-                <div className="text-center">
-                  <div className="text-2xl font-bold text-accent-blue">
+              <div className="flex items-center space-x-4">
+                <div className="bg-accent-blue/10 backdrop-blur-sm border border-accent-blue/30 rounded-xl px-6 py-3 text-center">
+                  <div className="text-2xl font-bold text-accent-blue drop-shadow-lg">
                     {analysisResults.summary.total_accounts}
                   </div>
-                  <div className="text-gray-400">Accounts</div>
+                  <div className="text-xs text-gray-400 font-medium">Accounts</div>
                 </div>
-                <div className="text-center">
-                  <div className="text-2xl font-bold text-accent-purple">
+                <div className="bg-accent-purple/10 backdrop-blur-sm border border-accent-purple/30 rounded-xl px-6 py-3 text-center">
+                  <div className="text-2xl font-bold text-accent-purple drop-shadow-lg">
                     {analysisResults.summary.total_transactions}
                   </div>
-                  <div className="text-gray-400">Transactions</div>
+                  <div className="text-xs text-gray-400 font-medium">Transactions</div>
                 </div>
-                <div className="text-center">
-                  <div className={`text-2xl font-bold ${analysisResults.summary.high_risk_count > 0 ? 'text-risk-high' : 'text-risk-low'}`}>
+                <div className={`backdrop-blur-sm border rounded-xl px-6 py-3 text-center ${
+                  analysisResults.summary.high_risk_count > 0 
+                    ? 'bg-risk-high/10 border-risk-high/30' 
+                    : 'bg-risk-low/10 border-risk-low/30'
+                }`}>
+                  <div className={`text-2xl font-bold drop-shadow-lg ${analysisResults.summary.high_risk_count > 0 ? 'text-risk-high' : 'text-risk-low'}`}>
                     {analysisResults.summary.high_risk_count}
                   </div>
-                  <div className="text-gray-400">High Risk</div>
+                  <div className="text-xs text-gray-400 font-medium">High Risk</div>
                 </div>
               </div>
             )}
@@ -110,15 +126,40 @@ function App() {
       </header>
 
       {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-6 py-8">
+      <main className="relative max-w-7xl mx-auto px-6 py-12">
         {/* Upload Section */}
         {!analysisResults && (
-          <div className="space-y-6">
-            <div className="bg-dark-surface rounded-lg border border-dark-border p-8">
-              <div className="flex items-center space-x-3 mb-6">
-                <Upload className="w-6 h-6 text-accent-blue" />
-                <h2 className="text-xl font-semibold">Upload Data</h2>
+          <div className="space-y-8">
+            {/* Hero Section */}
+            <div className="text-center space-y-4 mb-12">
+              <div className="inline-flex items-center space-x-2 bg-accent-blue/10 border border-accent-blue/30 rounded-full px-4 py-2 mb-4">
+                <Lock className="w-4 h-4 text-accent-blue" />
+                <span className="text-sm font-medium text-accent-blue">Enterprise-Grade Security</span>
               </div>
+              <h2 className="text-4xl md:text-5xl font-black bg-gradient-to-r from-white via-gray-100 to-gray-300 bg-clip-text text-transparent">
+                Detect Fraud Networks
+                <br />
+                <span className="bg-gradient-to-r from-accent-blue to-accent-purple bg-clip-text text-transparent">
+                  in Real-Time
+                </span>
+              </h2>
+              <p className="text-lg text-gray-400 max-w-2xl mx-auto">
+                Upload your KYC and transaction data to uncover hidden fraud patterns with AI-powered graph analysis
+              </p>
+            </div>
+
+            <div className="relative bg-gradient-to-br from-dark-surface/90 to-dark-surface/50 backdrop-blur-xl rounded-2xl border border-dark-border/50 p-8 shadow-2xl">
+              {/* Decorative Elements */}
+              <div className="absolute top-0 right-0 w-64 h-64 bg-accent-purple/5 rounded-full blur-3xl"></div>
+              <div className="absolute bottom-0 left-0 w-64 h-64 bg-accent-blue/5 rounded-full blur-3xl"></div>
+              
+              <div className="relative">
+                <div className="flex items-center space-x-3 mb-8">
+                  <div className="p-2 bg-gradient-to-br from-accent-blue to-accent-purple rounded-lg">
+                    <Upload className="w-5 h-5 text-white" />
+                  </div>
+                  <h3 className="text-2xl font-bold">Upload Your Data</h3>
+                </div>
 
               <div className="grid md:grid-cols-2 gap-6 mb-6">
                 <FileUpload
@@ -142,38 +183,52 @@ function App() {
                 </div>
               )}
 
-              <button
-                onClick={handleAnalyze}
-                disabled={loading || !usersFile || !transactionsFile}
-                className="w-full bg-gradient-to-r from-accent-blue to-accent-purple text-white py-3 px-6 rounded-lg font-semibold hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-2"
-              >
-                {loading ? (
-                  <>
-                    <Loader2 className="w-5 h-5 animate-spin" />
-                    <span>Analyzing...</span>
-                  </>
-                ) : (
-                  <>
-                    <Network className="w-5 h-5" />
-                    <span>Run Analysis</span>
-                  </>
-                )}
-              </button>
+                <button
+                  onClick={handleAnalyze}
+                  disabled={loading || !usersFile || !transactionsFile}
+                  className="group relative w-full bg-gradient-to-r from-accent-blue via-accent-purple to-accent-blue bg-size-200 hover:bg-pos-100 text-white py-4 px-8 rounded-xl font-bold text-lg shadow-lg hover:shadow-accent-blue/50 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-3 overflow-hidden"
+                >
+                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-1000"></div>
+                  {loading ? (
+                    <>
+                      <Loader2 className="w-6 h-6 animate-spin" />
+                      <span>Analyzing Your Data...</span>
+                    </>
+                  ) : (
+                    <>
+                      <Sparkles className="w-6 h-6" />
+                      <span>Run AI Analysis</span>
+                      <TrendingUp className="w-5 h-5" />
+                    </>
+                  )}
+                </button>
+              </div>
             </div>
 
             {/* Sample Data Info */}
-            <div className="bg-dark-surface/50 rounded-lg border border-dark-border p-6">
-              <h3 className="font-semibold mb-3 flex items-center space-x-2">
-                <FileText className="w-5 h-5 text-accent-blue" />
-                <span>Sample Data Available</span>
-              </h3>
-              <p className="text-sm text-gray-400 mb-2">
-                Sample CSV files are available in the <code className="bg-dark-bg px-2 py-1 rounded text-accent-blue">/data</code> directory:
-              </p>
-              <ul className="text-sm text-gray-400 space-y-1 ml-4">
-                <li>• <code className="text-accent-purple">users.csv</code> - Mock KYC data with shared devices/IPs</li>
-                <li>• <code className="text-accent-purple">transactions.csv</code> - Mock transactions with fraud patterns</li>
-              </ul>
+            <div className="relative bg-gradient-to-br from-dark-surface/70 to-dark-surface/30 backdrop-blur-sm rounded-xl border border-dark-border/50 p-6 overflow-hidden">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-accent-blue/5 rounded-full blur-2xl"></div>
+              <div className="relative">
+                <h3 className="font-bold mb-4 flex items-center space-x-2 text-lg">
+                  <div className="p-1.5 bg-accent-blue/10 rounded-lg">
+                    <FileText className="w-4 h-4 text-accent-blue" />
+                  </div>
+                  <span>Sample Data Available</span>
+                </h3>
+                <p className="text-sm text-gray-400 mb-3">
+                  Demo CSV files are included in the <code className="bg-dark-bg/80 px-2 py-1 rounded text-accent-blue font-mono">/data</code> directory:
+                </p>
+                <div className="grid md:grid-cols-2 gap-3">
+                  <div className="bg-dark-bg/50 border border-accent-purple/20 rounded-lg p-3">
+                    <code className="text-accent-purple font-semibold">users.csv</code>
+                    <p className="text-xs text-gray-500 mt-1">KYC data with shared devices/IPs</p>
+                  </div>
+                  <div className="bg-dark-bg/50 border border-accent-blue/20 rounded-lg p-3">
+                    <code className="text-accent-blue font-semibold">transactions.csv</code>
+                    <p className="text-xs text-gray-500 mt-1">Transactions with fraud patterns</p>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         )}

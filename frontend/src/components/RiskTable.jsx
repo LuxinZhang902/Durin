@@ -131,7 +131,12 @@ function RiskTable({ nodes, onAccountSelect, selectedAccount }) {
                     {node.risk_score >= 7 && (
                       <AlertTriangle className="w-4 h-4 text-risk-high" />
                     )}
-                    <span className="font-mono text-sm">{node.id}</span>
+                    <div>
+                      {node.name && (
+                        <div className="text-sm font-medium">{node.name}</div>
+                      )}
+                      <span className="font-mono text-xs text-gray-400">{node.id}</span>
+                    </div>
                   </div>
                 </td>
                 <td className="px-4 py-3">

@@ -27,6 +27,7 @@ class FraudGraphAnalyzer:
             self.graph.add_node(
                 user_id,
                 node_type='user',
+                user_name=str(user.get('user_name', '')),
                 device_id=str(user.get('device_id', '')),
                 ip=str(user.get('ip', '')),
                 country=str(user.get('country', ''))
@@ -215,6 +216,7 @@ class FraudGraphAnalyzer:
             nodes.append({
                 'id': node,
                 'type': data.get('node_type', 'account'),
+                'name': data.get('user_name', ''),
                 'risk_score': round(risk, 2),
                 'signals': self.fraud_signals.get(node, []),
                 'device_id': data.get('device_id', ''),

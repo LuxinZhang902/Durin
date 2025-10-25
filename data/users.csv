@@ -1,16 +1,16 @@
-user_id,device_id,ip,country
-U1,D1,192.168.1.100,US
-U2,D1,192.168.1.101,US
-U3,D2,192.168.1.102,US
-U4,D3,192.168.1.103,SG
-U5,D3,192.168.1.104,SG
-U6,D4,192.168.1.105,UK
-U7,D5,192.168.1.106,US
-U8,D1,192.168.1.107,US
-U9,D6,192.168.1.108,CA
-U10,D7,192.168.1.109,US
-U11,D8,192.168.1.110,SG
-U12,D3,192.168.1.111,SG
-U13,D9,192.168.1.112,UK
-U14,D10,192.168.1.113,US
-U15,D11,192.168.1.114,CA
+user_id,user_name,device_id,ip,country
+U1,Jack,D1,192.168.1.100,United States
+U2,Andy,D1,192.168.1.101,United States
+U3,Sarah,D2,192.168.1.102,United States
+U4,Michael,D3,192.168.1.103,Singapore
+U5,David,D3,192.168.1.104,Singapore
+U6,Emma,D4,192.168.1.105,United Kingdom
+U7,James,D5,192.168.1.106,United States
+U8,Robert,D1,192.168.1.107,United States
+U9,Lisa,D6,192.168.1.108,Canada
+U10,Tom,D7,192.168.1.109,United States
+U11,Kevin,D8,192.168.1.110,Singapore
+U12,Ryan,D3,192.168.1.111,Singapore
+U13,Sophie,D9,192.168.1.112,United Kingdom
+U14,Chris,D10,192.168.1.113,United States
+U15,Alex,D11,192.168.1.114,Canada

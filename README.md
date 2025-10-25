@@ -258,10 +258,10 @@ Health check endpoint.
 
 ### users.csv
 ```csv
-user_id,device_id,ip,country
-U1,D1,192.168.1.100,US
-U2,D1,192.168.1.101,US
-U3,D2,192.168.1.102,SG
+user_id,user_name,device_id,ip,country
+U1,Jack,D1,192.168.1.100,United States
+U2,Andy,D1,192.168.1.101,United States
+U3,Sarah,D2,192.168.1.102,United States
 ```
 
 ### transactions.csv

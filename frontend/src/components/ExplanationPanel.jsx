@@ -80,7 +80,12 @@ function ExplanationPanel({ explanation, selectedAccount, analysisResults }) {
             {accountNode.risk_score.toFixed(1)}/10
           </div>
         </div>
-        <p className="text-xs text-gray-400 font-mono">{selectedAccount}</p>
+        <div className="flex items-center space-x-2">
+          {accountNode.name && (
+            <p className="text-sm font-medium text-white">{accountNode.name}</p>
+          )}
+          <p className="text-xs text-gray-400 font-mono">{selectedAccount}</p>
+        </div>
       </div>
 
       <div className="p-4 space-y-4 max-h-[600px] overflow-y-auto">
