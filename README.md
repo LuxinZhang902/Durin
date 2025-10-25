@@ -20,12 +20,34 @@ FinShield AI is a production-ready web application that detects financial fraud 
 - ✅ **Real-time Analysis** - Sub-second processing for 1k+ transactions
 - ✅ **Multi-Signal Detection** - Shared devices, IPs, structuring, circular flows
 - ✅ **Modern UI/UX** - Dark mode dashboard with TailwindCSS
+- ✅ **🆕 Underwriting System** - Cashflow-based credit scoring with fraud prevention
 
 ### Fraud Detection Patterns
 1. **Shared Device Detection** - Multiple users on same device (account takeover)
 2. **Shared IP Analysis** - Coordinated activity from same network
 3. **Structuring Detection** - Multiple small transactions under reporting thresholds
 4. **Circular Flow Detection** - Money laundering layering patterns
+
+### 🆕 Underwriting System V2 (Production-Ready)
+**Country-agnostic cashflow-based credit underwriting with zero technical debt**
+
+#### Production Features
+- ✅ **SQLite Database** - Persistent storage with SQLAlchemy ORM
+- ✅ **Real Face Detection** - DeepFace + RetinaFace with deepfake detection
+- ✅ **Sanctions Screening** - OpenSanctions API (OFAC, UN, EU, PEP lists)
+- ✅ **Cashflow Analysis** - 90-day transaction history → financial health metrics
+- ✅ **Credit Scoring** - PD calculation with explainable risk factors
+- ✅ **Multi-jurisdiction** - US/UK policy configurations
+
+#### Tech Stack
+- **Database**: SQLAlchemy + SQLite (production: PostgreSQL ready)
+- **Face Detection**: DeepFace, RetinaFace, FaceNet512
+- **Sanctions**: OpenSanctions API (free tier)
+- **ML**: scikit-learn, numpy, pandas
+
+[📖 **Quick Start →** See `install_and_test.md`](./install_and_test.md)
+[📖 **Full Setup Guide →** See `SETUP_PRODUCTION.md`](./SETUP_PRODUCTION.md)
+[📖 **API Documentation →** See `UNDERWRITING.md`](./UNDERWRITING.md)
 
 ---
 

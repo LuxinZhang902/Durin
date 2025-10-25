@@ -1,0 +1,50 @@
+txn_id,account_id,timestamp,amount,currency,merchant,counterparty,transaction_type,mcc
+txn_001,ACC_U1,2025-07-28T09:00:00Z,2800.00,USD,Acme Corp Payroll,,income,
+txn_002,ACC_U1,2025-07-29T14:23:00Z,-45.32,USD,Whole Foods Market,,expense,5411
+txn_003,ACC_U1,2025-07-30T19:45:00Z,-18.50,USD,Shell Gas Station,,expense,5541
+txn_004,ACC_U1,2025-08-01T08:12:00Z,-1200.00,USD,Landlord Rent Payment,,expense,
+txn_005,ACC_U1,2025-08-02T11:30:00Z,-65.00,USD,Electric Company,,expense,4814
+txn_006,ACC_U1,2025-08-03T16:20:00Z,-89.99,USD,Target Store,,expense,5310
+txn_007,ACC_U1,2025-08-05T10:15:00Z,-35.00,USD,AT&T Mobile,,expense,4814
+txn_008,ACC_U1,2025-08-06T13:45:00Z,-52.18,USD,Safeway Grocery,,expense,5411
+txn_009,ACC_U1,2025-08-08T20:30:00Z,-42.00,USD,Chevron Gas,,expense,5541
+txn_010,ACC_U1,2025-08-10T09:00:00Z,-150.00,USD,Car Insurance Payment,,expense,6300
+txn_011,ACC_U1,2025-08-12T14:50:00Z,-28.75,USD,CVS Pharmacy,,expense,5912
+txn_012,ACC_U1,2025-08-15T08:00:00Z,2800.00,USD,Acme Corp Payroll,,income,
+txn_013,ACC_U1,2025-08-16T12:30:00Z,-67.40,USD,Kroger Grocery,,expense,5411
+txn_014,ACC_U1,2025-08-17T18:20:00Z,-95.00,USD,Internet Service Provider,,expense,4899
+txn_015,ACC_U1,2025-08-19T09:15:00Z,-38.50,USD,Shell Gas Station,,expense,5541
+txn_016,ACC_U1,2025-08-20T15:00:00Z,-120.00,USD,Electric Company,,expense,4814
+txn_017,ACC_U1,2025-08-22T11:45:00Z,-55.23,USD,Whole Foods Market,,expense,5411
+txn_018,ACC_U1,2025-08-25T19:30:00Z,-80.00,USD,Restaurant Dining,,expense,5812
+txn_019,ACC_U1,2025-08-28T16:10:00Z,-45.00,USD,Gym Membership,,expense,7997
+txn_020,ACC_U1,2025-08-30T09:00:00Z,2800.00,USD,Acme Corp Payroll,,income,
+txn_021,ACC_U1,2025-09-01T08:00:00Z,-1200.00,USD,Landlord Rent Payment,,expense,
+txn_022,ACC_U1,2025-09-02T14:20:00Z,-72.15,USD,Target Store,,expense,5310
+txn_023,ACC_U1,2025-09-04T10:30:00Z,-48.90,USD,Safeway Grocery,,expense,5411
+txn_024,ACC_U1,2025-09-06T17:45:00Z,-35.00,USD,AT&T Mobile,,expense,4814
+txn_025,ACC_U1,2025-09-08T20:15:00Z,-40.25,USD,Chevron Gas,,expense,5541
+txn_026,ACC_U1,2025-09-10T09:30:00Z,-30.00,USD,Netflix Subscription,,expense,7841
+txn_027,ACC_U1,2025-09-12T13:00:00Z,-65.50,USD,Whole Foods Market,,expense,5411
+txn_028,ACC_U1,2025-09-15T09:00:00Z,2800.00,USD,Acme Corp Payroll,,income,
+txn_029,ACC_U1,2025-09-16T11:20:00Z,-58.30,USD,Kroger Grocery,,expense,5411
+txn_030,ACC_U1,2025-09-18T16:40:00Z,-42.00,USD,Shell Gas Station,,expense,5541
+txn_031,ACC_U1,2025-09-20T14:15:00Z,-95.00,USD,Internet Service Provider,,expense,4899
+txn_032,ACC_U1,2025-09-22T10:00:00Z,-150.00,USD,Car Insurance Payment,,expense,6300
+txn_033,ACC_U1,2025-09-25T18:30:00Z,-110.00,USD,Restaurant Dining,,expense,5812
+txn_034,ACC_U1,2025-09-28T12:45:00Z,-35.25,USD,CVS Pharmacy,,expense,5912
+txn_035,ACC_U1,2025-09-30T09:00:00Z,2800.00,USD,Acme Corp Payroll,,income,
+txn_036,ACC_U1,2025-10-01T08:00:00Z,-1200.00,USD,Landlord Rent Payment,,expense,
+txn_037,ACC_U1,2025-10-02T15:30:00Z,-62.80,USD,Whole Foods Market,,expense,5411
+txn_038,ACC_U1,2025-10-04T19:20:00Z,-38.50,USD,Chevron Gas,,expense,5541
+txn_039,ACC_U1,2025-10-06T11:00:00Z,-35.00,USD,AT&T Mobile,,expense,4814
+txn_040,ACC_U1,2025-10-08T14:45:00Z,-70.00,USD,Target Store,,expense,5310
+txn_041,ACC_U1,2025-10-10T09:15:00Z,-55.40,USD,Safeway Grocery,,expense,5411
+txn_042,ACC_U1,2025-10-12T17:30:00Z,-45.00,USD,Gym Membership,,expense,7997
+txn_043,ACC_U1,2025-10-15T09:00:00Z,2800.00,USD,Acme Corp Payroll,,income,
+txn_044,ACC_U1,2025-10-16T13:20:00Z,-48.75,USD,Kroger Grocery,,expense,5411
+txn_045,ACC_U1,2025-10-18T20:00:00Z,-90.00,USD,Restaurant Dining,,expense,5812
+txn_046,ACC_U1,2025-10-20T10:30:00Z,-95.00,USD,Internet Service Provider,,expense,4899
+txn_047,ACC_U1,2025-10-22T16:15:00Z,-42.00,USD,Shell Gas Station,,expense,5541
+txn_048,ACC_U1,2025-10-24T14:00:00Z,-28.50,USD,CVS Pharmacy,,expense,5912
+
