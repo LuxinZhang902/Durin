@@ -21,17 +21,50 @@ class FraudGraphAnalyzer:
         self.risk_scores.clear()
         self.fraud_signals.clear()
         
+        # Track countries for creating country nodes
+        countries = set()
+        
         # Add user nodes with attributes
         for _, user in users_df.iterrows():
             user_id = str(user['user_id'])
+            country = str(user.get('country', ''))
+            
             self.graph.add_node(
                 user_id,
                 node_type='user',
                 user_name=str(user.get('user_name', '')),
                 device_id=str(user.get('device_id', '')),
                 ip=str(user.get('ip', '')),
-                country=str(user.get('country', ''))
+                country=country
             )
+            
+            # Track country for later
+            if country:
+                countries.add(country)
+        
+        # Add country nodes
+        for country in countries:
+            country_node_id = f"COUNTRY_{country.replace(' ', '_').upper()}"
+            self.graph.add_node(
+                country_node_id,
+                node_type='country',
+                country_name=country,
+                user_count=0
+            )
+            
+            # Link users to their country nodes
+            for _, user in users_df.iterrows():
+                user_id = str(user['user_id'])
+                user_country = str(user.get('country', ''))
+                if user_country == country:
+                    self.graph.add_edge(
+                        user_id,
+                        country_node_id,
+                        edge_type='located_in',
+                        weight=1
+                    )
+                    # Increment user count
+                    self.graph.nodes[country_node_id]['user_count'] += 1
         
         # Add transaction edges
         for _, txn in transactions_df.iterrows():
@@ -41,18 +74,30 @@ class FraudGraphAnalyzer:
             timestamp = str(txn['timestamp'])
             device = str(txn.get('device_id', ''))
             ip = str(txn.get('ip', ''))
+            txn_type = str(txn.get('transaction_type', 'user_to_user'))
             
-            # Add account nodes if not exist
-            for acc in [from_acc, to_acc]:
-                if acc not in self.graph:
-                    self.graph.add_node(acc, node_type='account')
+            # Handle country-to-country transactions
+            if txn_type == 'country_to_country':
+                # Use country node IDs
+                from_node = f"COUNTRY_{from_acc.replace(' ', '_').upper()}"
+                to_node = f"COUNTRY_{to_acc.replace(' ', '_').upper()}"
+            else:
+                # Regular user transactions
+                from_node = from_acc
+                to_node = to_acc
+                
+                # Add account nodes if not exist
+                for acc in [from_node, to_node]:
+                    if acc not in self.graph:
+                        self.graph.add_node(acc, node_type='account')
             
             # Add transaction edge
-            if self.graph.has_edge(from_acc, to_acc):
+            if self.graph.has_edge(from_node, to_node):
                 # Update existing edge
-                edge_data = self.graph[from_acc][to_acc]
+                edge_data = self.graph[from_node][to_node]
                 edge_data['count'] = edge_data.get('count', 1) + 1
                 edge_data['total_amount'] = edge_data.get('total_amount', 0) + amount
+                edge_data['transaction_type'] = txn_type
                 edge_data['transactions'].append({
                     'amount': amount,
                     'timestamp': timestamp,
@@ -61,10 +106,11 @@ class FraudGraphAnalyzer:
                 })
             else:
                 self.graph.add_edge(
-                    from_acc,
-                    to_acc,
+                    from_node,
+                    to_node,
                     count=1,
                     total_amount=amount,
+                    transaction_type=txn_type,
                     transactions=[{
                         'amount': amount,
                         'timestamp': timestamp,
@@ -212,17 +258,32 @@ class FraudGraphAnalyzer:
         
         # Prepare nodes for visualization
         for node, data in self.graph.nodes(data=True):
+            node_type = data.get('node_type', 'account')
             risk = self.risk_scores.get(node, 0.0)
-            nodes.append({
+            
+            node_data = {
                 'id': node,
-                'type': data.get('node_type', 'account'),
-                'name': data.get('user_name', ''),
+                'type': node_type,
                 'risk_score': round(risk, 2),
-                'signals': self.fraud_signals.get(node, []),
-                'device_id': data.get('device_id', ''),
-                'ip': data.get('ip', ''),
-                'country': data.get('country', '')
-            })
+                'signals': self.fraud_signals.get(node, [])
+            }
+            
+            # Add type-specific attributes
+            if node_type == 'country':
+                node_data.update({
+                    'name': data.get('country_name', ''),
+                    'country': data.get('country_name', ''),
+                    'user_count': data.get('user_count', 0)
+                })
+            else:
+                node_data.update({
+                    'name': data.get('user_name', ''),
+                    'device_id': data.get('device_id', ''),
+                    'ip': data.get('ip', ''),
+                    'country': data.get('country', '')
+                })
+            
+            nodes.append(node_data)
         
         # Prepare edges for visualization
         for u, v, data in self.graph.edges(data=True):
@@ -230,7 +291,9 @@ class FraudGraphAnalyzer:
                 'source': u,
                 'target': v,
                 'count': data.get('count', 1),
-                'total_amount': round(data.get('total_amount', 0), 2)
+                'total_amount': round(data.get('total_amount', 0), 2),
+                'transaction_type': data.get('transaction_type', 'user_to_user'),
+                'edge_type': data.get('edge_type', 'transaction')
             })
         
         # Sort nodes by risk score

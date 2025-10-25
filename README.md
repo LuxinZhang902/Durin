@@ -266,10 +266,10 @@ U3,Sarah,D2,192.168.1.102,United States
 
 ### transactions.csv
 ```csv
-from,to,amount,timestamp,device_id,ip
-A1,A2,950,2025-10-23T10:01:00Z,D1,192.168.1.100
-A1,A3,980,2025-10-23T10:05:00Z,D1,192.168.1.100
-A2,A6,15000,2025-10-23T11:00:00Z,D2,192.168.1.102
+from,to,amount,timestamp,device_id,ip,from_country,to_country
+Jack,Andy,950,2025-10-23T10:01:00Z,D1,192.168.1.100,United States,United States
+Jack,Sarah,980,2025-10-23T10:05:00Z,D1,192.168.1.100,United States,United States
+Andy,Emma,15000,2025-10-23T11:00:00Z,D2,192.168.1.102,United States,United Kingdom
 ```
 
 ---

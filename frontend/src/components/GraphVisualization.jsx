@@ -2,33 +2,65 @@ import { useEffect, useRef, useState } from 'react'
 import ForceGraph2D from 'react-force-graph-2d'
 import { ZoomIn, ZoomOut, Maximize2 } from 'lucide-react'
 
-function GraphVisualization({ data, onNodeClick, selectedNode }) {
+function GraphVisualization({ data, onNodeClick, selectedNode, filter = 'all' }) {
   const graphRef = useRef()
   const [graphData, setGraphData] = useState({ nodes: [], links: [] })
   const [dimensions, setDimensions] = useState({ width: 800, height: 600 })
 
   useEffect(() => {
     if (data && data.nodes && data.edges) {
+      // Filter edges based on transaction type
+      let filteredEdges = data.edges
+      if (filter !== 'all') {
+        filteredEdges = data.edges.filter(edge => {
+          if (filter === 'user_to_user') {
+            return edge.transaction_type === 'user_to_user' || edge.edge_type === 'located_in'
+          } else if (filter === 'cross_border') {
+            return edge.transaction_type === 'cross_border' || edge.edge_type === 'located_in'
+          } else if (filter === 'country_to_country') {
+            return edge.transaction_type === 'country_to_country' || edge.edge_type === 'located_in'
+          }
+          return true
+        })
+      }
+
+      // Get nodes that are connected by filtered edges
+      const connectedNodeIds = new Set()
+      filteredEdges.forEach(edge => {
+        connectedNodeIds.add(edge.source)
+        connectedNodeIds.add(edge.target)
+      })
+
+      // Filter nodes to only show connected ones (unless showing all)
+      const filteredNodes = filter === 'all' 
+        ? data.nodes 
+        : data.nodes.filter(node => connectedNodeIds.has(node.id))
+
       // Transform data for react-force-graph
-      const nodes = data.nodes.map(node => ({
+      const nodes = filteredNodes.map(node => ({
         id: node.id,
-        name: node.id,
+        name: node.name || node.id,
         type: node.type,
         risk_score: node.risk_score,
         signals: node.signals,
-        val: Math.max(3, node.risk_score * 2) // Node size based on risk
+        country: node.country,
+        user_count: node.user_count,
+        // Node size: larger for countries, based on risk for others
+        val: node.type === 'country' ? 15 : Math.max(3, node.risk_score * 2)
       }))
 
-      const links = data.edges.map(edge => ({
+      const links = filteredEdges.map(edge => ({
         source: edge.source,
         target: edge.target,
         value: edge.count,
-        amount: edge.total_amount
+        amount: edge.total_amount,
+        transaction_type: edge.transaction_type,
+        edge_type: edge.edge_type
       }))
 
       setGraphData({ nodes, links })
     }
-  }, [data])
+  }, [data, filter])
 
   useEffect(() => {
     // Auto-fit graph on load
@@ -42,6 +74,11 @@ function GraphVisualization({ data, onNodeClick, selectedNode }) {
   const getNodeColor = (node) => {
     if (node.id === selectedNode) {
       return '#8b5cf6' // Purple for selected
+    }
+    
+    // Country nodes get a special color
+    if (node.type === 'country') {
+      return '#3b82f6' // Blue for countries
     }
     
     const score = node.risk_score || 0
@@ -130,9 +167,8 @@ function GraphVisualization({ data, onNodeClick, selectedNode }) {
             linkDirectionalParticleSpeed={0.005}
             onNodeClick={handleNodeClick}
             nodeCanvasObject={(node, ctx, globalScale) => {
-              const label = node.id
-              const fontSize = 12 / globalScale
               const nodeRadius = node.val || 5
+              const fontSize = node.type === 'country' ? 14 / globalScale : 12 / globalScale
 
               // Draw node circle
               ctx.beginPath()
@@ -140,15 +176,20 @@ function GraphVisualization({ data, onNodeClick, selectedNode }) {
               ctx.fillStyle = getNodeColor(node)
               ctx.fill()
 
-              // Draw border for selected node
+              // Draw border for selected node or country nodes
               if (node.id === selectedNode) {
                 ctx.strokeStyle = '#ffffff'
+                ctx.lineWidth = 3 / globalScale
+                ctx.stroke()
+              } else if (node.type === 'country') {
+                ctx.strokeStyle = '#60a5fa'
                 ctx.lineWidth = 2 / globalScale
                 ctx.stroke()
               }
 
               // Draw label
-              ctx.font = `${fontSize}px Sans-Serif`
+              ctx.font = `${node.type === 'country' ? 'bold ' : ''}${fontSize}px Sans-Serif`
+              const label = node.type === 'country' ? `🌍 ${node.name}` : (node.name || node.id)
               ctx.textAlign = 'center'
               ctx.textBaseline = 'middle'
               ctx.fillStyle = '#ffffff'

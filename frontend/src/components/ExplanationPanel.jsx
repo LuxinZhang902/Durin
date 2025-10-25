@@ -1,6 +1,9 @@
-import { Brain, AlertCircle, TrendingUp, Users, Wifi, Smartphone, Loader2 } from 'lucide-react'
+import { useState } from 'react'
+import { Brain, AlertCircle, TrendingUp, Users, Wifi, Smartphone, Loader2, MessageCircle, Globe, Sparkles } from 'lucide-react'
+import ComplianceChat from './ComplianceChat'
 
 function ExplanationPanel({ explanation, selectedAccount, analysisResults }) {
+  const [showComplianceChat, setShowComplianceChat] = useState(false)
   if (!selectedAccount) {
     return (
       <div className="bg-dark-surface rounded-lg border border-dark-border p-6">
@@ -73,24 +76,78 @@ function ExplanationPanel({ explanation, selectedAccount, analysisResults }) {
       <div className="px-4 py-3 border-b border-dark-border bg-gradient-to-r from-accent-blue/10 to-accent-purple/10">
         <div className="flex items-center justify-between mb-2">
           <div className="flex items-center space-x-2">
-            <Brain className="w-5 h-5 text-accent-purple" />
-            <h3 className="font-semibold">AI Risk Analysis</h3>
+            {accountNode.type === 'country' ? (
+              <Globe className="w-5 h-5 text-accent-blue" />
+            ) : (
+              <Brain className="w-5 h-5 text-accent-purple" />
+            )}
+            <h3 className="font-semibold">
+              {accountNode.type === 'country' ? 'Country Information' : 'AI Risk Analysis'}
+            </h3>
           </div>
-          <div className={`text-2xl font-bold ${getRiskColor(accountNode.risk_score)}`}>
-            {accountNode.risk_score.toFixed(1)}/10
-          </div>
+          {accountNode.type !== 'country' && (
+            <div className={`text-2xl font-bold ${getRiskColor(accountNode.risk_score)}`}>
+              {accountNode.risk_score.toFixed(1)}/10
+            </div>
+          )}
         </div>
         <div className="flex items-center space-x-2">
           {accountNode.name && (
-            <p className="text-sm font-medium text-white">{accountNode.name}</p>
+            <p className="text-sm font-medium text-white">
+              {accountNode.type === 'country' ? '🌍 ' : ''}{accountNode.name}
+            </p>
           )}
-          <p className="text-xs text-gray-400 font-mono">{selectedAccount}</p>
+          {accountNode.type !== 'country' && (
+            <p className="text-xs text-gray-400 font-mono">{selectedAccount}</p>
+          )}
         </div>
       </div>
 
       <div className="p-4 space-y-4 max-h-[600px] overflow-y-auto">
-        {/* AI Explanation */}
-        {explanation ? (
+        {/* Country Node Special View */}
+        {accountNode.type === 'country' && (
+          <div className="space-y-4">
+            {/* Country Stats */}
+            <div className="bg-gradient-to-br from-accent-blue/10 to-accent-purple/10 rounded-lg p-4 border border-accent-blue/30">
+              <h4 className="text-sm font-semibold mb-3 flex items-center space-x-2">
+                <Users className="w-4 h-4 text-accent-blue" />
+                <span>Country Statistics</span>
+              </h4>
+              <div className="grid grid-cols-2 gap-3">
+                <div className="bg-dark-bg/50 rounded-lg p-3 text-center">
+                  <div className="text-2xl font-bold text-accent-blue">{accountNode.user_count || 0}</div>
+                  <div className="text-xs text-gray-400 mt-1">Active Users</div>
+                </div>
+                <div className="bg-dark-bg/50 rounded-lg p-3 text-center">
+                  <div className="text-2xl font-bold text-accent-purple">{accountNode.country}</div>
+                  <div className="text-xs text-gray-400 mt-1">Region</div>
+                </div>
+              </div>
+            </div>
+
+            {/* Compliance Chat Button */}
+            <button
+              onClick={() => setShowComplianceChat(true)}
+              className="w-full flex items-center justify-center space-x-3 bg-gradient-to-r from-accent-blue to-accent-purple hover:opacity-90 rounded-xl py-4 px-6 transition-all group shadow-lg"
+            >
+              <MessageCircle className="w-5 h-5 text-white" />
+              <span className="text-base font-bold text-white">Ask About {accountNode.country} Compliance</span>
+              <Sparkles className="w-4 h-4 text-white" />
+            </button>
+
+            {/* Quick Info */}
+            <div className="bg-dark-bg rounded-lg p-4 border border-dark-border">
+              <h4 className="text-sm font-semibold mb-2">About This Country</h4>
+              <p className="text-sm text-gray-400">
+                Click the button above to chat with our AI compliance assistant about {accountNode.country}'s 
+                AML/KYC regulations, reporting requirements, and fraud prevention guidelines.
+              </p>
+            </div>
+          </div>
+        )}
+
+        {/* Regular Account View */}
+        {accountNode.type !== 'country' && explanation ? (
           <div className="bg-dark-bg rounded-lg p-4 border border-dark-border">
             <div className="flex items-start space-x-2 mb-2">
               <Brain className="w-4 h-4 text-accent-purple mt-0.5 flex-shrink-0" />
@@ -172,9 +229,18 @@ function ExplanationPanel({ explanation, selectedAccount, analysisResults }) {
                 </div>
               )}
               {accountNode.country && (
-                <div className="flex justify-between">
+                <div className="flex justify-between items-center">
                   <span className="text-gray-400">Country:</span>
-                  <span className="font-mono">{accountNode.country}</span>
+                  <div className="flex items-center space-x-2">
+                    <span className="font-mono">{accountNode.country}</span>
+                    <button
+                      onClick={() => setShowComplianceChat(true)}
+                      className="p-1.5 bg-accent-blue/10 hover:bg-accent-blue/20 rounded-lg transition-colors group"
+                      title="Ask about compliance"
+                    >
+                      <MessageCircle className="w-3.5 h-3.5 text-accent-blue" />
+                    </button>
+                  </div>
                 </div>
               )}
               <div className="flex justify-between">
@@ -182,7 +248,26 @@ function ExplanationPanel({ explanation, selectedAccount, analysisResults }) {
                 <span className="capitalize">{accountNode.type}</span>
               </div>
             </div>
+            
+            {/* Compliance Chat Button */}
+            {accountNode.country && (
+              <button
+                onClick={() => setShowComplianceChat(true)}
+                className="mt-3 w-full flex items-center justify-center space-x-2 bg-gradient-to-r from-accent-blue/10 to-accent-purple/10 hover:from-accent-blue/20 hover:to-accent-purple/20 border border-accent-blue/30 rounded-lg py-2.5 px-4 transition-all group"
+              >
+                <Globe className="w-4 h-4 text-accent-blue" />
+                <span className="text-sm font-medium">Ask About {accountNode.country} Compliance</span>
+              </button>
+            )}
           </div>
+        )}
+        
+        {/* Compliance Chat Modal */}
+        {showComplianceChat && accountNode.country && (
+          <ComplianceChat 
+            country={accountNode.country}
+            onClose={() => setShowComplianceChat(false)}
+          />
         )}
 
         {/* Risk Score Breakdown */}

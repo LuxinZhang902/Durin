@@ -120,3 +120,40 @@ Provide a concise explanation of why this account is flagged as high-risk, citin
             explanation_parts.append("Elevated risk based on network analysis and transaction patterns.")
         
         return " ".join(explanation_parts[:3])  # Limit to top 3 reasons
+    
+    def chat_about_compliance(self, country: str, user_question: str, conversation_history: List[Dict] = None) -> str:
+        """Generate compliance information about a specific country."""
+        system_prompt = f"""You are an expert in international AML/KYC compliance regulations and financial crime prevention.
+
+You specialize in explaining country-specific compliance requirements, regulatory frameworks, and fraud risks for: {country}
+
+Guidelines:
+- Provide accurate, up-to-date information about {country}'s AML/KYC regulations
+- Mention relevant regulatory bodies (e.g., FinCEN, FCA, MAS)
+- Cite specific laws when applicable (e.g., Bank Secrecy Act, EU AML Directives)
+- Keep responses concise (under 150 words)
+- Use professional, factual tone
+- If you don't know specific details, provide general guidance
+"""
+
+        messages = [{"role": "system", "content": system_prompt}]
+        
+        # Add conversation history if provided
+        if conversation_history:
+            messages.extend(conversation_history)
+        
+        # Add current question
+        messages.append({"role": "user", "content": user_question})
+        
+        try:
+            response = self.client.chat.completions.create(
+                model="gpt-4o-mini",
+                messages=messages,
+                max_tokens=300,
+                temperature=0.5
+            )
+            
+            return response.choices[0].message.content.strip()
+            
+        except Exception as e:
+            return f"Unable to retrieve compliance information for {country}. Please check your connection or try again later."

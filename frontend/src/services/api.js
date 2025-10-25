@@ -32,28 +32,27 @@ export const analyzeData = async (usersFile, transactionsFile) => {
     } else if (error.request) {
       throw new Error('No response from server. Please ensure the backend is running.')
     } else {
-      throw new Error(error.message)
     }
   }
 }
 
 export const explainAccount = async (accountId) => {
-  try {
-    const response = await api.post('/api/explain', {
-      account_id: accountId,
-    })
+  const response = await axios.post(`${API_BASE_URL}/explain`, {
+    account_id: accountId
+  })
+  return response.data
+}
 
-    if (response.data.success) {
-      return response.data
-    } else {
-      throw new Error('Failed to generate explanation')
-    }
+export const chatAboutCompliance = async (country, question, conversationHistory = null) => {
+  try {
+    const response = await axios.post(`${API_BASE_URL}/compliance-chat`, {
+      country,
+      question,
+      conversation_history: conversationHistory
+    })
+    return response.data
   } catch (error) {
-    if (error.response) {
-      throw new Error(error.response.data.detail || 'Server error')
-    } else {
-      throw new Error(error.message)
-    }
+    throw new Error(error.response?.data?.detail || 'Failed to get compliance information')
   }
 }
 

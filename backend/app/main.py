@@ -54,6 +54,18 @@ class ExplainResponse(BaseModel):
     risk_score: float
 
 
+class ComplianceChatRequest(BaseModel):
+    country: str
+    question: str
+    conversation_history: Optional[List[Dict]] = None
+
+
+class ComplianceChatResponse(BaseModel):
+    success: bool
+    country: str
+    response: str
+
+
 @app.on_event("startup")
 async def startup_event():
     """Initialize LLM service on startup."""
@@ -226,6 +238,37 @@ async def get_results():
     }
 
 
+@app.post("/api/compliance-chat", response_model=ComplianceChatResponse)
+async def compliance_chat(request: ComplianceChatRequest):
+    """
+    Chat about compliance regulations for a specific country.
+    """
+    if not llm_explainer:
+        raise HTTPException(
+            status_code=503,
+            detail="LLM service not available"
+        )
+    
+    try:
+        response_text = llm_explainer.chat_about_compliance(
+            country=request.country,
+            user_question=request.question,
+            conversation_history=request.conversation_history
+        )
+        
+        return ComplianceChatResponse(
+            success=True,
+            country=request.country,
+            response=response_text
+        )
+        
+    except Exception as e:
+        raise HTTPException(
+            status_code=500,
+            detail=f"Failed to generate compliance response: {str(e)}"
+        )
+
+
 @app.get("/api/health")
 async def health_check():
     """Detailed health check."""
@@ -242,4 +285,3 @@ async def health_check():
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000)

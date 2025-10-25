@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Upload, AlertTriangle, Shield, Network, FileText, Loader2, Sparkles, TrendingUp, Lock } from 'lucide-react'
+import { Upload, AlertTriangle, Shield, Network, FileText, Loader2, Sparkles, TrendingUp, Lock, Filter, Users, Globe2, ArrowRightLeft } from 'lucide-react'
 import FileUpload from './components/FileUpload'
 import GraphVisualization from './components/GraphVisualization'
 import RiskTable from './components/RiskTable'
@@ -15,6 +15,7 @@ function App() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
   const [activeView, setActiveView] = useState('graph') // 'graph' or 'table'
+  const [graphFilter, setGraphFilter] = useState('all') // 'all', 'user_to_user', 'cross_border', 'country_to_country'
 
   const handleAnalyze = async () => {
     if (!usersFile || !transactionsFile) {
@@ -164,13 +165,13 @@ function App() {
               <div className="grid md:grid-cols-2 gap-6 mb-6">
                 <FileUpload
                   label="Users / KYC Data"
-                  description="CSV with: user_id, device_id, ip, country"
+                  description="CSV with: user_id, user_name, device_id, ip, country"
                   onFileSelect={setUsersFile}
                   accept=".csv"
                 />
                 <FileUpload
                   label="Transactions Data"
-                  description="CSV with: from, to, amount, timestamp, device_id, ip"
+                  description="CSV with: from, to, amount, timestamp, countries"
                   onFileSelect={setTransactionsFile}
                   accept=".csv"
                 />
@@ -236,8 +237,8 @@ function App() {
         {/* Results Section */}
         {analysisResults && (
           <div className="space-y-6">
-            {/* View Toggle */}
-            <div className="flex items-center justify-between">
+            {/* View Toggle and Filters */}
+            <div className="flex items-center justify-between flex-wrap gap-4">
               <div className="flex space-x-2 bg-dark-surface rounded-lg p-1 border border-dark-border">
                 <button
                   onClick={() => setActiveView('graph')}
@@ -263,6 +264,59 @@ function App() {
                 </button>
               </div>
 
+              {/* Graph Filters */}
+              {activeView === 'graph' && (
+                <div className="flex items-center space-x-2">
+                  <Filter className="w-4 h-4 text-gray-400" />
+                  <span className="text-sm text-gray-400">Filter:</span>
+                  <div className="flex space-x-2 bg-dark-surface rounded-lg p-1 border border-dark-border">
+                    <button
+                      onClick={() => setGraphFilter('all')}
+                      className={`px-3 py-1.5 rounded-md transition-colors flex items-center space-x-1.5 text-sm ${
+                        graphFilter === 'all'
+                          ? 'bg-accent-purple text-white'
+                          : 'text-gray-400 hover:text-white'
+                      }`}
+                    >
+                      <span>All</span>
+                    </button>
+                    <button
+                      onClick={() => setGraphFilter('user_to_user')}
+                      className={`px-3 py-1.5 rounded-md transition-colors flex items-center space-x-1.5 text-sm ${
+                        graphFilter === 'user_to_user'
+                          ? 'bg-accent-purple text-white'
+                          : 'text-gray-400 hover:text-white'
+                      }`}
+                    >
+                      <Users className="w-3.5 h-3.5" />
+                      <span>User→User</span>
+                    </button>
+                    <button
+                      onClick={() => setGraphFilter('cross_border')}
+                      className={`px-3 py-1.5 rounded-md transition-colors flex items-center space-x-1.5 text-sm ${
+                        graphFilter === 'cross_border'
+                          ? 'bg-accent-purple text-white'
+                          : 'text-gray-400 hover:text-white'
+                      }`}
+                    >
+                      <ArrowRightLeft className="w-3.5 h-3.5" />
+                      <span>Cross-Border</span>
+                    </button>
+                    <button
+                      onClick={() => setGraphFilter('country_to_country')}
+                      className={`px-3 py-1.5 rounded-md transition-colors flex items-center space-x-1.5 text-sm ${
+                        graphFilter === 'country_to_country'
+                          ? 'bg-accent-purple text-white'
+                          : 'text-gray-400 hover:text-white'
+                      }`}
+                    >
+                      <Globe2 className="w-3.5 h-3.5" />
+                      <span>Country→Country</span>
+                    </button>
+                  </div>
+                </div>
+              )}
+
               <button
                 onClick={() => {
                   setAnalysisResults(null)
@@ -285,6 +339,7 @@ function App() {
                     data={analysisResults}
                     onNodeClick={handleAccountSelect}
                     selectedNode={selectedAccount}
+                    filter={graphFilter}
                   />
                 ) : (
                   <RiskTable
