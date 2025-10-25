@@ -32,6 +32,7 @@ export const analyzeData = async (usersFile, transactionsFile) => {
     } else if (error.request) {
       throw new Error('No response from server. Please ensure the backend is running.')
     } else {
+      throw new Error(error.message || 'Analysis failed')
     }
   }
 }

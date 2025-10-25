@@ -197,14 +197,8 @@ async def analyze_data(
 
         return AnalysisResponse(
             success=True,
-            message=f"Analyzed {len(users_df)} users and {len(transactions_df)} transactions",
-            data={
-                "total_users": results['total_users'],
-                "total_transactions": results['total_transactions'],
-                "high_risk_count": len(results['high_risk_accounts']),
-                "fraud_rings_detected": len(results['clusters']),
-                "explanations_generated": len(explanations_cache)
-            }
+            message=f"Analysis complete. Found {len(results.get('high_risk_accounts', []))} high-risk accounts.",
+            data=results
         )
 
     except HTTPException:
