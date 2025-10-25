@@ -14,11 +14,8 @@ pillow==10.1.0
 # Database
 sqlalchemy==2.0.23
 
-# Face detection and deepfake detection
-deepface==0.0.92
-tf-keras==2.16.0
-tensorflow==2.16.1
-retina-face==0.0.17
-
-# Sanctions/PEP screening (lightweight)
+# Sanctions/PEP screening
 requests==2.31.0
+
+# Reality Defender - Production deepfake detection
+realitydefender

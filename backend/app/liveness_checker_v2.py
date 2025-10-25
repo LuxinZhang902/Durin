@@ -1,6 +1,6 @@
 """
-Production-ready liveness verification with real face detection and deepfake detection.
-Uses DeepFace for face analysis and OpenSanctions for PEP/sanctions screening.
+Production-ready liveness verification with Reality Defender deepfake detection.
+Uses Reality Defender API for deepfake detection and OpenSanctions for PEP/sanctions screening.
 """
 import base64
 import hashlib
@@ -10,28 +10,15 @@ import tempfile
 from typing import Dict, Set, Optional, List, Tuple
 from datetime import datetime
 
-import numpy as np
 from PIL import Image
 import requests
 from dotenv import load_dotenv
 
 from app.models import LivenessCheck, LivenessResult
 
-# Load environment variables
-load_dotenv()
-
-# Lazy import DeepFace to avoid loading models at module import time
-_deepface = None
-_face_analysis_models_loaded = False
-
-
-def get_deepface():
-    """Lazy load DeepFace to avoid slow startup."""
-    global _deepface, _face_analysis_models_loaded
-    if _deepface is None:
-        from deepface import DeepFace
-        _deepface = DeepFace
-    return _deepface
+# Load environment variables (prioritize .env.local over .env)
+load_dotenv('.env.local')
+load_dotenv()  # Fallback to .env if .env.local doesn't exist
 
 
 class LivenessCheckerV2:
@@ -39,8 +26,7 @@ class LivenessCheckerV2:
     Production-grade identity integrity gate for underwriting.
 
     Features:
-    - Real face detection using DeepFace/RetinaFace
-    - Deepfake detection via face analysis
+    - Reality Defender API for deepfake detection
     - Sanctions/PEP screening via OpenSanctions API
     - Device risk scoring with shared device detection
     - Velocity abuse prevention
@@ -64,9 +50,8 @@ class LivenessCheckerV2:
     def __init__(self):
         self.check_history: Dict[str, int] = {}  # user_id -> check count
         self.device_usage: Dict[str, Set[str]] = {}  # device -> set of user_ids
-        self.face_embeddings: Dict[str, List[float]] = {}  # user_id -> face embedding (for deduplication)
 
-    def verify_liveness(self, check: LivenessCheck, user_name: Optional[str] = None) -> Tuple[LivenessResult, Optional[List[float]]]:
+    async def verify_liveness(self, check: LivenessCheck, user_name: Optional[str] = None) -> Tuple[LivenessResult, Optional[List[float]]]:
         """
         Perform comprehensive liveness verification and fraud checks.
 
@@ -103,24 +88,16 @@ class LivenessCheckerV2:
             flags.append("INVALID_IMAGE_FORMAT")
             return self._failed_result(check.user_id, flags, f"Image decode error: {str(e)}"), None
 
-        # 2. Real face detection and analysis using DeepFace
-        try:
-            face_detected, liveness_score, is_deepfake, deepfake_conf, face_embedding = self._analyze_face(image_bytes)
+        # 2. Reality Defender deepfake detection (production-grade)
+        is_deepfake, deepfake_conf, rd_models = await self._check_reality_defender(image_bytes)
+        if is_deepfake:
+            flags.append("REALITY_DEFENDER_DEEPFAKE")
 
-            if not face_detected:
-                flags.append("NO_FACE_DETECTED")
-                return self._failed_result(check.user_id, flags, "No face detected in image"), None
-
-            if is_deepfake:
-                flags.append("DEEPFAKE_DETECTED")
-
-        except Exception as e:
-            # If face detection fails, fall back to basic checks
-            print(f"Face detection error for {check.user_id}: {str(e)}")
-            flags.append("FACE_DETECTION_ERROR")
-            liveness_score = 0.5  # Neutral score
-            is_deepfake = False
-            deepfake_conf = 0.0
+        # Set liveness score based on Reality Defender result
+        # Score of 0.0-0.3 = high confidence real (liveness 1.0-0.7)
+        # Score of 0.3-0.5 = medium confidence (liveness 0.7-0.5)
+        # Score of 0.5+ = deepfake (liveness 0.5-0.0)
+        liveness_score = max(0.0, 1.0 - (deepfake_conf * 2))
 
         # 3. Replay detection (screen capture patterns)
         replay_detected = self._detect_replay(image_bytes)
@@ -141,26 +118,17 @@ class LivenessCheckerV2:
         if self._check_velocity_abuse(check.user_id):
             flags.append("VELOCITY_ABUSE")
 
-        # 7. Check for duplicate face embeddings (same person, different user_id)
-        if face_embedding is not None and self._check_duplicate_face(check.user_id, face_embedding):
-            flags.append("DUPLICATE_IDENTITY")
-
         # Final liveness determination
         liveness_pass = (
             liveness_score >= self.MIN_LIVENESS_SCORE and
             not is_deepfake and
             not replay_detected and
             sanctions_pass and
-            device_risk < self.MAX_DEVICE_RISK and
-            "DUPLICATE_IDENTITY" not in flags
+            device_risk < self.MAX_DEVICE_RISK
         )
 
         # Track usage
         self._track_usage(check)
-
-        # Store face embedding if valid
-        if face_embedding is not None and liveness_pass:
-            self.face_embeddings[check.user_id] = face_embedding
 
         return LivenessResult(
             user_id=check.user_id,
@@ -170,102 +138,7 @@ class LivenessCheckerV2:
             sanctions_pass=sanctions_pass,
             device_risk_score=round(device_risk, 3),
             flags=flags
-        ), face_embedding
-
-    def _analyze_face(self, image_bytes: bytes) -> Tuple[bool, float, bool, float, Optional[List[float]]]:
-        """
-        Analyze face using DeepFace.
-
-        Returns:
-            (face_detected, liveness_score, is_deepfake, deepfake_confidence, face_embedding)
-        """
-        DeepFace = get_deepface()
-
-        # Save image to temp file (DeepFace requires file path)
-        with tempfile.NamedTemporaryFile(suffix='.jpg', delete=False) as tmp:
-            tmp.write(image_bytes)
-            tmp_path = tmp.name
-
-        try:
-            # Analyze face with multiple backends
-            # Using RetinaFace as it's most accurate for face detection
-            result = DeepFace.analyze(
-                img_path=tmp_path,
-                actions=['age', 'gender', 'race', 'emotion'],
-                detector_backend='retinaface',
-                enforce_detection=True,
-                silent=True
-            )
-
-            # Extract face embedding for deduplication
-            embedding_result = DeepFace.represent(
-                img_path=tmp_path,
-                model_name='Facenet512',
-                detector_backend='retinaface',
-                enforce_detection=False
-            )
-
-            face_embedding = embedding_result[0]['embedding'] if embedding_result else None
-
-            # Face detected successfully
-            face_detected = True
-
-            # Compute liveness score based on face quality indicators
-            # In production, you'd use a dedicated liveness model
-            # Here we use heuristics from face analysis
-
-            face_confidence = result[0].get('face_confidence', 0.0) if isinstance(result, list) else result.get('face_confidence', 0.0)
-
-            # Heuristic liveness score based on detection confidence
-            if face_confidence > 0:
-                liveness_score = min(0.95, face_confidence)
-            else:
-                # Fallback: if face was detected, give it a decent score
-                liveness_score = 0.75
-
-            # Deepfake detection heuristic
-            # Real deepfake detection requires specialized models (e.g., FaceForensics++)
-            # Here we use basic heuristics:
-            # - Very high confidence faces can be synthetic
-            # - Unnatural emotion distributions
-            # - Age-gender inconsistencies
-
-            is_deepfake = False
-            deepfake_conf = 0.0
-
-            if isinstance(result, list):
-                result = result[0]
-
-            # Suspicious if confidence is unnaturally high (perfect synthetic face)
-            if face_confidence > 0.999:
-                is_deepfake = True
-                deepfake_conf = 0.6
-
-            # Check emotion distribution (deepfakes often have neutral/happy only)
-            emotions = result.get('emotion', {})
-            if emotions:
-                # Real faces have varied emotions, deepfakes are often too neutral
-                neutral_score = emotions.get('neutral', 0)
-                if neutral_score > 95:
-                    deepfake_conf = 0.4
-                    if neutral_score > 98:
-                        is_deepfake = True
-                        deepfake_conf = 0.7
-
-            return face_detected, liveness_score, is_deepfake, deepfake_conf, face_embedding
-
-        except ValueError as e:
-            # No face detected
-            if "Face could not be detected" in str(e):
-                return False, 0.0, False, 0.0, None
-            raise
-
-        finally:
-            # Clean up temp file
-            try:
-                os.unlink(tmp_path)
-            except:
-                pass
+        ), None
 
     def _detect_replay(self, image_bytes: bytes) -> bool:
         """
@@ -429,35 +302,6 @@ class LivenessCheckerV2:
         # Flag if more than 10 attempts (generous for hackathon demo)
         return count > 10
 
-    def _check_duplicate_face(self, user_id: str, new_embedding: List[float]) -> bool:
-        """
-        Check if this face embedding matches another user (identity fraud).
-
-        Uses cosine similarity between face embeddings.
-        """
-        if not self.face_embeddings:
-            return False
-
-        new_emb = np.array(new_embedding)
-
-        for existing_user_id, existing_embedding in self.face_embeddings.items():
-            if existing_user_id == user_id:
-                continue  # Same user is ok
-
-            existing_emb = np.array(existing_embedding)
-
-            # Compute cosine similarity
-            similarity = np.dot(new_emb, existing_emb) / (
-                np.linalg.norm(new_emb) * np.linalg.norm(existing_emb)
-            )
-
-            # If very similar (>0.8), likely same person
-            if similarity > 0.8:
-                print(f"Duplicate face detected: {user_id} matches {existing_user_id} (similarity: {similarity:.3f})")
-                return True
-
-        return False
-
     def _track_usage(self, check: LivenessCheck):
         """Track check history for velocity and device intelligence."""
         # Increment user check count
@@ -468,6 +312,83 @@ class LivenessCheckerV2:
         if device_fp not in self.device_usage:
             self.device_usage[device_fp] = set()
         self.device_usage[device_fp].add(check.user_id)
+
+    async def _check_reality_defender(self, image_bytes: bytes) -> Tuple[bool, float, List[Dict]]:
+        """
+        Check image for deepfakes using Reality Defender API (async version).
+
+        Returns:
+            (is_deepfake, confidence_score, model_results)
+        """
+        try:
+            # Get API key from environment
+            api_key = os.getenv('REALITY_DEFENDER_API_KEY')
+
+            if not api_key:
+                print("Warning: REALITY_DEFENDER_API_KEY not set, skipping Reality Defender check")
+                return False, 0.0, []
+
+            # Import Reality Defender SDK
+            try:
+                from realitydefender import RealityDefender
+            except ImportError:
+                print("Warning: realitydefender package not installed, run: pip install realitydefender")
+                return False, 0.0, []
+
+            # Initialize client
+            rd = RealityDefender(api_key=api_key)
+
+            # Save image to temp file for upload
+            with tempfile.NamedTemporaryFile(suffix='.jpg', delete=False) as tmp:
+                tmp.write(image_bytes)
+                tmp_path = tmp.name
+
+            try:
+                # Upload image (runs in current event loop - FastAPI's)
+                response = await rd.upload(file_path=tmp_path)
+                request_id = response.get("request_id")
+
+                print(f"Reality Defender: Upload complete, request_id={request_id}")
+
+                # Get results (SDK handles polling internally)
+                result = await rd.get_result(request_id)
+
+                # Parse results
+                status = result.get('status')
+                overall_score = result.get('score', 0.0)  # 0.0 = real, 1.0 = fake
+                models = result.get('models', [])
+
+                # Reality Defender returns scores from 0 (real) to 1 (fake)
+                # If score > 0.5, likely a deepfake
+                is_deepfake = overall_score > 0.5
+
+                print(f"Reality Defender result: score={overall_score:.3f}, status={status}, deepfake={is_deepfake}")
+
+                # Format model results
+                model_results = [
+                    {
+                        'name': m.get('name'),
+                        'score': m.get('score'),
+                        'status': m.get('status')
+                    }
+                    for m in models
+                ]
+
+                return is_deepfake, overall_score, model_results
+
+            finally:
+                # Clean up temp file
+                try:
+                    os.unlink(tmp_path)
+                except:
+                    pass
+
+        except Exception as e:
+            # Don't fail the whole check if Reality Defender has issues
+            print(f"Reality Defender error: {str(e)}")
+            import traceback
+            traceback.print_exc()
+            return False, 0.0, []
 
     def _failed_result(self, user_id: str, flags: List[str], reason: str) -> LivenessResult:
         """Create a failed liveness result."""

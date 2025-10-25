@@ -4,6 +4,8 @@ Fraud detection + underwriting with production-ready database persistence.
 """
 from fastapi import FastAPI, UploadFile, File, HTTPException, Depends
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
 from pydantic import BaseModel
 from typing import Dict, List, Optional
 from sqlalchemy.orm import Session
@@ -12,6 +14,7 @@ import io
 import json
 from datetime import datetime
 import uuid
+import os
 
 from app.graph_analyzer import FraudGraphAnalyzer
 from app.llm_service import LLMExplainer
@@ -84,15 +87,21 @@ async def startup_event():
     # Initialize database
     print("Initializing database...")
     init_db()
-    print("✓ Database initialized")
+    print("[OK] Database initialized")
 
     # Initialize LLM service
     try:
         llm_explainer = LLMExplainer()
-        print("✓ LLM service initialized")
+        print("[OK] LLM service initialized")
     except Exception as e:
-        print(f"⚠ LLM service initialization failed: {e}")
+        print(f"[WARN] LLM service initialization failed: {e}")
         print("  Fallback explanations will be used")
+
+    # Mount static files
+    static_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "static")
+    if os.path.exists(static_path):
+        app.mount("/static", StaticFiles(directory=static_path), name="static")
+        print(f"[OK] Static files mounted from {static_path}")
 
 
 @app.get("/")
@@ -103,8 +112,19 @@ async def root():
         "status": "operational",
         "version": "2.0.0",
         "llm_available": llm_explainer is not None,
-        "database": "SQLite (production-ready)"
+        "database": "SQLite (production-ready)",
+        "test_page": "/test"
     }
+
+
+@app.get("/test")
+async def test_page():
+    """Serve the liveness test page."""
+    static_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "static", "test_liveness.html")
+    if os.path.exists(static_path):
+        return FileResponse(static_path)
+    else:
+        raise HTTPException(status_code=404, detail="Test page not found")
 
 
 @app.post("/api/analyze", response_model=AnalysisResponse)
@@ -539,8 +559,8 @@ async def check_liveness(
         user = db.query(User).filter(User.user_id == user_id).first()
         user_name = user.full_name if user and user.full_name != "Pending" else None
 
-        # Perform liveness check with real face detection
-        result, face_embedding = liveness_checker.verify_liveness(liveness_check, user_name)
+        # Perform liveness check with real face detection (async)
+        result, face_embedding = await liveness_checker.verify_liveness(liveness_check, user_name)
 
         # Store result in database
         db_liveness = LivenessCheckDB(
@@ -686,12 +706,17 @@ async def analyze_underwriting(
         )
 
         # Store decision in database
+        # Determine fraud decline reason if fraud gate failed
+        fraud_decline_reason = None
+        if not decision.fraud_gate_passed and decision.liveness_result:
+            fraud_decline_reason = ",".join(decision.liveness_result.flags) if decision.liveness_result.flags else "FRAUD_GATE_FAILED"
+
         db_decision = UnderwritingDecisionDB(
             decision_id=decision.decision_id,
             user_id=user_id,
             jurisdiction=jurisdiction,
             fraud_gate_passed=decision.fraud_gate_passed,
-            fraud_decline_reason=decision.fraud_decline_reason,
+            fraud_decline_reason=fraud_decline_reason,
             cashflow_metrics=json.dumps(cashflow_metrics.dict()),
             pd_12m=decision.pd_12m,
             lgd=decision.lgd,
