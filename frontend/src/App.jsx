@@ -1,12 +1,20 @@
 import { useState } from 'react'
-import { Upload, AlertTriangle, Shield, Network, FileText, Loader2, Sparkles, TrendingUp, Lock, Filter, Users, Globe2, ArrowRightLeft, Scale } from 'lucide-react'
+import { Upload, AlertTriangle, Shield, Network, FileText, Loader2, Sparkles, TrendingUp, Lock, Filter, Users, Globe2, ArrowRightLeft, Scale, User as UserIcon } from 'lucide-react'
 import FileUpload from './components/FileUpload'
 import GraphVisualization from './components/GraphVisualization'
 import RiskTable from './components/RiskTable'
 import ExplanationPanel from './components/ExplanationPanel'
+import Logo from './components/Logo'
+import SignUp from './pages/SignUp'
+import BankImport from './pages/BankImport'
+import BankPortal from './pages/BankPortal'
+import UserProfile from './pages/UserProfile'
 import { analyzeData, explainAccount } from './services/api'
 
 function App() {
+  const [currentPage, setCurrentPage] = useState('signup') // 'signup', 'bankimport', 'bank', 'main', 'profile'
+  const [userData, setUserData] = useState(null)
+  const [selectedBank, setSelectedBank] = useState(null)
   const [usersFile, setUsersFile] = useState(null)
   const [transactionsFile, setTransactionsFile] = useState(null)
   const [analysisResults, setAnalysisResults] = useState(null)
@@ -16,6 +24,40 @@ function App() {
   const [error, setError] = useState(null)
   const [activeView, setActiveView] = useState('graph') // 'graph' or 'table'
   const [graphFilter, setGraphFilter] = useState('all') // 'all', 'user_to_user', 'cross_border', 'country_to_country', 'compliance_groups'
+
+  const handleSignUpComplete = (data) => {
+    setUserData(data)
+    setCurrentPage('bankimport')
+  }
+
+  const handleBankSelected = (bank) => {
+    setSelectedBank(bank)
+    setCurrentPage('bank')
+  }
+
+  const handleBackToProfile = () => {
+    setCurrentPage('signup')
+  }
+
+  const handleBackToBankSelection = () => {
+    setCurrentPage('bankimport')
+  }
+
+  const handleBankLogin = () => {
+    setCurrentPage('main')
+  }
+
+  const handleUpdateProfile = (updatedData) => {
+    setUserData(updatedData)
+  }
+
+  const handleOpenProfile = () => {
+    setCurrentPage('profile')
+  }
+
+  const handleCloseProfile = () => {
+    setCurrentPage('main')
+  }
 
   const handleAnalyze = async () => {
     if (!usersFile || !transactionsFile) {
@@ -68,6 +110,27 @@ function App() {
     return 'text-risk-low'
   }
 
+  // Show sign-up page first
+  if (currentPage === 'signup') {
+    return <SignUp onSignUpComplete={handleSignUpComplete} />
+  }
+
+  // Then show bank import selection
+  if (currentPage === 'bankimport') {
+    return <BankImport onBankSelected={handleBankSelected} onBack={handleBackToProfile} />
+  }
+
+  // Then show bank portal
+  if (currentPage === 'bank') {
+    return <BankPortal onLogin={handleBankLogin} selectedBank={selectedBank} onBackToBankSelection={handleBackToBankSelection} />
+  }
+
+  // Show user profile
+  if (currentPage === 'profile') {
+    return <UserProfile userData={userData} onUpdateProfile={handleUpdateProfile} onClose={handleCloseProfile} />
+  }
+
+  // Finally show main app
   return (
     <div className="min-h-screen bg-dark-bg text-white relative overflow-hidden">
       {/* Animated Background */}
@@ -84,26 +147,28 @@ function App() {
       <header className="relative bg-dark-surface/40 backdrop-blur-2xl border-b border-dark-border/30 shadow-glass">
         <div className="max-w-[1400px] mx-auto px-8 py-5">
           <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-4">
-              <div className="relative group">
-                <div className="absolute inset-0 bg-gradient-to-r from-accent-blue via-accent-purple to-accent-cyan blur-xl opacity-60 group-hover:opacity-100 transition-opacity"></div>
-                <div className="relative bg-gradient-to-br from-accent-blue to-accent-purple p-2.5 rounded-2xl shadow-glow-blue">
-                  <Shield className="w-8 h-8 text-white" />
-                </div>
-              </div>
-              <div>
-                <h1 className="text-2xl font-bold bg-gradient-to-r from-white via-accent-cyan to-accent-blue bg-clip-text text-transparent tracking-tight">
-                  FinShield AI
-                </h1>
-                <div className="flex items-center space-x-2 mt-0.5">
-                  <div className="w-1.5 h-1.5 rounded-full bg-accent-cyan animate-pulse"></div>
-                  <p className="text-xs text-gray-400 font-medium">AI-Powered Fraud Detection</p>
-                </div>
-              </div>
-            </div>
+            <Logo size="md" showText={true} />
             
-            {analysisResults && (
-              <div className="flex items-center space-x-3">
+            <div className="flex items-center space-x-4">
+              {/* User Profile */}
+              {userData && (
+                <button
+                  onClick={handleOpenProfile}
+                  className="flex items-center space-x-3 bg-glass backdrop-blur-xl border border-dark-border/30 rounded-2xl px-4 py-2 shadow-glass hover:border-accent-cyan/40 transition-all group"
+                >
+                  <div className="w-8 h-8 rounded-full bg-gradient-to-br from-accent-cyan to-accent-blue flex items-center justify-center font-bold text-sm group-hover:scale-110 transition-transform">
+                    {userData.fullName?.charAt(0) || 'U'}
+                  </div>
+                  <div className="text-left">
+                    <p className="text-sm font-semibold">{userData.fullName}</p>
+                    <p className="text-xs text-gray-500">{userData.occupation || userData.email}</p>
+                  </div>
+                  <UserIcon className="w-4 h-4 text-gray-500 group-hover:text-accent-cyan transition-colors" />
+                </button>
+              )}
+              
+              {analysisResults && (
+                <div className="flex items-center space-x-3">
                 <div className="bg-glass backdrop-blur-xl border border-accent-blue/20 rounded-2xl px-5 py-3 shadow-glass hover:border-accent-blue/40 transition-all">
                   <div className="text-xl font-bold text-accent-blue">
                     {analysisResults.summary.total_accounts}
@@ -127,7 +192,8 @@ function App() {
                   <div className="text-[10px] text-gray-500 font-medium uppercase tracking-wider">High Risk</div>
                 </div>
               </div>
-            )}
+              )}
+            </div>
           </div>
         </div>
       </header>
