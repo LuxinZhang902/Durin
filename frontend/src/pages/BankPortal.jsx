@@ -13,10 +13,10 @@ function BankPortal({ onLogin, selectedBank, onBackToBankSelection }) {
     e.preventDefault()
     setIsLoading(true)
     
-    // Simulate authentication
+    // Simulate authentication - go directly to main page
     setTimeout(() => {
       setIsLoading(false)
-      setShowDownloadSection(true)
+      onLogin()
     }, 1500)
   }
 
