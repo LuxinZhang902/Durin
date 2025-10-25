@@ -69,56 +69,62 @@ function App() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-dark-bg via-dark-bg to-accent-blue/5 text-white">
+    <div className="min-h-screen bg-dark-bg text-white relative overflow-hidden">
       {/* Animated Background */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-0 left-1/4 w-96 h-96 bg-accent-blue/10 rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-accent-purple/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
+        <div className="absolute top-0 left-1/4 w-[600px] h-[600px] bg-accent-blue/20 rounded-full blur-[120px] animate-pulse"></div>
+        <div className="absolute bottom-0 right-1/4 w-[600px] h-[600px] bg-accent-purple/20 rounded-full blur-[120px] animate-pulse" style={{ animationDelay: '1s' }}></div>
+        <div className="absolute top-1/2 left-1/2 w-[400px] h-[400px] bg-accent-cyan/10 rounded-full blur-[100px] animate-pulse" style={{ animationDelay: '2s' }}></div>
       </div>
+      
+      {/* Grid Pattern Overlay */}
+      <div className="fixed inset-0 pointer-events-none opacity-[0.02]" style={{ backgroundImage: 'linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)', backgroundSize: '50px 50px' }}></div>
 
       {/* Header */}
-      <header className="relative bg-dark-surface/80 backdrop-blur-xl border-b border-dark-border/50 shadow-2xl">
-        <div className="max-w-7xl mx-auto px-6 py-6">
+      <header className="relative bg-dark-surface/40 backdrop-blur-2xl border-b border-dark-border/30 shadow-glass">
+        <div className="max-w-[1400px] mx-auto px-8 py-5">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
-              <div className="relative">
-                <div className="absolute inset-0 bg-gradient-to-r from-accent-blue to-accent-purple blur-lg opacity-50"></div>
-                <Shield className="relative w-10 h-10 text-white drop-shadow-lg" />
+              <div className="relative group">
+                <div className="absolute inset-0 bg-gradient-to-r from-accent-blue via-accent-purple to-accent-cyan blur-xl opacity-60 group-hover:opacity-100 transition-opacity"></div>
+                <div className="relative bg-gradient-to-br from-accent-blue to-accent-purple p-2.5 rounded-2xl shadow-glow-blue">
+                  <Shield className="w-8 h-8 text-white" />
+                </div>
               </div>
               <div>
-                <h1 className="text-3xl font-black bg-gradient-to-r from-accent-blue via-accent-purple to-accent-blue bg-clip-text text-transparent animate-gradient">
+                <h1 className="text-2xl font-bold bg-gradient-to-r from-white via-accent-cyan to-accent-blue bg-clip-text text-transparent tracking-tight">
                   FinShield AI
                 </h1>
-                <div className="flex items-center space-x-2 mt-1">
-                  <Sparkles className="w-3 h-3 text-accent-purple" />
-                  <p className="text-sm text-gray-400 font-medium">AI-Powered Fraud Detection Platform</p>
+                <div className="flex items-center space-x-2 mt-0.5">
+                  <div className="w-1.5 h-1.5 rounded-full bg-accent-cyan animate-pulse"></div>
+                  <p className="text-xs text-gray-400 font-medium">AI-Powered Fraud Detection</p>
                 </div>
               </div>
             </div>
             
             {analysisResults && (
-              <div className="flex items-center space-x-4">
-                <div className="bg-accent-blue/10 backdrop-blur-sm border border-accent-blue/30 rounded-xl px-6 py-3 text-center">
-                  <div className="text-2xl font-bold text-accent-blue drop-shadow-lg">
+              <div className="flex items-center space-x-3">
+                <div className="bg-glass backdrop-blur-xl border border-accent-blue/20 rounded-2xl px-5 py-3 shadow-glass hover:border-accent-blue/40 transition-all">
+                  <div className="text-xl font-bold text-accent-blue">
                     {analysisResults.summary.total_accounts}
                   </div>
-                  <div className="text-xs text-gray-400 font-medium">Accounts</div>
+                  <div className="text-[10px] text-gray-500 font-medium uppercase tracking-wider">Accounts</div>
                 </div>
-                <div className="bg-accent-purple/10 backdrop-blur-sm border border-accent-purple/30 rounded-xl px-6 py-3 text-center">
-                  <div className="text-2xl font-bold text-accent-purple drop-shadow-lg">
+                <div className="bg-glass backdrop-blur-xl border border-accent-purple/20 rounded-2xl px-5 py-3 shadow-glass hover:border-accent-purple/40 transition-all">
+                  <div className="text-xl font-bold text-accent-purple">
                     {analysisResults.summary.total_transactions}
                   </div>
-                  <div className="text-xs text-gray-400 font-medium">Transactions</div>
+                  <div className="text-[10px] text-gray-500 font-medium uppercase tracking-wider">Transactions</div>
                 </div>
-                <div className={`backdrop-blur-sm border rounded-xl px-6 py-3 text-center ${
+                <div className={`bg-glass backdrop-blur-xl border rounded-2xl px-5 py-3 shadow-glass transition-all ${
                   analysisResults.summary.high_risk_count > 0 
-                    ? 'bg-risk-high/10 border-risk-high/30' 
-                    : 'bg-risk-low/10 border-risk-low/30'
+                    ? 'border-risk-high/20 hover:border-risk-high/40' 
+                    : 'border-risk-low/20 hover:border-risk-low/40'
                 }`}>
-                  <div className={`text-2xl font-bold drop-shadow-lg ${analysisResults.summary.high_risk_count > 0 ? 'text-risk-high' : 'text-risk-low'}`}>
+                  <div className={`text-xl font-bold ${analysisResults.summary.high_risk_count > 0 ? 'text-risk-high' : 'text-risk-low'}`}>
                     {analysisResults.summary.high_risk_count}
                   </div>
-                  <div className="text-xs text-gray-400 font-medium">High Risk</div>
+                  <div className="text-[10px] text-gray-500 font-medium uppercase tracking-wider">High Risk</div>
                 </div>
               </div>
             )}
@@ -127,7 +133,7 @@ function App() {
       </header>
 
       {/* Main Content */}
-      <main className="relative max-w-7xl mx-auto px-6 py-12">
+      <main className="relative max-w-[1400px] mx-auto px-8 py-10">
         {/* Upload Section */}
         {!analysisResults && (
           <div className="space-y-8">
@@ -149,17 +155,20 @@ function App() {
               </p>
             </div>
 
-            <div className="relative bg-gradient-to-br from-dark-surface/90 to-dark-surface/50 backdrop-blur-xl rounded-2xl border border-dark-border/50 p-8 shadow-2xl">
+            <div className="relative bg-glass backdrop-blur-2xl rounded-3xl border border-dark-border/30 p-10 shadow-glass overflow-hidden">
               {/* Decorative Elements */}
-              <div className="absolute top-0 right-0 w-64 h-64 bg-accent-purple/5 rounded-full blur-3xl"></div>
-              <div className="absolute bottom-0 left-0 w-64 h-64 bg-accent-blue/5 rounded-full blur-3xl"></div>
+              <div className="absolute top-0 right-0 w-96 h-96 bg-accent-purple/10 rounded-full blur-[100px]"></div>
+              <div className="absolute bottom-0 left-0 w-96 h-96 bg-accent-blue/10 rounded-full blur-[100px]"></div>
               
               <div className="relative">
-                <div className="flex items-center space-x-3 mb-8">
-                  <div className="p-2 bg-gradient-to-br from-accent-blue to-accent-purple rounded-lg">
-                    <Upload className="w-5 h-5 text-white" />
+                <div className="flex items-center space-x-3 mb-10">
+                  <div className="p-3 bg-gradient-to-br from-accent-blue to-accent-purple rounded-2xl shadow-glow-blue">
+                    <Upload className="w-6 h-6 text-white" />
                   </div>
-                  <h3 className="text-2xl font-bold">Upload Your Data</h3>
+                  <div>
+                    <h3 className="text-2xl font-bold">Upload Your Data</h3>
+                    <p className="text-sm text-gray-500">CSV files with user and transaction information</p>
+                  </div>
                 </div>
 
               <div className="grid md:grid-cols-2 gap-6 mb-6">
@@ -178,55 +187,57 @@ function App() {
               </div>
 
               {error && (
-                <div className="mb-6 p-4 bg-risk-high/10 border border-risk-high/30 rounded-lg flex items-start space-x-3">
+                <div className="mb-6 p-4 bg-risk-high/10 backdrop-blur-xl border border-risk-high/30 rounded-2xl flex items-start space-x-3 shadow-glass">
                   <AlertTriangle className="w-5 h-5 text-risk-high flex-shrink-0 mt-0.5" />
-                  <p className="text-sm text-risk-high">{error}</p>
+                  <p className="text-sm text-risk-high font-medium">{error}</p>
                 </div>
               )}
 
                 <button
                   onClick={handleAnalyze}
                   disabled={loading || !usersFile || !transactionsFile}
-                  className="group relative w-full bg-gradient-to-r from-accent-blue via-accent-purple to-accent-blue bg-size-200 hover:bg-pos-100 text-white py-4 px-8 rounded-xl font-bold text-lg shadow-lg hover:shadow-accent-blue/50 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-3 overflow-hidden"
+                  className="group relative w-full bg-gradient-to-r from-accent-blue via-accent-purple to-accent-cyan text-white py-5 px-8 rounded-2xl font-bold text-lg shadow-glow-blue hover:shadow-glow-purple transition-all duration-500 disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center space-x-3 overflow-hidden hover:scale-[1.02] active:scale-[0.98]"
                 >
-                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-1000"></div>
-                  {loading ? (
-                    <>
-                      <Loader2 className="w-6 h-6 animate-spin" />
-                      <span>Analyzing Your Data...</span>
-                    </>
-                  ) : (
-                    <>
-                      <Sparkles className="w-6 h-6" />
-                      <span>Run AI Analysis</span>
-                      <TrendingUp className="w-5 h-5" />
-                    </>
-                  )}
+                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-1000"></div>
+                  <div className="relative flex items-center space-x-3">
+                    {loading ? (
+                      <>
+                        <Loader2 className="w-6 h-6 animate-spin" />
+                        <span>Analyzing Your Data...</span>
+                      </>
+                    ) : (
+                      <>
+                        <Sparkles className="w-6 h-6" />
+                        <span>Run AI Analysis</span>
+                        <TrendingUp className="w-5 h-5" />
+                      </>
+                    )}
+                  </div>
                 </button>
               </div>
             </div>
 
             {/* Sample Data Info */}
-            <div className="relative bg-gradient-to-br from-dark-surface/70 to-dark-surface/30 backdrop-blur-sm rounded-xl border border-dark-border/50 p-6 overflow-hidden">
-              <div className="absolute top-0 right-0 w-32 h-32 bg-accent-blue/5 rounded-full blur-2xl"></div>
+            <div className="relative bg-glass backdrop-blur-xl rounded-2xl border border-dark-border/30 p-6 overflow-hidden shadow-glass">
+              <div className="absolute top-0 right-0 w-40 h-40 bg-accent-cyan/10 rounded-full blur-[60px]"></div>
               <div className="relative">
-                <h3 className="font-bold mb-4 flex items-center space-x-2 text-lg">
-                  <div className="p-1.5 bg-accent-blue/10 rounded-lg">
-                    <FileText className="w-4 h-4 text-accent-blue" />
+                <h3 className="font-bold mb-4 flex items-center space-x-2 text-base">
+                  <div className="p-2 bg-accent-cyan/10 rounded-xl border border-accent-cyan/20">
+                    <FileText className="w-4 h-4 text-accent-cyan" />
                   </div>
                   <span>Sample Data Available</span>
                 </h3>
-                <p className="text-sm text-gray-400 mb-3">
-                  Demo CSV files are included in the <code className="bg-dark-bg/80 px-2 py-1 rounded text-accent-blue font-mono">/data</code> directory:
+                <p className="text-sm text-gray-400 mb-4">
+                  Demo CSV files are included in the <code className="bg-dark-card/80 px-2 py-1 rounded text-accent-cyan font-mono text-xs">/data</code> directory:
                 </p>
                 <div className="grid md:grid-cols-2 gap-3">
-                  <div className="bg-dark-bg/50 border border-accent-purple/20 rounded-lg p-3">
-                    <code className="text-accent-purple font-semibold">users.csv</code>
-                    <p className="text-xs text-gray-500 mt-1">KYC data with shared devices/IPs</p>
+                  <div className="bg-dark-card/50 backdrop-blur-sm border border-accent-purple/20 rounded-xl p-4 hover:border-accent-purple/40 transition-all">
+                    <code className="text-accent-purple font-semibold text-sm">users.csv</code>
+                    <p className="text-xs text-gray-500 mt-1.5">KYC data with shared devices/IPs</p>
                   </div>
-                  <div className="bg-dark-bg/50 border border-accent-blue/20 rounded-lg p-3">
-                    <code className="text-accent-blue font-semibold">transactions.csv</code>
-                    <p className="text-xs text-gray-500 mt-1">Transactions with fraud patterns</p>
+                  <div className="bg-dark-card/50 backdrop-blur-sm border border-accent-blue/20 rounded-xl p-4 hover:border-accent-blue/40 transition-all">
+                    <code className="text-accent-blue font-semibold text-sm">transactions.csv</code>
+                    <p className="text-xs text-gray-500 mt-1.5">Transactions with fraud patterns</p>
                   </div>
                 </div>
               </div>
@@ -239,13 +250,13 @@ function App() {
           <div className="space-y-6">
             {/* View Toggle and Filters */}
             <div className="flex items-center justify-between flex-wrap gap-4">
-              <div className="flex space-x-2 bg-dark-surface rounded-lg p-1 border border-dark-border">
+              <div className="flex space-x-1 bg-dark-card/50 backdrop-blur-xl rounded-2xl p-1.5 border border-dark-border/30 shadow-glass">
                 <button
                   onClick={() => setActiveView('graph')}
-                  className={`px-4 py-2 rounded-md transition-colors flex items-center space-x-2 ${
+                  className={`px-5 py-2.5 rounded-xl transition-all flex items-center space-x-2 font-medium ${
                     activeView === 'graph'
-                      ? 'bg-accent-blue text-white'
-                      : 'text-gray-400 hover:text-white'
+                      ? 'bg-gradient-to-r from-accent-blue to-accent-purple text-white shadow-glow-blue'
+                      : 'text-gray-400 hover:text-white hover:bg-dark-surface/50'
                   }`}
                 >
                   <Network className="w-4 h-4" />
@@ -253,10 +264,10 @@ function App() {
                 </button>
                 <button
                   onClick={() => setActiveView('table')}
-                  className={`px-4 py-2 rounded-md transition-colors flex items-center space-x-2 ${
+                  className={`px-5 py-2.5 rounded-xl transition-all flex items-center space-x-2 font-medium ${
                     activeView === 'table'
-                      ? 'bg-accent-blue text-white'
-                      : 'text-gray-400 hover:text-white'
+                      ? 'bg-gradient-to-r from-accent-blue to-accent-purple text-white shadow-glow-blue'
+                      : 'text-gray-400 hover:text-white hover:bg-dark-surface/50'
                   }`}
                 >
                   <FileText className="w-4 h-4" />
@@ -266,26 +277,28 @@ function App() {
 
               {/* Graph Filters */}
               {activeView === 'graph' && (
-                <div className="flex items-center space-x-2">
-                  <Filter className="w-4 h-4 text-gray-400" />
-                  <span className="text-sm text-gray-400">Filter:</span>
-                  <div className="flex space-x-2 bg-dark-surface rounded-lg p-1 border border-dark-border">
+                <div className="flex items-center space-x-3">
+                  <div className="flex items-center space-x-2">
+                    <Filter className="w-4 h-4 text-accent-cyan" />
+                    <span className="text-sm text-gray-400 font-medium">Filter:</span>
+                  </div>
+                  <div className="flex space-x-1.5 bg-dark-card/50 backdrop-blur-xl rounded-2xl p-1.5 border border-dark-border/30 shadow-glass">
                     <button
                       onClick={() => setGraphFilter('all')}
-                      className={`px-3 py-1.5 rounded-md transition-colors flex items-center space-x-1.5 text-sm ${
+                      className={`px-3 py-2 rounded-xl transition-all flex items-center space-x-1.5 text-xs font-medium ${
                         graphFilter === 'all'
-                          ? 'bg-accent-purple text-white'
-                          : 'text-gray-400 hover:text-white'
+                          ? 'bg-gradient-to-r from-accent-purple to-accent-blue text-white shadow-glow-purple'
+                          : 'text-gray-400 hover:text-white hover:bg-dark-surface/50'
                       }`}
                     >
                       <span>All</span>
                     </button>
                     <button
                       onClick={() => setGraphFilter('user_to_user')}
-                      className={`px-3 py-1.5 rounded-md transition-colors flex items-center space-x-1.5 text-sm ${
+                      className={`px-3 py-2 rounded-xl transition-all flex items-center space-x-1.5 text-xs font-medium ${
                         graphFilter === 'user_to_user'
-                          ? 'bg-accent-purple text-white'
-                          : 'text-gray-400 hover:text-white'
+                          ? 'bg-gradient-to-r from-accent-purple to-accent-blue text-white shadow-glow-purple'
+                          : 'text-gray-400 hover:text-white hover:bg-dark-surface/50'
                       }`}
                     >
                       <Users className="w-3.5 h-3.5" />
@@ -293,10 +306,10 @@ function App() {
                     </button>
                     <button
                       onClick={() => setGraphFilter('cross_border')}
-                      className={`px-3 py-1.5 rounded-md transition-colors flex items-center space-x-1.5 text-sm ${
+                      className={`px-3 py-2 rounded-xl transition-all flex items-center space-x-1.5 text-xs font-medium ${
                         graphFilter === 'cross_border'
-                          ? 'bg-accent-purple text-white'
-                          : 'text-gray-400 hover:text-white'
+                          ? 'bg-gradient-to-r from-accent-purple to-accent-blue text-white shadow-glow-purple'
+                          : 'text-gray-400 hover:text-white hover:bg-dark-surface/50'
                       }`}
                     >
                       <ArrowRightLeft className="w-3.5 h-3.5" />
@@ -304,10 +317,10 @@ function App() {
                     </button>
                     <button
                       onClick={() => setGraphFilter('country_to_country')}
-                      className={`px-3 py-1.5 rounded-md transition-colors flex items-center space-x-1.5 text-sm ${
+                      className={`px-3 py-2 rounded-xl transition-all flex items-center space-x-1.5 text-xs font-medium ${
                         graphFilter === 'country_to_country'
-                          ? 'bg-accent-purple text-white'
-                          : 'text-gray-400 hover:text-white'
+                          ? 'bg-gradient-to-r from-accent-purple to-accent-blue text-white shadow-glow-purple'
+                          : 'text-gray-400 hover:text-white hover:bg-dark-surface/50'
                       }`}
                     >
                       <Globe2 className="w-3.5 h-3.5" />
@@ -315,10 +328,10 @@ function App() {
                     </button>
                     <button
                       onClick={() => setGraphFilter('compliance_groups')}
-                      className={`px-3 py-1.5 rounded-md transition-colors flex items-center space-x-1.5 text-sm ${
+                      className={`px-3 py-2 rounded-xl transition-all flex items-center space-x-1.5 text-xs font-medium ${
                         graphFilter === 'compliance_groups'
-                          ? 'bg-accent-purple text-white'
-                          : 'text-gray-400 hover:text-white'
+                          ? 'bg-gradient-to-r from-accent-purple to-accent-blue text-white shadow-glow-purple'
+                          : 'text-gray-400 hover:text-white hover:bg-dark-surface/50'
                       }`}
                     >
                       <Scale className="w-3.5 h-3.5" />
@@ -336,7 +349,7 @@ function App() {
                   setSelectedAccount(null)
                   setExplanation(null)
                 }}
-                className="px-4 py-2 bg-dark-surface border border-dark-border rounded-lg hover:bg-dark-border transition-colors"
+                className="px-5 py-2.5 bg-dark-card/50 backdrop-blur-xl border border-dark-border/30 rounded-2xl hover:border-accent-cyan/40 transition-all font-medium text-sm shadow-glass hover:shadow-glow-blue"
               >
                 New Analysis
               </button>

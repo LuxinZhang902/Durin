@@ -48,16 +48,16 @@ function FileUpload({ label, description, onFileSelect, accept = '.csv' }) {
 
   return (
     <div>
-      <label className="block text-sm font-bold mb-2 text-white">{label}</label>
-      <p className="text-xs text-gray-500 mb-3">{description}</p>
+      <label className="block text-sm font-semibold mb-2 text-white">{label}</label>
+      <p className="text-xs text-gray-400 mb-3">{description}</p>
 
       <div
-        className={`relative border-2 border-dashed rounded-xl p-8 transition-all duration-300 ${
+        className={`relative border-2 border-dashed rounded-2xl p-8 transition-all duration-300 backdrop-blur-sm ${
           dragActive
-            ? 'border-accent-blue bg-accent-blue/10 scale-105 shadow-lg shadow-accent-blue/20'
+            ? 'border-accent-blue bg-accent-blue/10 scale-[1.02] shadow-glow-blue'
             : selectedFile
-            ? 'border-risk-low bg-risk-low/10 shadow-lg shadow-risk-low/20'
-            : 'border-dark-border/50 hover:border-accent-blue/50 hover:bg-dark-border/10'
+            ? 'border-risk-low bg-risk-low/10 shadow-glass'
+            : 'border-dark-border/40 hover:border-accent-blue/40 hover:bg-dark-card/30'
         }`}
         onDragEnter={handleDrag}
         onDragLeave={handleDrag}
@@ -74,7 +74,7 @@ function FileUpload({ label, description, onFileSelect, accept = '.csv' }) {
         {selectedFile ? (
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
-              <div className="p-2 bg-risk-low/20 rounded-lg">
+              <div className="p-2.5 bg-risk-low/20 rounded-xl border border-risk-low/30">
                 <File className="w-5 h-5 text-risk-low" />
               </div>
               <div>
@@ -89,21 +89,21 @@ function FileUpload({ label, description, onFileSelect, accept = '.csv' }) {
                 e.stopPropagation()
                 clearFile()
               }}
-              className="p-2 hover:bg-risk-high/20 rounded-lg transition-colors group"
+              className="p-2 hover:bg-risk-high/20 rounded-xl transition-all group"
             >
               <X className="w-4 h-4 text-gray-400 group-hover:text-risk-high" />
             </button>
           </div>
         ) : (
           <div className="text-center">
-            <div className="inline-flex p-4 bg-accent-blue/10 rounded-full mb-3">
-              <Upload className="w-8 h-8 text-accent-blue" />
+            <div className="inline-flex p-4 bg-gradient-to-br from-accent-blue/10 to-accent-purple/10 rounded-2xl mb-3 border border-accent-blue/20">
+              <Upload className="w-7 h-7 text-accent-blue" />
             </div>
-            <p className="text-sm font-medium text-gray-300 mb-1">
+            <p className="text-sm font-medium text-gray-200 mb-1">
               Drag & drop your file here
             </p>
-            <p className="text-xs text-gray-500">
-              or <span className="text-accent-blue font-semibold cursor-pointer hover:underline">browse</span> to upload
+            <p className="text-xs text-gray-400">
+              or <span className="text-accent-cyan font-semibold cursor-pointer hover:underline">browse</span> to upload
             </p>
             <p className="text-xs text-gray-600 mt-2">CSV files only</p>
           </div>
