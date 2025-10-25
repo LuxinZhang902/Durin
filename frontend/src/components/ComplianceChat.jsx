@@ -46,9 +46,11 @@ function ComplianceChat({ country, onClose }) {
         content: response.response 
       }])
     } catch (error) {
+      console.error('Compliance chat error:', error)
+      const errorMessage = error.response?.data?.detail || error.message || 'Unable to retrieve compliance information for ' + country + '. Please check your connection or try again later.'
       setMessages(prev => [...prev, { 
         role: 'assistant', 
-        content: 'Sorry, I encountered an error. Please try again.' 
+        content: errorMessage
       }])
     } finally {
       setLoading(false)

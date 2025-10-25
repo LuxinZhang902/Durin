@@ -156,4 +156,41 @@ Guidelines:
             return response.choices[0].message.content.strip()
             
         except Exception as e:
-            return f"Unable to retrieve compliance information for {country}. Please check your connection or try again later."
+            print(f"Compliance chat error: {str(e)}")
+            import traceback
+            traceback.print_exc()
+            
+            # Fallback response for demo when quota exceeded
+            if "insufficient_quota" in str(e) or "429" in str(e):
+                return self._get_fallback_compliance_response(country, user_question)
+            
+            return f"Unable to retrieve compliance information for {country}. Error: {str(e)}"
+    
+    def _get_fallback_compliance_response(self, country: str, question: str) -> str:
+        """Provide fallback compliance information when OpenAI is unavailable."""
+        responses = {
+            "Canada": {
+                "kyc": "Canada's KYC regulations are governed by FINTRAC (Financial Transactions and Reports Analysis Centre). Key requirements include: customer identification, beneficial ownership verification, ongoing monitoring, and suspicious transaction reporting. Financial institutions must verify identity using government-issued ID and maintain records for 5 years.",
+                "aml": "Canada's AML framework is overseen by FINTRAC under the Proceeds of Crime (Money Laundering) and Terrorist Financing Act (PCMLTFA). Requirements include: risk-based approach, customer due diligence, transaction monitoring, and reporting suspicious activities (STRs) and large cash transactions (LCTRs) over $10,000 CAD.",
+                "default": "Canada's financial compliance is regulated by FINTRAC. Key areas include KYC (Know Your Customer), AML (Anti-Money Laundering), and CTF (Counter-Terrorist Financing). Financial institutions must implement risk-based programs, verify customer identity, monitor transactions, and report suspicious activities."
+            },
+            "United States": {
+                "kyc": "US KYC regulations are enforced by FinCEN under the Bank Secrecy Act (BSA). Requirements include Customer Identification Program (CIP), Customer Due Diligence (CDD), and Enhanced Due Diligence (EDD) for high-risk customers. Beneficial ownership rules require identifying individuals owning 25%+ of entities.",
+                "aml": "US AML compliance is governed by FinCEN and enforced through the Bank Secrecy Act (BSA) and USA PATRIOT Act. Requirements include: AML program, SAR filing for suspicious activities, CTR filing for transactions over $10,000, and OFAC sanctions screening.",
+                "default": "US financial compliance is overseen by FinCEN, OCC, and FDIC. Key regulations include the Bank Secrecy Act (BSA), USA PATRIOT Act, and OFAC sanctions. Financial institutions must implement comprehensive AML/KYC programs, file SARs and CTRs, and screen against sanctions lists."
+            }
+        }
+        
+        # Get country-specific responses or use default
+        country_responses = responses.get(country, {
+            "default": f"{country}'s financial compliance typically includes KYC (customer identification), AML (transaction monitoring), and regulatory reporting requirements. Specific regulations vary by jurisdiction. Consult local regulatory authorities for detailed requirements."
+        })
+        
+        # Match question to response type
+        question_lower = question.lower()
+        if "kyc" in question_lower or "know your customer" in question_lower or "identification" in question_lower:
+            return country_responses.get("kyc", country_responses.get("default"))
+        elif "aml" in question_lower or "money laundering" in question_lower or "laundering" in question_lower:
+            return country_responses.get("aml", country_responses.get("default"))
+        else:
+            return country_responses.get("default")
