@@ -1,6 +1,6 @@
-# 🛡️ FinShield AI - START HERE
+# 🛡️ Durin - START HERE
 
-**Welcome to FinShield AI!** This is your complete fraud detection platform.
+**Welcome to Durin!** This is your complete fraud detection platform.
 
 ---
 
@@ -27,26 +27,32 @@ echo "OPENAI_API_KEY=sk-your-key-here" > .env
 Choose your path based on what you need:
 
 ### 🚀 **Just Want to Run It?**
+
 → Read: [GETTING_STARTED.md](GETTING_STARTED.md)  
 **5 minutes** to get from zero to working demo
 
 ### ⚡ **Super Quick Reference?**
+
 → Read: [QUICKSTART.md](QUICKSTART.md)  
 **2 minutes** for essential commands only
 
 ### 🎬 **Preparing for Demo Day?**
+
 → Read: [DEMO.md](DEMO.md)  
 **5-minute demo script** with talking points
 
 ### 🔧 **Need Detailed Setup?**
+
 → Read: [SETUP.md](SETUP.md)  
 **Troubleshooting**, customization, deployment
 
 ### 📖 **Want Full Documentation?**
+
 → Read: [README.md](README.md)  
 **Complete guide** with architecture, API docs, features
 
 ### 📊 **Want Project Overview?**
+
 → Read: [PROJECT_SUMMARY.md](PROJECT_SUMMARY.md)  
 **What's built**, tech stack, file structure
 
@@ -54,17 +60,17 @@ Choose your path based on what you need:
 
 ## 🎯 What Is This?
 
-**FinShield AI** is an AI-powered fraud detection platform that:
+**Durin** is an AI-powered fraud detection platform that:
 
 ✅ Analyzes financial transaction networks  
 ✅ Detects 4 types of fraud patterns automatically  
 ✅ Generates AI explanations using GPT-4  
 ✅ Visualizes fraud networks interactively  
-✅ Provides risk scores (0-10) for every account  
+✅ Provides risk scores (0-10) for every account
 
 **Built for:** Soma Capital Hackathon  
 **Status:** Production-ready MVP  
-**Tech:** React + FastAPI + NetworkX + OpenAI  
+**Tech:** React + FastAPI + NetworkX + OpenAI
 
 ---
 
@@ -171,29 +177,34 @@ Before you start:
 ### Quick Fixes
 
 **"Port already in use"**
+
 ```bash
 docker-compose down
 ./run.sh
 ```
 
 **"OPENAI_API_KEY not found"**
+
 ```bash
 nano .env  # Add your key
 docker-compose restart
 ```
 
 **"Docker not running"**
+
 ```bash
 # Start Docker Desktop, then:
 ./run.sh
 ```
 
 **Graph not showing**
+
 - Try Chrome browser
 - Clear cache (Cmd+Shift+R)
 - Check both CSV files uploaded
 
 ### Get Detailed Help
+
 → See [SETUP.md](SETUP.md) for comprehensive troubleshooting
 
 ---
@@ -201,18 +212,21 @@ docker-compose restart
 ## 🚀 What's Next?
 
 ### For Demo Day
+
 1. Read [DEMO.md](DEMO.md) for 5-minute pitch
 2. Practice the demo flow once
 3. Have screenshots ready as backup
 4. Test your OpenAI API key works
 
 ### For Development
+
 1. Read [README.md](README.md) for architecture
 2. Explore the code in `backend/app/` and `frontend/src/`
 3. Customize colors in `frontend/tailwind.config.js`
 4. Add new fraud signals in `backend/app/graph_analyzer.py`
 
 ### For Deployment
+
 1. Read [SETUP.md](SETUP.md) deployment section
 2. Set up cloud hosting (AWS/Heroku/DigitalOcean)
 3. Add authentication
@@ -223,12 +237,14 @@ docker-compose restart
 ## 🎓 Learning Resources
 
 **Understand the Tech:**
+
 - FastAPI: https://fastapi.tiangolo.com/
 - NetworkX: https://networkx.org/
 - React: https://react.dev/
 - OpenAI API: https://platform.openai.com/docs
 
 **Understand the Domain:**
+
 - AML Patterns: https://www.fincen.gov/
 - KYC Compliance: https://www.ffiec.gov/
 - Graph Analysis: https://en.wikipedia.org/wiki/Social_network_analysis
@@ -237,28 +253,30 @@ docker-compose restart
 
 ## 🏆 Key Features
 
-| Feature | Description | Status |
-|---------|-------------|--------|
-| **Graph Analysis** | NetworkX-powered fraud detection | ✅ |
-| **AI Explanations** | GPT-4 generated insights | ✅ |
-| **Interactive Graph** | Force-directed visualization | ✅ |
-| **Risk Scoring** | 0-10 scale with multi-signal | ✅ |
-| **CSV Upload** | Drag & drop data import | ✅ |
-| **Real-time Analysis** | <1s for 1k transactions | ✅ |
-| **Modern UI** | Dark mode, responsive | ✅ |
-| **Docker Deploy** | One-command setup | ✅ |
+| Feature                | Description                      | Status |
+| ---------------------- | -------------------------------- | ------ |
+| **Graph Analysis**     | NetworkX-powered fraud detection | ✅     |
+| **AI Explanations**    | GPT-4 generated insights         | ✅     |
+| **Interactive Graph**  | Force-directed visualization     | ✅     |
+| **Risk Scoring**       | 0-10 scale with multi-signal     | ✅     |
+| **CSV Upload**         | Drag & drop data import          | ✅     |
+| **Real-time Analysis** | <1s for 1k transactions          | ✅     |
+| **Modern UI**          | Dark mode, responsive            | ✅     |
+| **Docker Deploy**      | One-command setup                | ✅     |
 
 ---
 
 ## 📊 Sample Data Explained
 
 ### users.csv (15 users)
+
 - Shows **shared device** fraud pattern
 - Users U1, U2, U8 all use device D1
 - Users U4, U5, U12 all use device D3
 - Indicates account takeover or mule networks
 
 ### transactions.csv (30 transactions)
+
 - Shows **structuring** pattern (A1, A11 send multiple small amounts)
 - Shows **circular flow** pattern (money loops through accounts)
 - Demonstrates real-world fraud scenarios
@@ -284,24 +302,27 @@ You'll know it's working when:
 ✅ Sample data uploads successfully  
 ✅ Analysis completes in <1 second  
 ✅ Graph shows colored nodes (red/orange/green)  
-✅ Clicking nodes shows AI explanations  
+✅ Clicking nodes shows AI explanations
 
 ---
 
 ## 🌟 What Makes This Special
 
 **Production Quality:**
+
 - Not a prototype - actually deployable
 - Clean, modern UI with dark theme
 - Fast performance (<1s analysis)
 - Comprehensive documentation
 
 **AI-Powered:**
+
 - Real GPT-4 integration
 - Natural language explanations
 - Compliance-ready insights
 
 **Complete Stack:**
+
 - Backend: FastAPI + NetworkX
 - Frontend: React + Vite + TailwindCSS
 - Infrastructure: Docker + Nginx
@@ -312,12 +333,14 @@ You'll know it's working when:
 ## 📞 Support
 
 **Questions?**
+
 - Check documentation files above
 - Run `./verify.sh` for diagnostics
 - View logs: `docker-compose logs -f`
 - Test API: http://localhost:8000/docs
 
 **Found a Bug?**
+
 - Check [SETUP.md](SETUP.md) troubleshooting
 - Verify `.env` has correct API key
 - Restart: `docker-compose restart`
@@ -339,15 +362,15 @@ You'll know it's working when:
 
 ## 📝 File Guide
 
-| File | When to Read | Time |
-|------|--------------|------|
-| **START_HERE.md** | Right now! | 2 min |
-| **GETTING_STARTED.md** | First time setup | 5 min |
-| **QUICKSTART.md** | Quick reference | 2 min |
-| **DEMO.md** | Before demo day | 10 min |
-| **README.md** | Full understanding | 20 min |
-| **SETUP.md** | Troubleshooting | As needed |
-| **PROJECT_SUMMARY.md** | Project overview | 10 min |
+| File                   | When to Read       | Time      |
+| ---------------------- | ------------------ | --------- |
+| **START_HERE.md**      | Right now!         | 2 min     |
+| **GETTING_STARTED.md** | First time setup   | 5 min     |
+| **QUICKSTART.md**      | Quick reference    | 2 min     |
+| **DEMO.md**            | Before demo day    | 10 min    |
+| **README.md**          | Full understanding | 20 min    |
+| **SETUP.md**           | Troubleshooting    | As needed |
+| **PROJECT_SUMMARY.md** | Project overview   | 10 min    |
 
 ---
 
@@ -357,4 +380,4 @@ You'll know it's working when:
 
 ---
 
-*Built with ❤️ for the Soma Capital Hackathon*
+_Built with ❤️ for the Soma Capital Hackathon_

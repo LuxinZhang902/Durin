@@ -1,22 +1,25 @@
-# FinShield AI - Production Setup Guide
+# Durin - Production Setup Guide
 
 ## What's New in V2 (Production-Ready)
 
 ### Major Improvements
 
 1. **SQLite Database with SQLAlchemy**
+
    - Persistent storage for all underwriting data
    - Proper relationship management
    - ACID transactions
    - Database file: `finshield_underwriting.db`
 
 2. **Real Face Detection & Deepfake Prevention**
+
    - DeepFace with RetinaFace backend for face detection
    - Anti-spoofing with deepfake detection
    - Face embedding deduplication (prevents same person applying multiple times)
    - Replay attack detection
 
 3. **Real Sanctions/PEP Screening**
+
    - OpenSanctions API integration (free tier)
    - Covers OFAC, UN, EU, UK OFSI sanctions
    - PEP (Politically Exposed Persons) screening
@@ -50,6 +53,7 @@ uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 ```
 
 You'll see:
+
 ```
 Initializing database...
 ✓ Database initialized
@@ -60,6 +64,7 @@ INFO:     Uvicorn running on http://0.0.0.0:8000
 ### 3. Run the Demo
 
 Open a new terminal:
+
 ```bash
 cd backend
 python demo_underwriting.py
@@ -100,6 +105,7 @@ python demo_underwriting.py
 ## Database Schema
 
 ### Users Table
+
 - `user_id` (PK)
 - `full_name`, `address`, `country`
 - `employment_status`, `monthly_income`, `tenure_months`
@@ -107,6 +113,7 @@ python demo_underwriting.py
 - `created_at`, `updated_at`
 
 ### Transactions Table
+
 - `id` (PK, auto-increment)
 - `txn_id` (unique)
 - `user_id` (FK → users)
@@ -114,6 +121,7 @@ python demo_underwriting.py
 - `merchant`, `counterparty`, `transaction_type`, `mcc`
 
 ### Liveness_Checks Table
+
 - `id` (PK)
 - `user_id` (FK → users)
 - `device_fingerprint`, `timestamp`
@@ -124,6 +132,7 @@ python demo_underwriting.py
 - `face_embedding` (JSON array for deduplication)
 
 ### Decisions Table
+
 - `id` (PK)
 - `decision_id` (unique)
 - `user_id` (FK → users)
@@ -139,11 +148,13 @@ python demo_underwriting.py
 ## API Endpoints
 
 ### Health Check
+
 ```bash
 GET /api/health
 ```
 
 Returns:
+
 ```json
 {
   "status": "healthy",
@@ -161,6 +172,7 @@ Returns:
 ```
 
 ### Upload Transactions (CSV)
+
 ```bash
 POST /api/underwrite/transactions/csv?user_id=user_001
 Content-Type: multipart/form-data
@@ -169,6 +181,7 @@ file: bank_transactions.csv
 ```
 
 ### Submit Personal Data
+
 ```bash
 POST /api/underwrite/personal-data
 Content-Type: application/json
@@ -187,6 +200,7 @@ Content-Type: application/json
 ```
 
 ### Liveness Check (Real Face Detection)
+
 ```bash
 POST /api/underwrite/liveness
 Content-Type: application/json
@@ -201,6 +215,7 @@ Content-Type: application/json
 ```
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -215,6 +230,7 @@ Content-Type: application/json
 ```
 
 ### Run Underwriting Analysis
+
 ```bash
 POST /api/underwrite/analyze
 Content-Type: application/json
@@ -226,16 +242,19 @@ Content-Type: application/json
 ```
 
 ### Get Decision
+
 ```bash
 GET /api/underwrite/decision/user_001
 ```
 
 ### Check Status
+
 ```bash
 GET /api/underwrite/status/user_001
 ```
 
 ### Clear User Data (Testing)
+
 ```bash
 DELETE /api/underwrite/user/user_001
 ```
@@ -247,16 +266,19 @@ DELETE /api/underwrite/user/user_001
 ### What It Does
 
 1. **Real Face Detection**
+
    - Uses RetinaFace (SOTA face detector)
    - Detects multiple faces and validates single person
    - Extracts face embeddings (512-dimensional vectors)
 
 2. **Deepfake Detection**
+
    - Analyzes face confidence scores
    - Checks for unnatural emotion distributions
    - Flags synthetic faces with >50% confidence
 
 3. **Replay Attack Detection**
+
    - Screen aspect ratio detection
    - Moiré pattern analysis
    - Pixel variance checks
@@ -269,6 +291,7 @@ DELETE /api/underwrite/user/user_001
 ### Testing Face Detection
 
 For hackathon demo without real photos:
+
 ```python
 # The demo script creates a test JPEG
 # For real testing, capture from webcam:
@@ -295,6 +318,7 @@ image_b64 = base64.b64encode(buffer).decode('utf-8')
 ### OpenSanctions API
 
 Free tier covers:
+
 - **OFAC SDN** (US sanctions)
 - **UN Sanctions**
 - **EU Sanctions**
@@ -331,6 +355,7 @@ personal_data = {
 ## Database Management
 
 ### View Database
+
 ```bash
 cd backend
 sqlite3 finshield_underwriting.db
@@ -349,6 +374,7 @@ SELECT user_id, approved, credit_limit, pd_12m FROM decisions;
 ```
 
 ### Reset Database
+
 ```python
 from app.database import reset_db
 
@@ -357,6 +383,7 @@ reset_db()
 ```
 
 ### Backup Database
+
 ```bash
 cp finshield_underwriting.db finshield_underwriting_backup.db
 ```
@@ -366,6 +393,7 @@ cp finshield_underwriting.db finshield_underwriting_backup.db
 ## Performance Considerations
 
 ### First Run (Model Downloads)
+
 - RetinaFace model: ~100MB
 - FaceNet512 model: ~350MB
 - Total: ~450MB, 2-5 minutes
@@ -373,6 +401,7 @@ cp finshield_underwriting.db finshield_underwriting_backup.db
 Models are cached in `~/.deepface/weights/`
 
 ### Subsequent Runs
+
 - Fast startup (<2 seconds)
 - Face detection: ~1-3 seconds per image
 - Sanctions API: ~500ms per query
@@ -381,6 +410,7 @@ Models are cached in `~/.deepface/weights/`
 ### Optimization Tips
 
 1. **Disable face detection for testing:**
+
    ```python
    # In liveness_checker_v2.py, set:
    SKIP_FACE_DETECTION = True  # For testing only
@@ -418,6 +448,7 @@ Common errors:
 ### Debugging
 
 Enable SQL query logging:
+
 ```python
 # In database.py
 engine = create_engine(
@@ -431,6 +462,7 @@ engine = create_engine(
 ## Deployment Checklist
 
 ### For Hackathon Demo
+
 - ✅ SQLite database (included)
 - ✅ All models auto-download
 - ✅ Demo script works out of box
@@ -439,23 +471,27 @@ engine = create_engine(
 ### For Production
 
 1. **Database**
+
    - [ ] Migrate to PostgreSQL
    - [ ] Set up connection pooling
    - [ ] Configure backups
    - [ ] Add database migrations (Alembic)
 
 2. **Security**
+
    - [ ] Add authentication (JWT)
    - [ ] Encrypt PII in database
    - [ ] Rate limiting
    - [ ] HTTPS only
 
 3. **Face Detection**
+
    - [ ] Consider GPU hosting for speed
    - [ ] Add anti-spoofing hardware (3D depth)
    - [ ] Implement active liveness (blink detection)
 
 4. **Sanctions**
+
    - [ ] Get OpenSanctions API key (paid tier)
    - [ ] Add compliance audit logs
    - [ ] GDPR consent workflows
@@ -483,12 +519,14 @@ A: Create CSVs in `data/underwriting/` folder and update `demo_underwriting.py`.
 
 **Q: Can I use this with PostgreSQL?**
 A: Yes! Just change `DATABASE_URL` in `database.py`:
+
 ```python
 DATABASE_URL = "postgresql://user:pass@localhost/finshield"
 ```
 
 **Q: Is this GDPR compliant?**
 A: Partially. For full compliance:
+
 - Add consent management
 - Implement right to deletion
 - Add data export functionality
@@ -499,6 +537,7 @@ A: Partially. For full compliance:
 ## Support
 
 For hackathon support:
+
 1. Check `IMPLEMENTATION_SUMMARY.md`
 2. Check `UNDERWRITING.md` for API docs
 3. Run demo script with `--verbose` flag
@@ -507,6 +546,7 @@ For hackathon support:
 ## Next Steps
 
 After hackathon:
+
 1. Migrate to PostgreSQL
 2. Add authentication layer
 3. Build frontend UI

@@ -1,5 +1,5 @@
 """
-FinShield AI - FastAPI Backend
+Durin - FastAPI Backend
 Fraud detection API with graph analysis and LLM explanations.
 """
 from fastapi import FastAPI, UploadFile, File, HTTPException
@@ -23,7 +23,7 @@ from app.models import (
 )
 
 app = FastAPI(
-    title="FinShield AI API",
+    title="Durin API",
     description="AI-powered fraud detection and network analysis",
     version="1.0.0"
 )
@@ -89,7 +89,7 @@ async def startup_event():
 async def root():
     """Health check endpoint."""
     return {
-        "service": "FinShield AI",
+        "service": "Durin",
         "status": "operational",
         "version": "1.0.0",
         "llm_available": llm_explainer is not None

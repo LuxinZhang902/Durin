@@ -249,7 +249,7 @@ def test_with_webcam_image(image):
 
 def main():
     """Main test function."""
-    print("\n🛡️  FINSHIELD AI - WEBCAM REALITY DEFENDER TEST")
+    print("\n🛡️  Durin - WEBCAM REALITY DEFENDER TEST")
     print("="*60)
     print("\nThis test will:")
     print("  1. Capture your face from webcam")

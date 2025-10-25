@@ -1,8 +1,8 @@
-# 🛡️ FinShield AI
+# 🛡️ Durin
 
 **AI-Powered Fraud Detection & Network Analysis Platform**
 
-FinShield AI is a production-ready web application that detects financial fraud networks using graph analysis and provides AI-generated explanations for risk assessments. Built for hackathons with enterprise-grade architecture.
+Durin is a production-ready web application that detects financial fraud networks using graph analysis and provides AI-generated explanations for risk assessments. Built for hackathons with enterprise-grade architecture.
 
 ![Tech Stack](https://img.shields.io/badge/React-18.2-blue)
 ![FastAPI](https://img.shields.io/badge/FastAPI-0.104-green)
@@ -14,6 +14,7 @@ FinShield AI is a production-ready web application that detects financial fraud 
 ## 🎯 Features
 
 ### Core Capabilities
+
 - ✅ **Graph-Based Fraud Detection** - NetworkX-powered relationship analysis
 - ✅ **AI Risk Explanations** - OpenAI GPT-4 generated compliance reports
 - ✅ **Interactive Visualization** - Force-directed graph with risk coloring
@@ -23,15 +24,18 @@ FinShield AI is a production-ready web application that detects financial fraud 
 - ✅ **🆕 Underwriting System** - Cashflow-based credit scoring with fraud prevention
 
 ### Fraud Detection Patterns
+
 1. **Shared Device Detection** - Multiple users on same device (account takeover)
 2. **Shared IP Analysis** - Coordinated activity from same network
 3. **Structuring Detection** - Multiple small transactions under reporting thresholds
 4. **Circular Flow Detection** - Money laundering layering patterns
 
 ### 🆕 Underwriting System V2 (Production-Ready)
+
 **Country-agnostic cashflow-based credit underwriting with zero technical debt**
 
 #### Production Features
+
 - ✅ **SQLite Database** - Persistent storage with SQLAlchemy ORM
 - ✅ **Real Face Detection** - DeepFace + RetinaFace with deepfake detection
 - ✅ **Sanctions Screening** - OpenSanctions API (OFAC, UN, EU, PEP lists)
@@ -40,6 +44,7 @@ FinShield AI is a production-ready web application that detects financial fraud 
 - ✅ **Multi-jurisdiction** - US/UK policy configurations
 
 #### Tech Stack
+
 - **Database**: SQLAlchemy + SQLite (production: PostgreSQL ready)
 - **Face Detection**: DeepFace, RetinaFace, FaceNet512
 - **Sanctions**: OpenSanctions API (free tier)
@@ -66,7 +71,9 @@ FinShield AI is a production-ready web application that detects financial fraud 
 ```
 
 ### Tech Stack
+
 **Frontend:**
+
 - React 18.2 + Vite
 - TailwindCSS (dark theme)
 - react-force-graph-2d
@@ -74,6 +81,7 @@ FinShield AI is a production-ready web application that detects financial fraud 
 - Axios
 
 **Backend:**
+
 - FastAPI 0.104
 - NetworkX 3.2 (graph analysis)
 - OpenAI API (GPT-4o-mini)
@@ -81,6 +89,7 @@ FinShield AI is a production-ready web application that detects financial fraud 
 - Uvicorn (ASGI server)
 
 **Infrastructure:**
+
 - Docker + Docker Compose
 - Nginx (reverse proxy)
 - SQLite (development)
@@ -90,6 +99,7 @@ FinShield AI is a production-ready web application that detects financial fraud 
 ## 🚀 Quick Start
 
 ### Prerequisites
+
 - **Docker & Docker Compose** (recommended)
 - OR **Python 3.11+** and **Node.js 18+**
 - **OpenAI API Key** (for AI explanations)
@@ -116,6 +126,7 @@ docker-compose up --build
 ### Option 2: Local Development
 
 #### Backend Setup
+
 ```bash
 cd backend
 
@@ -135,6 +146,7 @@ uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 ```
 
 #### Frontend Setup
+
 ```bash
 cd frontend
 
@@ -152,17 +164,20 @@ npm run dev
 ## 📊 Demo Workflow
 
 ### Step 1: Upload Data
+
 1. Navigate to http://localhost:3000
 2. Upload sample CSVs from `/data` folder:
    - `users.csv` - KYC data with shared devices/IPs
    - `transactions.csv` - Transaction history with fraud patterns
 
 ### Step 2: Run Analysis
+
 1. Click **"Run Analysis"** button
 2. Backend builds fraud graph and calculates risk scores
 3. Results appear in ~1 second
 
 ### Step 3: Explore Results
+
 - **Graph View**: Interactive network visualization
   - Red nodes = High risk (7-10)
   - Orange nodes = Medium risk (4-6)
@@ -171,6 +186,7 @@ npm run dev
 - **AI Explanation Panel**: Click any account for detailed analysis
 
 ### Step 4: Review AI Insights
+
 - Select high-risk accounts
 - Read AI-generated compliance explanations
 - View detected fraud signals with severity ratings
@@ -220,9 +236,11 @@ FinshieldAI/
 ## 🔌 API Endpoints
 
 ### `POST /api/analyze`
+
 Upload and analyze KYC + transaction data.
 
 **Request:**
+
 ```bash
 curl -X POST http://localhost:8000/api/analyze \
   -F "users_file=@data/users.csv" \
@@ -230,6 +248,7 @@ curl -X POST http://localhost:8000/api/analyze \
 ```
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -249,9 +268,11 @@ curl -X POST http://localhost:8000/api/analyze \
 ```
 
 ### `POST /api/explain`
+
 Generate AI explanation for specific account.
 
 **Request:**
+
 ```bash
 curl -X POST http://localhost:8000/api/explain \
   -H "Content-Type: application/json" \
@@ -259,6 +280,7 @@ curl -X POST http://localhost:8000/api/explain \
 ```
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -269,9 +291,11 @@ curl -X POST http://localhost:8000/api/explain \
 ```
 
 ### `GET /api/results`
+
 Retrieve cached analysis results.
 
 ### `GET /api/health`
+
 Health check endpoint.
 
 ---
@@ -279,6 +303,7 @@ Health check endpoint.
 ## 📝 Sample Data Format
 
 ### users.csv
+
 ```csv
 user_id,user_name,device_id,ip,country
 U1,Jack,D1,192.168.1.100,United States
@@ -287,6 +312,7 @@ U3,Sarah,D2,192.168.1.102,United States
 ```
 
 ### transactions.csv
+
 ```csv
 from,to,amount,timestamp,device_id,ip,from_country,to_country
 Jack,Andy,950,2025-10-23T10:01:00Z,D1,192.168.1.100,United States,United States
@@ -299,18 +325,21 @@ Andy,Emma,15000,2025-10-23T11:00:00Z,D2,192.168.1.102,United States,United Kingd
 ## 🧪 Testing
 
 ### Backend Tests
+
 ```bash
 cd backend
 pytest tests/
 ```
 
 ### Frontend Tests
+
 ```bash
 cd frontend
 npm test
 ```
 
 ### API Testing
+
 ```bash
 # Health check
 curl http://localhost:8000/api/health
@@ -335,17 +364,20 @@ open http://localhost:8000/docs
 ## 🎨 UI Features
 
 ### Dark Mode Dashboard
+
 - Modern gradient accents (blue → purple)
 - Responsive layout (mobile-friendly)
 - Smooth animations and transitions
 
 ### Interactive Graph
+
 - Force-directed layout
 - Zoom/pan controls
 - Node click for details
 - Risk-based color coding
 
 ### Risk Legend
+
 - 🔴 **High Risk (7-10)** - Immediate review
 - 🟠 **Medium Risk (4-6)** - Enhanced monitoring
 - 🟢 **Low Risk (0-3)** - Normal activity
@@ -355,12 +387,14 @@ open http://localhost:8000/docs
 ## 🚧 Roadmap
 
 ### Phase 1 (Hackathon MVP) ✅
+
 - [x] Graph analysis engine
 - [x] AI explanations
 - [x] Interactive visualization
 - [x] Docker deployment
 
 ### Phase 2 (Production)
+
 - [ ] PostgreSQL database
 - [ ] User authentication (OAuth2)
 - [ ] Real-time streaming analysis
@@ -369,6 +403,7 @@ open http://localhost:8000/docs
 - [ ] Multi-tenant support
 
 ### Phase 3 (Enterprise)
+
 - [ ] Kubernetes deployment
 - [ ] Microservices architecture
 - [ ] Custom LLM fine-tuning
@@ -414,9 +449,10 @@ MIT License - see LICENSE file for details.
 ## 📧 Contact
 
 **Demo Day Questions?**
+
 - 📧 Email: demo@finshield.ai
 - 🌐 Website: https://finshield.ai
-- 💼 LinkedIn: [FinShield AI](https://linkedin.com/company/finshield)
+- 💼 LinkedIn: [Durin](https://linkedin.com/company/finshield)
 
 ---
 
@@ -425,21 +461,26 @@ MIT License - see LICENSE file for details.
 ### 5-Minute Pitch
 
 **[0:00-0:30] Problem**
+
 > "Financial fraud costs $5.1B annually. Traditional rule-based systems miss 40% of fraud networks. Manual investigation takes days."
 
 **[0:30-1:30] Solution**
-> "FinShield AI combines graph analysis + AI explanations to detect fraud networks in real-time. Upload CSVs → Get insights in 1 second."
+
+> "Durin combines graph analysis + AI explanations to detect fraud networks in real-time. Upload CSVs → Get insights in 1 second."
 
 **[1:30-3:00] Live Demo**
+
 1. Upload sample data
 2. Run analysis → Show graph
 3. Click high-risk node → AI explanation
 4. Highlight detected patterns (structuring, shared devices)
 
 **[3:00-4:00] Technical Highlights**
+
 > "Built with FastAPI + React. NetworkX for graph analysis. GPT-4 for compliance-ready explanations. Production-ready with Docker."
 
 **[4:00-5:00] Impact & Next Steps**
+
 > "Reduces investigation time by 80%. Catches 95% of fraud patterns. Next: Real-time streaming, custom ML models, enterprise deployment."
 
 ---

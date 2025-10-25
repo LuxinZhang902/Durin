@@ -163,7 +163,7 @@ function SignUp({ onSignUpComplete }) {
             <div className="bg-glass backdrop-blur-2xl rounded-3xl border border-dark-border/30 p-10 shadow-glass">
               <div className="text-center mb-8">
                 <h2 className="text-3xl font-bold mb-2">Create Your Account</h2>
-                <p className="text-gray-400">Join FinShield AI to start detecting fraud</p>
+                <p className="text-gray-400">Join Durin to start detecting fraud</p>
               </div>
 
               <form onSubmit={handleAuthSubmit} className="space-y-6">
@@ -504,7 +504,7 @@ function SignUp({ onSignUpComplete }) {
                 <CheckCircle2 className="w-16 h-16 text-accent-cyan" />
               </div>
               
-              <h2 className="text-3xl font-bold mb-4">Welcome to FinShield AI!</h2>
+              <h2 className="text-3xl font-bold mb-4">Welcome to Durin!</h2>
               <p className="text-lg text-gray-400 mb-8">
                 Your account has been created successfully. You'll be redirected to the bank portal to download your data.
               </p>
@@ -528,7 +528,7 @@ function SignUp({ onSignUpComplete }) {
                     <div className="w-6 h-6 rounded-full bg-accent-cyan/20 flex items-center justify-center flex-shrink-0 mt-0.5">
                       <span className="text-accent-cyan text-xs font-bold">3</span>
                     </div>
-                    <p className="text-sm text-gray-400">Upload files to FinShield AI for fraud detection analysis</p>
+                    <p className="text-sm text-gray-400">Upload files to Durin for fraud detection analysis</p>
                   </div>
                 </div>
               </div>

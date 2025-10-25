@@ -1,1 +1,1 @@
-"""FinShield AI Backend Application"""
+"""Durin Backend Application"""

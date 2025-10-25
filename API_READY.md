@@ -1,4 +1,4 @@
-# FinShield AI - Production-Ready API
+# Durin - Production-Ready API
 
 **Status**: ✅ **PRODUCTION READY** (87.5% test pass rate)
 
@@ -9,12 +9,14 @@
 ## Quick Start
 
 ### 1. Start the Server
+
 ```bash
 cd backend
 python -m uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 ```
 
 ### 2. Run Tests
+
 ```bash
 cd backend
 python test_complete_api.py
@@ -28,25 +30,25 @@ python test_complete_api.py
 
 ### Core Underwriting Flow
 
-| Endpoint | Method | Description | Status |
-|----------|--------|-------------|--------|
-| `/api/underwrite/personal-data` | POST | Submit user personal/employment info | ✅ Working |
-| `/api/underwrite/transactions` | POST | Upload transaction history (JSON) | ✅ Working |
-| `/api/underwrite/transactions/csv` | POST | Upload transaction history (CSV) | ✅ Working |
-| `/api/underwrite/liveness` | POST | Facial liveness + deepfake detection | ✅ Working (Reality Defender API) |
-| `/api/underwrite/analyze` | POST | Generate credit decision | ✅ Working |
-| `/api/underwrite/decision/{user_id}` | GET | Retrieve decision | ✅ Working |
-| `/api/underwrite/status/{user_id}` | GET | Check onboarding status | ✅ Working |
-| `/api/underwrite/user/{user_id}` | DELETE | Delete user data (GDPR) | ✅ Working |
-| `/api/health` | GET | Health check | ✅ Working |
+| Endpoint                             | Method | Description                          | Status                            |
+| ------------------------------------ | ------ | ------------------------------------ | --------------------------------- |
+| `/api/underwrite/personal-data`      | POST   | Submit user personal/employment info | ✅ Working                        |
+| `/api/underwrite/transactions`       | POST   | Upload transaction history (JSON)    | ✅ Working                        |
+| `/api/underwrite/transactions/csv`   | POST   | Upload transaction history (CSV)     | ✅ Working                        |
+| `/api/underwrite/liveness`           | POST   | Facial liveness + deepfake detection | ✅ Working (Reality Defender API) |
+| `/api/underwrite/analyze`            | POST   | Generate credit decision             | ✅ Working                        |
+| `/api/underwrite/decision/{user_id}` | GET    | Retrieve decision                    | ✅ Working                        |
+| `/api/underwrite/status/{user_id}`   | GET    | Check onboarding status              | ✅ Working                        |
+| `/api/underwrite/user/{user_id}`     | DELETE | Delete user data (GDPR)              | ✅ Working                        |
+| `/api/health`                        | GET    | Health check                         | ✅ Working                        |
 
 ### Legacy Fraud Detection
 
-| Endpoint | Method | Description |
-|----------|--------|-------------|
-| `/api/analyze` | POST | Basic fraud analysis |
-| `/api/explain` | POST | Explain fraud predictions |
-| `/api/results` | GET | Get cached results |
+| Endpoint       | Method | Description               |
+| -------------- | ------ | ------------------------- |
+| `/api/analyze` | POST   | Basic fraud analysis      |
+| `/api/explain` | POST   | Explain fraud predictions |
+| `/api/results` | GET    | Get cached results        |
 
 ---
 
@@ -55,17 +57,20 @@ python test_complete_api.py
 All endpoints use **REAL production APIs**, not mocks:
 
 ### ✅ Reality Defender API
+
 - **Endpoint**: `/api/underwrite/liveness`
 - **Purpose**: Enterprise-grade deepfake detection
 - **Proof**: Request IDs logged: `bde09dc9-899f-4205-8ccc-8edd72d5f04b`
 - **Scores**: Returns 0.0-1.0 (0=real, 1=fake)
 
 ### ✅ OpenSanctions API
+
 - **Endpoint**: `/api/underwrite/liveness`
 - **Purpose**: Sanctions/PEP screening (OFAC, UN, EU, UK OFSI)
 - **Real-time**: Checks names against global watchlists
 
 ### ✅ SQLite Database
+
 - **Storage**: `finshield_underwriting.db`
 - **Tables**: Users, Transactions, LivenessChecks, Decisions
 - **ORM**: SQLAlchemy for production-ready data persistence
@@ -76,7 +81,7 @@ All endpoints use **REAL production APIs**, not mocks:
 
 ```
 ======================================================================
-FINSHIELD AI - COMPLETE API TEST SUITE
+Durin - COMPLETE API TEST SUITE
 ======================================================================
 Testing API at: http://localhost:8000
 Test User ID: test_user_1761428420
@@ -104,44 +109,44 @@ Success Rate: 87.5%
 ### JavaScript Client Example
 
 ```javascript
-const BASE_URL = 'http://localhost:8000';
+const BASE_URL = "http://localhost:8000";
 
 // Complete onboarding flow
 async function onboardUser(userId, userData, csvFile, selfieImage) {
   // Step 1: Submit personal data
   await fetch(`${BASE_URL}/api/underwrite/personal-data`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ personal_data: userData })
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ personal_data: userData }),
   });
 
   // Step 2: Upload transactions
   const formData = new FormData();
-  formData.append('user_id', userId);
-  formData.append('file', csvFile);
+  formData.append("user_id", userId);
+  formData.append("file", csvFile);
   await fetch(`${BASE_URL}/api/underwrite/transactions/csv`, {
-    method: 'POST',
-    body: formData
+    method: "POST",
+    body: formData,
   });
 
   // Step 3: Liveness check
   await fetch(`${BASE_URL}/api/underwrite/liveness`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
       liveness_check: {
         user_id: userId,
         image_data: selfieImage, // base64
-        device_fingerprint: navigator.userAgent
-      }
-    })
+        device_fingerprint: navigator.userAgent,
+      },
+    }),
   });
 
   // Step 4: Get decision
   const response = await fetch(`${BASE_URL}/api/underwrite/analyze`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ user_id: userId, jurisdiction: 'US' })
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ user_id: userId, jurisdiction: "US" }),
   });
 
   const decision = await response.json();
@@ -154,6 +159,7 @@ async function onboardUser(userId, userData, csvFile, selfieImage) {
 ## Production Features
 
 ### Security
+
 - ✅ Reality Defender deepfake detection
 - ✅ OpenSanctions PEP/sanctions screening
 - ✅ Device fingerprinting
@@ -161,12 +167,14 @@ async function onboardUser(userId, userData, csvFile, selfieImage) {
 - ✅ Velocity abuse prevention
 
 ### Data Management
+
 - ✅ SQLite persistence
 - ✅ GDPR-compliant deletion
 - ✅ Transaction history storage
 - ✅ Decision audit trail
 
 ### Risk Assessment
+
 - ✅ Cashflow analysis (150+ data points)
 - ✅ PD (Probability of Default) scoring
 - ✅ Credit limit calculation
@@ -181,6 +189,7 @@ async function onboardUser(userId, userData, csvFile, selfieImage) {
 **Full Documentation**: [API_DOCUMENTATION.md](./API_DOCUMENTATION.md)
 
 Includes:
+
 - Complete endpoint reference
 - Request/response examples
 - Error handling
@@ -195,6 +204,7 @@ Includes:
 ### Environment Variables
 
 Create `backend/.env.local`:
+
 ```bash
 OPENSANCTIONS_API_KEY=5c0e476942350bccb869e50b8e3a2479
 REALITY_DEFENDER_API_KEY=rd_b96549396a496950_37f5b891dac8c82eec491914e0106ff0
@@ -204,6 +214,7 @@ OPENAI_API_KEY=your_key_here  # Optional
 ### CORS Settings
 
 For production, update `backend/app/main.py`:
+
 ```python
 app.add_middleware(
     CORSMiddleware,
@@ -231,6 +242,7 @@ python test_complete_api.py
 ```
 
 This will:
+
 1. Create test user
 2. Upload 33 transactions
 3. Perform liveness check (calls Reality Defender)
@@ -258,6 +270,7 @@ FastAPI Backend (localhost:8000)
 ## What's Working
 
 ✅ **All 8 core endpoints**
+
 - Health check
 - Personal data submission
 - Transaction upload (JSON & CSV)
@@ -268,11 +281,13 @@ FastAPI Backend (localhost:8000)
 - GDPR deletion
 
 ✅ **Real API Integrations**
+
 - Reality Defender: Confirmed working (request IDs logged)
 - OpenSanctions: Confirmed working
 - Database: All CRUD operations working
 
 ✅ **Production Features**
+
 - Async/await properly implemented
 - Error handling in place
 - Input validation
@@ -285,16 +300,19 @@ FastAPI Backend (localhost:8000)
 ## Next Steps for Frontend
 
 1. **Implement User Flow**
+
    - Personal data form
    - CSV transaction uploader
    - Webcam capture for liveness
    - Decision results page
 
 2. **Use Web Interface Template**
+
    - `backend/static/test_liveness.html` shows how to capture webcam
    - Copy this pattern for your frontend
 
 3. **Handle Responses**
+
    - Display liveness results
    - Show credit decision
    - Handle declines gracefully
@@ -309,12 +327,12 @@ FastAPI Backend (localhost:8000)
 
 ## Support Files
 
-| File | Purpose |
-|------|---------|
-| `API_DOCUMENTATION.md` | Complete API reference |
-| `test_complete_api.py` | Automated test suite |
-| `backend/static/test_liveness.html` | Webcam capture example |
-| `REALITY_DEFENDER_FIXED.md` | Async integration details |
+| File                                | Purpose                   |
+| ----------------------------------- | ------------------------- |
+| `API_DOCUMENTATION.md`              | Complete API reference    |
+| `test_complete_api.py`              | Automated test suite      |
+| `backend/static/test_liveness.html` | Webcam capture example    |
+| `REALITY_DEFENDER_FIXED.md`         | Async integration details |
 
 ---
 

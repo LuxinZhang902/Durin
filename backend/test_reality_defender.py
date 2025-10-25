@@ -191,7 +191,7 @@ def test_reality_defender_direct():
 
 
 if __name__ == "__main__":
-    print("\n🛡️  FINSHIELD AI - REALITY DEFENDER INTEGRATION TEST")
+    print("\n🛡️  Durin - REALITY DEFENDER INTEGRATION TEST")
     print("="*60)
 
     # Test via liveness checker

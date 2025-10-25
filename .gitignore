@@ -30,3 +30,13 @@ dist-ssr/
 *.log
 logs/
 nul
+
+# Test files
+test_*.py
+*_test.py
+demo_*.py
+
+# Documentation (if generated)
+*.md.backup
+docs/build/
+site/

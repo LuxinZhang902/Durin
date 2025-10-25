@@ -1,9 +1,9 @@
 #!/bin/bash
 
-# FinShield AI - Project Verification Script
+# Durin - Project Verification Script
 # Checks that all required files and dependencies are in place
 
-echo "🛡️  FinShield AI - Project Verification"
+echo "🛡️  Durin - Project Verification"
 echo "========================================"
 echo ""
 

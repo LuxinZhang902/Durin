@@ -1,4 +1,4 @@
-# FinShield AI - Underwriting System
+# Durin - Underwriting System
 
 Country-agnostic cashflow-based underwriting with fraud prevention.
 
@@ -43,26 +43,32 @@ The underwriting system converts verified foreign/domestic cashflow into furnish
 ## 📊 Components
 
 ### 1. Cashflow Analyzer
+
 Computes financial health metrics from transaction history:
 
 **Income Metrics:**
+
 - Median monthly income
 - Income coefficient of variation (stability)
 
 **Spending Metrics:**
+
 - Essential spending (groceries, utilities, rent)
 - Discretionary spending
 
 **Health Metrics:**
+
 - Buffer days (cash runway)
 - Payment burden (recurring payments / income)
 - On-time payment ratio
 - NSF/overdraft count (90 days)
 
 ### 2. Liveness Checker
+
 Identity integrity gate with fraud prevention:
 
 **Checks:**
+
 - Image validation (format, size)
 - Liveness scoring (mock implementation for MVP)
 - Replay detection (screen capture detection)
@@ -70,20 +76,24 @@ Identity integrity gate with fraud prevention:
 - Device risk scoring (shared device detection)
 
 **Production Upgrade Path:**
+
 - InsightFace ONNX for face embeddings
 - Passive liveness (texture analysis, blink detection)
 - Real sanctions lists (OFAC, OFSI, PEP databases)
 - Device intelligence service integration
 
 ### 3. Underwriting Scorer
+
 Credit risk engine with explainable decisions:
 
 **PD Calculation:**
+
 - Monotone constraints (better cashflow → lower PD)
 - Feature-driven (uses computed metrics)
 - Jurisdiction-specific thresholds
 
 **Outputs:**
+
 - Probability of default (12-month)
 - Credit limit (tiered by PD)
 - APR (risk-based pricing)
@@ -93,6 +103,7 @@ Credit risk engine with explainable decisions:
 ## 🚀 API Endpoints
 
 ### Health Check
+
 ```bash
 GET /api/health
 ```
@@ -100,6 +111,7 @@ GET /api/health
 Returns system status including underwriting services.
 
 ### 1. Upload Transactions (CSV)
+
 ```bash
 POST /api/underwrite/transactions/csv?user_id={user_id}
 Content-Type: multipart/form-data
@@ -108,6 +120,7 @@ file: bank_transactions.csv
 ```
 
 **CSV Format:**
+
 ```csv
 txn_id,account_id,timestamp,amount,currency,merchant,counterparty,transaction_type,mcc
 txn_001,ACC_U1,2025-07-28T09:00:00Z,2800.00,USD,Acme Corp Payroll,,income,
@@ -115,6 +128,7 @@ txn_002,ACC_U1,2025-07-29T14:23:00Z,-45.32,USD,Whole Foods Market,,expense,5411
 ```
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -125,6 +139,7 @@ txn_002,ACC_U1,2025-07-29T14:23:00Z,-45.32,USD,Whole Foods Market,,expense,5411
 ```
 
 ### 2. Upload Transactions (JSON)
+
 ```bash
 POST /api/underwrite/transactions
 Content-Type: application/json
@@ -146,6 +161,7 @@ Content-Type: application/json
 ```
 
 ### 3. Submit Personal Data
+
 ```bash
 POST /api/underwrite/personal-data
 Content-Type: application/json
@@ -164,6 +180,7 @@ Content-Type: application/json
 ```
 
 **Employment Status Options:**
+
 - `full_time`
 - `part_time`
 - `self_employed`
@@ -171,6 +188,7 @@ Content-Type: application/json
 - `retired`
 
 ### 4. Perform Liveness Check
+
 ```bash
 POST /api/underwrite/liveness
 Content-Type: application/json
@@ -185,6 +203,7 @@ Content-Type: application/json
 ```
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -199,6 +218,7 @@ Content-Type: application/json
 ```
 
 ### 5. Run Underwriting Analysis
+
 ```bash
 POST /api/underwrite/analyze
 Content-Type: application/json
@@ -212,6 +232,7 @@ Content-Type: application/json
 **Jurisdictions:** `US` or `UK`
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -224,7 +245,7 @@ Content-Type: application/json
     "fraud_gate_passed": true,
     "pd_12m": 0.055,
     "lgd": 0.45,
-    "expected_loss": 49.50,
+    "expected_loss": 49.5,
     "approved": true,
     "credit_limit": 2000,
     "apr": 17.5,
@@ -232,7 +253,7 @@ Content-Type: application/json
       {
         "code": "STABLE_INCOME",
         "description": "Consistent and stable income pattern detected",
-        "impact": -0.010,
+        "impact": -0.01,
         "severity": "low"
       },
       {
@@ -248,16 +269,19 @@ Content-Type: application/json
 ```
 
 ### 6. Retrieve Decision
+
 ```bash
 GET /api/underwrite/decision/{user_id}
 ```
 
 ### 7. Check Status
+
 ```bash
 GET /api/underwrite/status/{user_id}
 ```
 
 Returns which steps have been completed:
+
 ```json
 {
   "user_id": "user_001",
@@ -270,6 +294,7 @@ Returns which steps have been completed:
 ```
 
 ### 8. Clear User Data (Testing)
+
 ```bash
 DELETE /api/underwrite/user/{user_id}
 ```
@@ -295,13 +320,13 @@ Final PD = Capped between 1% and 30%
 
 ### Credit Limit Tiers
 
-| PD Range | Credit Limit | Risk Tier |
-|----------|--------------|-----------|
-| 0-3%     | $3,000       | Prime     |
-| 3-6%     | $2,000       | Near-Prime|
-| 6-9%     | $1,200       | Starter   |
-| 9-12%    | $800         | High-Risk |
-| >12%     | $0 (Decline) | Declined  |
+| PD Range | Credit Limit | Risk Tier  |
+| -------- | ------------ | ---------- |
+| 0-3%     | $3,000       | Prime      |
+| 3-6%     | $2,000       | Near-Prime |
+| 6-9%     | $1,200       | Starter    |
+| 9-12%    | $800         | High-Risk  |
+| >12%     | $0 (Decline) | Declined   |
 
 ### APR Pricing
 
@@ -313,6 +338,7 @@ Capped at 35.99%
 ## 🌍 Jurisdiction Differences
 
 ### US Thresholds
+
 - Min buffer days: 15
 - Max payment burden: 40%
 - Min on-time ratio: 85%
@@ -320,6 +346,7 @@ Capped at 35.99%
 - Starter max PD: 12%
 
 ### UK Thresholds
+
 - Min buffer days: 20
 - Max payment burden: 35%
 - Min on-time ratio: 90%
@@ -331,12 +358,14 @@ Capped at 35.99%
 ### Quick Start
 
 1. **Start the API:**
+
 ```bash
 cd backend
 uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 ```
 
 2. **Run the demo script:**
+
 ```bash
 cd backend
 python demo_underwriting.py
@@ -351,12 +380,14 @@ See `data/underwriting/README.md` for detailed curl examples.
 ### Sample Users
 
 **User 001 (Sarah Johnson):**
+
 - Stable full-time employment
 - Regular $2,800/month salary
 - Low risk profile
 - Expected: APPROVED at $2,000 limit, ~17.5% APR
 
 **User 002 (Marcus Chen):**
+
 - Gig economy worker
 - Irregular income ($1,800-2,400/month)
 - 3 NSF events, late fees detected
@@ -368,21 +399,25 @@ See `data/underwriting/README.md` for detailed curl examples.
 ### Cashflow Metrics Explained
 
 **Buffer Days:** How many days the user can survive at current spending rate with available cash.
+
 - Good: ≥20 days
 - Fair: 10-20 days
 - Poor: <10 days
 
 **Payment Burden:** Recurring monthly payments as % of income.
+
 - Good: ≤30%
 - Fair: 30-40%
 - Poor: >40%
 
 **Income CV (Coefficient of Variation):** Stability measure (std dev / mean).
+
 - Stable: CV < 0.3
 - Moderate: CV 0.3-0.5
 - Volatile: CV > 0.5
 
 **On-time Ratio:** % of payments made on time.
+
 - Excellent: ≥95%
 - Good: 85-95%
 - Poor: <85%
@@ -390,12 +425,14 @@ See `data/underwriting/README.md` for detailed curl examples.
 ## 🔐 Security & Privacy
 
 ### Current Implementation (MVP)
+
 - In-memory storage (no persistence)
 - Base64 image transmission
 - Mock liveness detection
 - Hashed PII in personal data (optional)
 
 ### Production Recommendations
+
 - Encrypt PII at rest and in transit
 - Store images ephemerally (delete after processing)
 - Use secure key management (AWS KMS, HashiCorp Vault)
@@ -411,12 +448,14 @@ See `data/underwriting/README.md` for detailed curl examples.
 When declining or offering less favorable terms, reasons must be provided:
 
 **US (Reg B / ECOA):**
+
 - Clear statement of adverse action
 - Specific reasons (up to 4 primary)
 - Right to obtain credit report
 - CFPB contact information
 
 **UK (UK-GDPR Art. 22):**
+
 - Right to human review
 - Explanation of automated decision logic
 - Right to contest decision
@@ -427,10 +466,12 @@ This system provides the `reasons` field to support adverse action letters.
 ### Furnishing to Credit Bureaus
 
 The decision token can be used to generate:
+
 - **US:** Metro2 format records
 - **UK:** CAIS (Credit Account Information Sharing) format
 
 Fields included:
+
 - Account open date
 - Credit limit
 - Payment status
@@ -439,6 +480,7 @@ Fields included:
 ## 🚀 Deployment
 
 ### Docker
+
 ```bash
 # Build and run
 docker-compose up --build
@@ -447,6 +489,7 @@ docker-compose up --build
 ```
 
 ### Local Development
+
 ```bash
 # Install dependencies
 cd backend
@@ -462,12 +505,14 @@ open http://localhost:8000/docs
 ## 📚 API Documentation
 
 Interactive OpenAPI documentation available at:
+
 - **Swagger UI:** http://localhost:8000/docs
 - **ReDoc:** http://localhost:8000/redoc
 
 ## 🎓 Examples
 
 See the `data/underwriting/` directory for:
+
 - Sample transaction CSVs
 - Personal data JSON examples
 - Complete API workflow examples
@@ -476,6 +521,7 @@ See the `data/underwriting/` directory for:
 ## 🤝 Support
 
 For questions or issues:
+
 - Check `/api/health` endpoint
 - Review logs in console
 - See `data/underwriting/README.md` for troubleshooting
@@ -484,4 +530,3 @@ For questions or issues:
 ---
 
 **Built with FastAPI, Pandas, and Scikit-learn**
-

@@ -1,8 +1,8 @@
-# 🛡️ FinShield AI - Project Summary
+# 🛡️ Durin - Project Summary
 
 **Built for:** Soma Capital Hackathon  
 **Date:** October 2025  
-**Status:** ✅ Production-Ready MVP  
+**Status:** ✅ Production-Ready MVP
 
 ---
 
@@ -11,13 +11,16 @@
 A complete, production-quality fraud detection platform with:
 
 ### ✅ Backend (FastAPI + Python)
+
 - **Graph Analysis Engine** (`graph_analyzer.py`)
+
   - NetworkX-based relationship detection
   - 4 fraud pattern detectors (shared devices, IPs, structuring, circular flows)
   - Risk scoring algorithm (0-10 scale)
   - Sub-second performance for 1k+ transactions
 
 - **LLM Service** (`llm_service.py`)
+
   - OpenAI GPT-4o-mini integration
   - AML/KYC-aware prompt engineering
   - Fallback to rule-based explanations
@@ -32,12 +35,15 @@ A complete, production-quality fraud detection platform with:
   - Interactive API docs at `/docs`
 
 ### ✅ Frontend (React + Vite + TailwindCSS)
+
 - **Modern Dark-Mode Dashboard**
+
   - Gradient accents (blue → purple)
   - Responsive design
   - Smooth animations
 
 - **Interactive Components**
+
   - `FileUpload.jsx` - Drag & drop CSV upload
   - `GraphVisualization.jsx` - Force-directed network graph
   - `RiskTable.jsx` - Sortable risk assessment table
@@ -51,7 +57,9 @@ A complete, production-quality fraud detection platform with:
   - Summary statistics dashboard
 
 ### ✅ Infrastructure
+
 - **Docker Configuration**
+
   - Multi-container setup (backend + frontend)
   - Nginx reverse proxy
   - One-command deployment
@@ -63,6 +71,7 @@ A complete, production-quality fraud detection platform with:
   - Demonstrates all 4 detection patterns
 
 ### ✅ Documentation
+
 - **README.md** - Comprehensive project documentation
 - **QUICKSTART.md** - 5-minute setup guide
 - **SETUP.md** - Detailed installation & troubleshooting
@@ -70,6 +79,7 @@ A complete, production-quality fraud detection platform with:
 - **PROJECT_SUMMARY.md** - This file
 
 ### ✅ Automation Scripts
+
 - `run.sh` - Docker quick start
 - `run-local.sh` - Local development mode
 - `verify.sh` - Project verification
@@ -79,18 +89,18 @@ A complete, production-quality fraud detection platform with:
 
 ## 🎯 Core Features Implemented
 
-| Feature | Status | Description |
-|---------|--------|-------------|
-| **CSV Upload** | ✅ | Drag & drop for users + transactions |
-| **Graph Analysis** | ✅ | NetworkX-powered fraud detection |
-| **Risk Scoring** | ✅ | 0-10 scale with multi-signal weighting |
-| **AI Explanations** | ✅ | GPT-4 generated compliance reports |
-| **Graph Visualization** | ✅ | Interactive force-directed layout |
-| **Table View** | ✅ | Sortable risk assessment table |
-| **Signal Detection** | ✅ | 4 patterns: devices, IPs, structuring, circular |
-| **Real-time Analysis** | ✅ | <1s for 1k transactions |
-| **Docker Deployment** | ✅ | One-command setup |
-| **API Documentation** | ✅ | Interactive Swagger/OpenAPI docs |
+| Feature                 | Status | Description                                     |
+| ----------------------- | ------ | ----------------------------------------------- |
+| **CSV Upload**          | ✅     | Drag & drop for users + transactions            |
+| **Graph Analysis**      | ✅     | NetworkX-powered fraud detection                |
+| **Risk Scoring**        | ✅     | 0-10 scale with multi-signal weighting          |
+| **AI Explanations**     | ✅     | GPT-4 generated compliance reports              |
+| **Graph Visualization** | ✅     | Interactive force-directed layout               |
+| **Table View**          | ✅     | Sortable risk assessment table                  |
+| **Signal Detection**    | ✅     | 4 patterns: devices, IPs, structuring, circular |
+| **Real-time Analysis**  | ✅     | <1s for 1k transactions                         |
+| **Docker Deployment**   | ✅     | One-command setup                               |
+| **API Documentation**   | ✅     | Interactive Swagger/OpenAPI docs                |
 
 ---
 
@@ -98,7 +108,7 @@ A complete, production-quality fraud detection platform with:
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│                     FINSHIELD AI PLATFORM                   │
+│                     Durin PLATFORM                   │
 ├─────────────────────────────────────────────────────────────┤
 │                                                             │
 │  ┌─────────────────┐         ┌──────────────────┐         │
@@ -186,6 +196,7 @@ FinshieldAI/
 ## 🔧 Tech Stack
 
 ### Backend
+
 - **Python 3.11+**
 - **FastAPI 0.104** - Modern async web framework
 - **NetworkX 3.2** - Graph analysis library
@@ -195,6 +206,7 @@ FinshieldAI/
 - **Pydantic** - Data validation
 
 ### Frontend
+
 - **React 18.2** - UI framework
 - **Vite 5.0** - Build tool
 - **TailwindCSS 3.3** - Utility-first CSS
@@ -203,6 +215,7 @@ FinshieldAI/
 - **Axios** - HTTP client
 
 ### Infrastructure
+
 - **Docker & Docker Compose** - Containerization
 - **Nginx** - Reverse proxy & static serving
 - **SQLite** - Development database (in-memory)
@@ -212,26 +225,31 @@ FinshieldAI/
 ## 🎯 Fraud Detection Algorithms
 
 ### 1. Shared Device Detection
+
 - **Logic:** Multiple users accessing from same device ID
 - **Risk:** Account takeover, mule networks
 - **Weight:** +3.0 points
 
 ### 2. Shared IP Detection
+
 - **Logic:** Multiple users from same IP address
 - **Risk:** Coordinated fraud activity
 - **Weight:** +1.5 points
 
 ### 3. Structuring Detection
+
 - **Logic:** Multiple small transactions (<$1k) in short timeframe
 - **Risk:** Evading reporting thresholds
 - **Weight:** +3.5 points
 
 ### 4. Circular Flow Detection
+
 - **Logic:** Money flowing in cycles through accounts
 - **Risk:** Layering to obscure fund origins
 - **Weight:** +2.5 points
 
 ### 5. Network Centrality Bonus
+
 - **Logic:** Accounts with >5 connections
 - **Risk:** Hub in fraud network
 - **Weight:** +1.0 points
@@ -243,18 +261,21 @@ FinshieldAI/
 ## 🚀 How to Run
 
 ### Option 1: Docker (Recommended)
+
 ```bash
 ./run.sh
 # Open http://localhost:3000
 ```
 
 ### Option 2: Local Development
+
 ```bash
 ./run-local.sh
 # Open http://localhost:3000
 ```
 
 ### Option 3: Manual
+
 ```bash
 # Terminal 1: Backend
 cd backend
@@ -281,7 +302,7 @@ The project is **100% demo-ready** with:
 ✅ AI explanations working  
 ✅ Interactive graph visualization  
 ✅ Comprehensive documentation  
-✅ One-command deployment  
+✅ One-command deployment
 
 **Demo script:** See [DEMO.md](DEMO.md) for 5-minute pitch
 
@@ -313,6 +334,7 @@ The project is **100% demo-ready** with:
 ## 🎓 What You Learned
 
 ### Technical Skills
+
 - Graph algorithms (NetworkX)
 - LLM integration (OpenAI API)
 - Modern React patterns (hooks, context)
@@ -321,6 +343,7 @@ The project is **100% demo-ready** with:
 - Data visualization (force-directed graphs)
 
 ### Domain Knowledge
+
 - AML/KYC fraud patterns
 - Financial compliance terminology
 - Risk scoring methodologies
@@ -331,6 +354,7 @@ The project is **100% demo-ready** with:
 ## 🚧 Future Enhancements
 
 ### Phase 2 (Production)
+
 - [ ] PostgreSQL database
 - [ ] User authentication (OAuth2/JWT)
 - [ ] Real-time streaming analysis
@@ -340,6 +364,7 @@ The project is **100% demo-ready** with:
 - [ ] Email alerts for high-risk accounts
 
 ### Phase 3 (Enterprise)
+
 - [ ] Kubernetes deployment
 - [ ] Microservices architecture
 - [ ] Custom LLM fine-tuning
@@ -368,6 +393,7 @@ The project is **100% demo-ready** with:
 ## 📧 Next Steps
 
 ### Before Demo
+
 1. ✅ Verify all files present (`./verify.sh`)
 2. ⚠️ Add OPENAI_API_KEY to `.env`
 3. ✅ Test full workflow once
@@ -375,6 +401,7 @@ The project is **100% demo-ready** with:
 5. ✅ Have backup screenshots ready
 
 ### After Hackathon
+
 - Deploy to cloud (AWS/Heroku/DigitalOcean)
 - Add authentication
 - Integrate with real payment APIs
@@ -386,6 +413,7 @@ The project is **100% demo-ready** with:
 ## 🙏 Acknowledgments
 
 Built with love using amazing open-source tools:
+
 - FastAPI, React, NetworkX, OpenAI, TailwindCSS, Docker
 
 **Thank you to the Soma Capital team for hosting this hackathon!**
@@ -394,8 +422,8 @@ Built with love using amazing open-source tools:
 
 **Status:** ✅ **READY TO DEMO**  
 **Confidence Level:** 💯 **100%**  
-**Estimated Demo Time:** ⏱️ **5 minutes**  
+**Estimated Demo Time:** ⏱️ **5 minutes**
 
 ---
 
-*Last Updated: October 24, 2025*
+_Last Updated: October 24, 2025_

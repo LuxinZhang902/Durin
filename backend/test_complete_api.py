@@ -1,5 +1,5 @@
 """
-Complete API Test Suite for FinShield AI Underwriting System
+Complete API Test Suite for Durin Underwriting System
 Tests the full user journey from onboarding to credit decision.
 """
 import requests
@@ -404,7 +404,7 @@ class FinShieldAPITest:
     def run_all_tests(self):
         """Run complete test suite"""
         print("\n" + "="*70)
-        print("FINSHIELD AI - COMPLETE API TEST SUITE")
+        print("Durin - COMPLETE API TEST SUITE")
         print("="*70)
         print(f"Testing API at: {self.base_url}")
         print(f"Test User ID: {self.test_user_id}")

@@ -1,8 +1,9 @@
-# 🎬 FinShield AI - Demo Guide
+# 🎬 Durin - Demo Guide
 
 ## 🎯 5-Minute Hackathon Demo Script
 
 ### Preparation (Before Demo)
+
 1. ✅ Ensure Docker is running
 2. ✅ Run `./run.sh` to start services
 3. ✅ Open http://localhost:3000 in browser
@@ -16,6 +17,7 @@
 ### **[0:00 - 0:45] The Problem**
 
 **Script:**
+
 > "Financial fraud costs the industry $5.1 billion annually. Traditional rule-based systems miss 40% of fraud networks because they can't see relationships between accounts. Manual investigation takes compliance teams days or weeks."
 
 **Visual:** Show news headline or statistic slide
@@ -25,10 +27,12 @@
 ### **[0:45 - 1:30] The Solution**
 
 **Script:**
-> "FinShield AI solves this with graph-based fraud detection powered by AI. Upload your KYC and transaction data, and get instant insights into fraud networks with natural language explanations."
+
+> "Durin solves this with graph-based fraud detection powered by AI. Upload your KYC and transaction data, and get instant insights into fraud networks with natural language explanations."
 
 **Action:**
-- Navigate to FinShield AI dashboard
+
+- Navigate to Durin dashboard
 - Point out the clean, modern interface
 - Highlight the three-step workflow: Upload → Analyze → Explain
 
@@ -37,10 +41,13 @@
 ### **[1:30 - 3:30] Live Demo**
 
 #### Step 1: Upload Data (30 seconds)
+
 **Script:**
+
 > "Let's analyze a real fraud scenario. I'm uploading two CSV files - KYC data with user devices and IPs, and transaction history."
 
 **Action:**
+
 1. Click "Users / KYC Data" upload area
 2. Select `data/users.csv`
 3. Click "Transactions Data" upload area
@@ -48,10 +55,13 @@
 5. Show file names appear with green checkmarks
 
 #### Step 2: Run Analysis (30 seconds)
+
 **Script:**
+
 > "Now I click 'Run Analysis' and our NetworkX-powered graph engine processes this data in under a second."
 
 **Action:**
+
 1. Click **"Run Analysis"** button
 2. Show loading animation
 3. Point out the summary stats that appear:
@@ -60,20 +70,26 @@
    - "3 high-risk accounts detected"
 
 #### Step 3: Explore Graph (60 seconds)
+
 **Script:**
+
 > "Here's the fraud network visualization. Red nodes are high-risk, orange is medium, green is low. Notice these clusters - multiple accounts sharing the same device."
 
 **Action:**
+
 1. Point to the interactive graph
 2. Zoom in on a high-risk cluster
 3. Show the color-coded risk levels
 4. Hover over nodes to show tooltips
 
 #### Step 4: AI Explanation (60 seconds)
+
 **Script:**
+
 > "Let me click on this high-risk account. Our GPT-4 integration generates a compliance-ready explanation in real-time."
 
 **Action:**
+
 1. Click a red (high-risk) node (e.g., A1 or A11)
 2. Wait for AI explanation to load
 3. Read key points from the explanation:
@@ -85,6 +101,7 @@
 5. Point out the risk score: 8.5/10
 
 **Script:**
+
 > "The AI explains exactly WHY this account is flagged - citing AML patterns like structuring and shared devices. This gives compliance teams actionable intelligence, not just a score."
 
 ---
@@ -92,7 +109,9 @@
 ### **[3:30 - 4:15] Technical Highlights**
 
 **Script:**
+
 > "Under the hood, we're using:
+>
 > - **NetworkX** for graph analysis - detecting shared devices, IPs, circular flows
 > - **FastAPI** backend processing 1000+ transactions per second
 > - **OpenAI GPT-4** for natural language explanations
@@ -106,15 +125,18 @@
 ### **[4:15 - 5:00] Impact & Next Steps**
 
 **Script:**
-> "FinShield AI reduces fraud investigation time by 80% and catches 95% of network-based fraud patterns that traditional systems miss.
+
+> "Durin reduces fraud investigation time by 80% and catches 95% of network-based fraud patterns that traditional systems miss.
 >
 > Next steps:
+>
 > - Real-time streaming analysis for live transactions
 > - Custom Graph Neural Networks for even better detection
 > - Enterprise deployment with multi-tenant support
 > - Integration with payment processors like Stripe and Plaid"
 
 **Closing:**
+
 > "We built this in one day for the hackathon, but it's production-ready. Thank you!"
 
 ---
@@ -122,18 +144,21 @@
 ## 🎨 Demo Tips
 
 ### Visual Impact
+
 - **Use dark mode** - The UI is designed for it
 - **Full screen browser** - Hide bookmarks bar
 - **Zoom to 110%** - Make text readable for audience
 - **Clear browser cache** - Ensure fresh load
 
 ### Backup Plans
+
 - **If LLM is slow:** Mention "AI is generating..." and continue talking
 - **If graph doesn't render:** Switch to Table View
 - **If upload fails:** Have screenshots ready
 - **If Docker crashes:** Use local dev mode (`./run-local.sh`)
 
 ### Engagement Tricks
+
 1. **Ask audience:** "How many of you have dealt with fraud detection?"
 2. **Show contrast:** "Traditional systems take 3 days - we take 1 second"
 3. **Use analogies:** "Like social network analysis, but for money laundering"
@@ -156,21 +181,27 @@
 ### Expected Questions & Answers
 
 **Q: How does this compare to existing fraud detection tools?**
+
 > "Traditional tools use rule-based systems that miss relationships. We use graph analysis to see the full network, plus AI explanations that traditional tools can't provide."
 
 **Q: What about false positives?**
+
 > "Our multi-signal approach reduces false positives. The AI explanation helps analysts quickly verify if it's real fraud or legitimate activity."
 
 **Q: Can this scale to millions of transactions?**
+
 > "Yes - NetworkX handles graphs with millions of nodes. For production, we'd add distributed processing with Apache Spark or Dask."
 
 **Q: What about data privacy?**
+
 > "All PII is masked in LLM prompts. For production, we'd add encryption at rest, GDPR compliance, and audit trails."
 
 **Q: How accurate is the AI explanation?**
+
 > "We use GPT-4 with carefully crafted prompts citing real AML/KYC regulations. Compliance teams review and approve, but it gives them a 10x faster starting point."
 
 **Q: What's your business model?**
+
 > "SaaS pricing: $500/month for SMBs, enterprise pricing for banks. We'd also offer API access for fintech companies to embed in their platforms."
 
 ---
@@ -187,18 +218,21 @@
 ## 🎬 Alternative Demo Paths
 
 ### Path A: Technical Deep Dive (for technical judges)
+
 - Show FastAPI docs at `/docs`
 - Demonstrate API with curl commands
 - Walk through graph analyzer code
 - Explain NetworkX algorithms used
 
 ### Path B: Business Focus (for business judges)
+
 - Emphasize ROI and time savings
 - Show compliance use case
 - Discuss market size and competition
 - Present go-to-market strategy
 
 ### Path C: Quick Demo (2 minutes)
+
 1. Upload files (15s)
 2. Run analysis (15s)
 3. Show graph (30s)
@@ -210,6 +244,7 @@
 ## 📸 Screenshot Checklist
 
 Have these ready as backup:
+
 - [ ] Dashboard with uploaded files
 - [ ] Graph visualization with high-risk nodes
 - [ ] AI explanation panel with detailed signals

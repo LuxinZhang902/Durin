@@ -257,7 +257,7 @@ def test_sample_data():
 def main():
     """Run all tests."""
     print("="*60)
-    print("FINSHIELD AI - SYSTEM VERIFICATION")
+    print("Durin - SYSTEM VERIFICATION")
     print("="*60)
 
     tests = [

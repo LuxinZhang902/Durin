@@ -1,6 +1,7 @@
 # 🔐 Sign-Up & Onboarding Feature
 
 ## Overview
+
 Added a comprehensive **3-step sign-up and onboarding flow** that collects user authentication, profile information, and seamlessly guides users through the platform.
 
 ---
@@ -16,7 +17,7 @@ Step 3: Success Screen
     ↓
 Bank Portal (Download Data)
     ↓
-FinShield AI Platform (Fraud Analysis)
+Durin Platform (Fraud Analysis)
 ```
 
 ---
@@ -26,6 +27,7 @@ FinShield AI Platform (Fraud Analysis)
 ### **Step 1: Authentication**
 
 **Fields:**
+
 - ✅ Full Name
 - ✅ Email Address
 - ✅ Password (min 8 characters)
@@ -33,12 +35,14 @@ FinShield AI Platform (Fraud Analysis)
 - ✅ Terms & Conditions checkbox
 
 **Validation:**
+
 - Password match verification
 - Minimum password length (8 chars)
 - Email format validation
 - Required field checks
 
 **UI Features:**
+
 - Icon-prefixed input fields
 - Real-time error messages
 - Loading state during submission
@@ -47,22 +51,26 @@ FinShield AI Platform (Fraud Analysis)
 ### **Step 2: Profile Setup**
 
 **Company Information:**
+
 - Company Name
 - Industry (dropdown)
 - Company Size (dropdown)
 
 **Personal Information:**
+
 - Job Title
 - Department (dropdown)
 - Phone Number
 
 **Location:**
+
 - Country (dropdown)
 - City
 
 **Dropdowns Include:**
 
 **Department Options:**
+
 - Compliance
 - Risk Management
 - Fraud Prevention
@@ -72,6 +80,7 @@ FinShield AI Platform (Fraud Analysis)
 - Other
 
 **Company Size:**
+
 - 1-10 employees
 - 11-50 employees
 - 51-200 employees
@@ -80,6 +89,7 @@ FinShield AI Platform (Fraud Analysis)
 - 1000+ employees
 
 **Industry:**
+
 - Banking & Finance
 - Fintech
 - Insurance
@@ -91,6 +101,7 @@ FinShield AI Platform (Fraud Analysis)
 - Other
 
 **Countries:**
+
 - United States
 - United Kingdom
 - Canada
@@ -104,6 +115,7 @@ FinShield AI Platform (Fraud Analysis)
 - Other
 
 **UI Features:**
+
 - Two-column grid layout
 - Icon-prefixed inputs
 - Dropdown selects
@@ -113,6 +125,7 @@ FinShield AI Platform (Fraud Analysis)
 ### **Step 3: Success Screen**
 
 **Features:**
+
 - ✅ Large success checkmark animation
 - ✅ Welcome message
 - ✅ "What's Next" guide with 3 steps
@@ -120,9 +133,10 @@ FinShield AI Platform (Fraud Analysis)
 - ✅ Smooth transition to bank portal
 
 **Next Steps Display:**
+
 1. Login to bank portal
 2. Download CSV files
-3. Upload to FinShield AI
+3. Upload to Durin
 
 ---
 
@@ -131,6 +145,7 @@ FinShield AI Platform (Fraud Analysis)
 ### **Progress Indicator**
 
 Visual stepper showing:
+
 - Step numbers (1, 2, 3)
 - Step titles
 - Step descriptions
@@ -195,8 +210,8 @@ SignUp.jsx
 
 ```javascript
 // In App.jsx
-const [currentPage, setCurrentPage] = useState('signup')
-const [userData, setUserData] = useState(null)
+const [currentPage, setCurrentPage] = useState("signup");
+const [userData, setUserData] = useState(null);
 
 // Flow:
 // 1. SignUp → saves userData → setCurrentPage('bank')
@@ -210,11 +225,11 @@ const [userData, setUserData] = useState(null)
 // Sign-up completion
 const handleSignUpComplete = (data) => {
   setUserData({
-    ...authData,      // email, password, fullName
-    ...profileData    // company, job, location
-  })
-  setCurrentPage('bank')
-}
+    ...authData, // email, password, fullName
+    ...profileData, // company, job, location
+  });
+  setCurrentPage("bank");
+};
 
 // User data available throughout app
 userData = {
@@ -227,8 +242,8 @@ userData = {
   country: "United States",
   city: "New York",
   companySize: "201-500",
-  industry: "banking"
-}
+  industry: "banking",
+};
 ```
 
 ---
@@ -275,9 +290,11 @@ userData = {
 ## 🎬 Demo Script
 
 ### **Opening**
+
 > "Let me show you our complete onboarding experience..."
 
 ### **Step 1: Authentication**
+
 **Action:** Fill in name, email, password
 
 > "Users start by creating their account with basic authentication..."
@@ -287,6 +304,7 @@ userData = {
 > "Notice the smooth validation and loading state..."
 
 ### **Step 2: Profile**
+
 **Action:** Fill in company details
 
 > "We collect important company information for compliance tracking..."
@@ -298,6 +316,7 @@ userData = {
 **Action:** Click "Complete Setup"
 
 ### **Step 3: Success**
+
 > "Users see a clear success message and know exactly what's next..."
 
 **Wait:** 2 seconds for auto-redirect
@@ -305,9 +324,11 @@ userData = {
 > "They're automatically guided to the bank portal..."
 
 ### **Bank Portal**
+
 > "Now they can download their transaction data..."
 
 ### **Main App**
+
 > "And notice their profile appears in the header - personalized experience!"
 
 ---
@@ -315,12 +336,14 @@ userData = {
 ## 📊 Form Fields Summary
 
 ### **Authentication (4 fields)**
+
 1. Full Name - text input
 2. Email - email input
 3. Password - password input
 4. Confirm Password - password input
 
 ### **Profile (8 fields)**
+
 1. Company Name - text input
 2. Job Title - text input
 3. Department - select dropdown
@@ -337,18 +360,21 @@ userData = {
 ## 🔐 Security Features
 
 ### **Password Requirements**
+
 - Minimum 8 characters
 - Must match confirmation
 - Client-side validation
 - Secure input type
 
 ### **Data Handling**
+
 - No plain text storage (demo)
 - Validation before submission
 - Error handling
 - Secure state management
 
 ### **Privacy**
+
 - Terms & conditions acceptance
 - Privacy policy link
 - GDPR-ready structure
@@ -359,18 +385,21 @@ userData = {
 ## 🎯 Business Value
 
 ### **For Users**
+
 - ✅ Clear onboarding process
 - ✅ Knows what to expect
 - ✅ Professional experience
 - ✅ Guided workflow
 
 ### **For Platform**
+
 - ✅ Collect user data
 - ✅ Understand customer base
 - ✅ Personalize experience
 - ✅ Compliance documentation
 
 ### **For Demo**
+
 - ✅ Shows enterprise readiness
 - ✅ Professional onboarding
 - ✅ Complete user journey
@@ -381,26 +410,30 @@ userData = {
 ## 🎨 UI Components
 
 ### **Progress Stepper**
+
 ```jsx
 [1] Authentication → [2] Profile Setup → [3] Complete
   ✓ Completed          ⏳ In Progress      ⭕ Pending
 ```
 
 ### **Input Fields**
+
 ```jsx
 [Icon] ___________________
        Placeholder text
 ```
 
 ### **Buttons**
+
 ```jsx
 [← Back]  [Continue →]
 ```
 
 ### **Success Screen**
+
 ```jsx
     ✓
-Welcome to FinShield AI!
+Welcome to Durin!
 
 What's Next?
 1. Login to bank portal
@@ -415,18 +448,21 @@ What's Next?
 ## 📱 Responsive Design
 
 ### **Desktop**
+
 - Two-column form layout
 - Wide progress stepper
 - Spacious inputs
 - Large buttons
 
 ### **Tablet**
+
 - Single column forms
 - Stacked progress steps
 - Full-width inputs
 - Touch-friendly buttons
 
 ### **Mobile**
+
 - Vertical layout
 - Compact stepper
 - Stack all fields
@@ -437,6 +473,7 @@ What's Next?
 ## 🚀 Future Enhancements
 
 ### **Phase 2**
+
 - [ ] Email verification
 - [ ] Phone number verification
 - [ ] OAuth integration (Google, Microsoft)
@@ -444,6 +481,7 @@ What's Next?
 - [ ] Profile photo upload
 
 ### **Phase 3**
+
 - [ ] Multi-factor authentication
 - [ ] SSO integration
 - [ ] Role-based access control
@@ -451,6 +489,7 @@ What's Next?
 - [ ] Company verification
 
 ### **Phase 4**
+
 - [ ] Onboarding analytics
 - [ ] A/B testing
 - [ ] Personalized recommendations
@@ -473,24 +512,28 @@ What's Next?
 ## ✅ Benefits
 
 ### **User Experience**
+
 - ✅ Clear, guided process
 - ✅ Professional appearance
 - ✅ Reduced friction
 - ✅ Confidence building
 
 ### **Data Collection**
+
 - ✅ User demographics
 - ✅ Company information
 - ✅ Contact details
 - ✅ Use case understanding
 
 ### **Platform Readiness**
+
 - ✅ Enterprise onboarding
 - ✅ Compliance tracking
 - ✅ User management
 - ✅ Personalization foundation
 
 ### **Demo Impact**
+
 - ✅ Complete user journey
 - ✅ Professional polish
 - ✅ Shows scalability
@@ -501,12 +544,14 @@ What's Next?
 ## 🏆 Why This Matters
 
 **Before:** Users jumped straight to upload
+
 - No context
 - No user data
 - Generic experience
 - Less professional
 
 **After:** Complete onboarding flow
+
 - ✅ Collect user information
 - ✅ Build user profiles
 - ✅ Personalized experience
@@ -519,18 +564,21 @@ What's Next?
 ## 💻 Code Quality
 
 ### **Clean Architecture**
+
 - Separate page component
 - Clear state management
 - Reusable patterns
 - Modular design
 
 ### **Best Practices**
+
 - Form validation
 - Error handling
 - Loading states
 - Accessibility considerations
 
 ### **Performance**
+
 - Efficient re-renders
 - Optimized animations
 - Fast transitions

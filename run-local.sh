@@ -1,11 +1,11 @@
 #!/bin/bash
 
-# FinShield AI - Local Development Script
+# Durin - Local Development Script
 # Run backend and frontend without Docker
 
 set -e
 
-echo "🛡️  FinShield AI - Local Development Mode"
+echo "🛡️  Durin - Local Development Mode"
 echo "=========================================="
 echo ""
 
@@ -77,7 +77,7 @@ FRONTEND_PID=$!
 
 echo ""
 echo "=========================================="
-echo "✅ FinShield AI is running!"
+echo "✅ Durin is running!"
 echo ""
 echo "📊 Frontend:  http://localhost:3000"
 echo "🔌 Backend:   http://localhost:8000"

@@ -182,7 +182,7 @@ Sweden,Germany,48000,2025-10-24T12:00:00Z,D28,192.168.1.131,Sweden,Germany,count
               </h2>
               
               <p className="text-lg text-gray-400 mb-8">
-                Download your KYC and transaction records to analyze with FinShield AI's advanced fraud detection system.
+                Download your KYC and transaction records to analyze with Durin's advanced fraud detection system.
               </p>
 
               {/* Features */}

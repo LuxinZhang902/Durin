@@ -1,14 +1,16 @@
-# FinShield AI - Detailed Setup Guide
+# Durin - Detailed Setup Guide
 
 ## 🎯 Pre-Demo Checklist
 
 ### 1. Environment Setup
+
 - [ ] Docker Desktop installed and running
 - [ ] OpenAI API key obtained (https://platform.openai.com/api-keys)
 - [ ] Git repository cloned
 - [ ] `.env` file created with API key
 
 ### 2. Quick Test (5 minutes)
+
 ```bash
 # Test backend standalone
 cd backend
@@ -24,6 +26,7 @@ curl http://localhost:8000/api/health
 ```
 
 ### 3. Full Docker Test (10 minutes)
+
 ```bash
 # From project root
 cp .env.example .env
@@ -41,7 +44,9 @@ docker-compose up --build
 ## 🐛 Troubleshooting
 
 ### Issue: "OPENAI_API_KEY not found"
+
 **Solution:**
+
 ```bash
 # Ensure .env file exists in project root
 cat .env
@@ -53,7 +58,9 @@ docker-compose up --build
 ```
 
 ### Issue: Port already in use
+
 **Solution:**
+
 ```bash
 # Check what's using ports 3000 or 8000
 lsof -i :3000
@@ -63,7 +70,9 @@ lsof -i :8000
 ```
 
 ### Issue: Frontend can't connect to backend
+
 **Solution:**
+
 ```bash
 # Check backend is running
 curl http://localhost:8000/api/health
@@ -76,14 +85,18 @@ docker-compose restart
 ```
 
 ### Issue: Graph not rendering
+
 **Solution:**
+
 - Check browser console for errors
 - Ensure sample data is uploaded correctly
 - Try different browser (Chrome recommended)
 - Clear browser cache
 
 ### Issue: LLM explanations failing
+
 **Solution:**
+
 ```bash
 # Verify API key is valid
 curl https://api.openai.com/v1/models \
@@ -100,6 +113,7 @@ docker-compose logs backend
 ## 📊 Performance Optimization
 
 ### For Large Datasets (10k+ transactions)
+
 ```python
 # In backend/app/graph_analyzer.py
 # Adjust these parameters:
@@ -114,6 +128,7 @@ if len(self.graph.nodes()) > 1000:
 ```
 
 ### Frontend Performance
+
 ```javascript
 // In GraphVisualization.jsx
 // Reduce particle count for large graphs
@@ -125,6 +140,7 @@ linkDirectionalParticles={graphData.nodes.length > 100 ? 1 : 2}
 ## 🔧 Development Tips
 
 ### Hot Reload Setup
+
 ```bash
 # Backend auto-reloads on code changes
 cd backend
@@ -136,11 +152,13 @@ npm run dev
 ```
 
 ### API Testing with Postman
+
 1. Import collection from `/docs/postman_collection.json`
 2. Set environment variable: `API_URL=http://localhost:8000`
 3. Test endpoints: analyze, explain, results
 
 ### Database Inspection
+
 ```bash
 # If using SQLite (future enhancement)
 sqlite3 backend/fraud_detection.db
@@ -153,7 +171,9 @@ sqlite3 backend/fraud_detection.db
 ## 🎨 Customization Guide
 
 ### Change Color Scheme
+
 Edit `frontend/tailwind.config.js`:
+
 ```javascript
 colors: {
   'accent-blue': '#3b82f6',    // Primary accent
@@ -164,7 +184,9 @@ colors: {
 ```
 
 ### Adjust Risk Scoring
+
 Edit `backend/app/graph_analyzer.py`:
+
 ```python
 def _calculate_risk_scores(self):
     # Modify weights:
@@ -174,6 +196,7 @@ def _calculate_risk_scores(self):
 ```
 
 ### Add New Fraud Signals
+
 ```python
 # In graph_analyzer.py, add new detection method:
 def _detect_velocity_abuse(self):
@@ -190,6 +213,7 @@ self._detect_velocity_abuse()
 ## 📦 Deployment
 
 ### Production Checklist
+
 - [ ] Change CORS origins in `backend/app/main.py`
 - [ ] Use PostgreSQL instead of in-memory storage
 - [ ] Enable HTTPS with SSL certificates
@@ -201,6 +225,7 @@ self._detect_velocity_abuse()
 ### Deploy to Cloud
 
 #### AWS (EC2 + RDS)
+
 ```bash
 # Install Docker on EC2
 sudo yum update -y
@@ -214,6 +239,7 @@ docker-compose up -d
 ```
 
 #### Heroku
+
 ```bash
 # Install Heroku CLI
 heroku create finshield-ai
@@ -222,6 +248,7 @@ git push heroku main
 ```
 
 #### DigitalOcean App Platform
+
 ```yaml
 # app.yaml
 name: finshield-ai
@@ -241,6 +268,7 @@ services:
 ## 🧪 Testing Strategy
 
 ### Unit Tests
+
 ```bash
 # Backend
 cd backend
@@ -252,6 +280,7 @@ npm test
 ```
 
 ### Integration Tests
+
 ```bash
 # Test full workflow
 curl -X POST http://localhost:8000/api/analyze \
@@ -260,6 +289,7 @@ curl -X POST http://localhost:8000/api/analyze \
 ```
 
 ### Load Testing
+
 ```bash
 # Install Apache Bench
 brew install httpd
@@ -283,18 +313,21 @@ ab -n 1000 -c 10 http://localhost:8000/api/health
 ## 🎓 Learning Path
 
 ### For Backend Developers
+
 1. Study NetworkX graph algorithms
 2. Learn FastAPI async patterns
 3. Understand fraud detection patterns (AML/KYC)
 4. Explore LLM prompt engineering
 
 ### For Frontend Developers
+
 1. Master React hooks (useState, useEffect, useRef)
 2. Learn D3.js/force-graph fundamentals
 3. Practice TailwindCSS utility classes
 4. Study data visualization best practices
 
 ### For Full-Stack
+
 1. Understand REST API design
 2. Learn Docker containerization
 3. Practice CI/CD workflows

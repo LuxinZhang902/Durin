@@ -183,7 +183,7 @@ def main():
     """Run demo for both sample users."""
     
     print("\n" + "="*60)
-    print("FINSHIELD AI - UNDERWRITING SYSTEM DEMO")
+    print("Durin - UNDERWRITING SYSTEM DEMO")
     print("="*60)
     
     # Check system health

@@ -1,5 +1,5 @@
 """
-FinShield AI - FastAPI Backend V2
+Durin - FastAPI Backend V2
 Fraud detection + underwriting with production-ready database persistence.
 """
 from fastapi import FastAPI, UploadFile, File, HTTPException, Depends
@@ -35,7 +35,7 @@ from app.database import (
 )
 
 app = FastAPI(
-    title="FinShield AI API",
+    title="Durin API",
     description="AI-powered fraud detection and underwriting with database persistence",
     version="2.0.0"
 )
@@ -120,7 +120,7 @@ async def startup_event():
 async def root():
     """Health check endpoint."""
     return {
-        "service": "FinShield AI",
+        "service": "Durin",
         "status": "operational",
         "version": "2.0.0",
         "llm_available": llm_explainer is not None,
@@ -569,6 +569,58 @@ async def submit_personal_data(
         raise HTTPException(
             status_code=500,
             detail=f"Failed to store personal data: {str(e)}"
+        )
+
+
+@app.post("/api/liveness/check")
+async def check_liveness_simple(
+    image: UploadFile = File(...),
+    user_id: str = "demo_user",
+    device_fingerprint: str = ""
+):
+    """
+    Simple liveness check endpoint for frontend demo.
+    Accepts image file directly without complex request model.
+    """
+    try:
+        # Mock liveness check result for demo
+        import random
+        
+        liveness_score = random.uniform(0.7, 0.95)
+        is_real_face = liveness_score > 0.6
+        is_deepfake = random.random() < 0.1
+        replay_detected = random.random() < 0.05
+        sanctions_pass = random.random() > 0.1
+        device_risk_score = random.uniform(0.1, 0.4)
+        
+        flags = []
+        if not is_real_face:
+            flags.append("NO_FACE_DETECTED")
+        if is_deepfake:
+            flags.append("DEEPFAKE_DETECTED")
+        if replay_detected:
+            flags.append("REPLAY_ATTACK")
+        if not sanctions_pass:
+            flags.append("SANCTIONS_MATCH")
+        
+        liveness_pass = is_real_face and not is_deepfake and not replay_detected and sanctions_pass
+        
+        return {
+            "success": True,
+            "user_id": user_id,
+            "liveness_pass": liveness_pass,
+            "liveness_score": liveness_score,
+            "is_real_face": is_real_face,
+            "is_deepfake": is_deepfake,
+            "replay_detected": replay_detected,
+            "sanctions_pass": sanctions_pass,
+            "device_risk_score": device_risk_score,
+            "flags": flags
+        }
+    except Exception as e:
+        raise HTTPException(
+            status_code=500,
+            detail=f"Liveness check failed: {str(e)}"
         )
 
 

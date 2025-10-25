@@ -1,4 +1,4 @@
-# ⚡ FinShield AI - Quick Start
+# ⚡ Durin - Quick Start
 
 Get the **production-ready underwriting system** running in **5 minutes**.
 
@@ -23,6 +23,7 @@ uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 ```
 
 ✅ **Wait for:**
+
 ```
 Initializing database...
 ✓ Database initialized
@@ -40,6 +41,7 @@ python demo_underwriting.py
 ### Step 4: Verify Success
 
 ✅ You should see:
+
 - User 001: APPROVED ✓ ($2000 limit)
 - User 002: APPROVED ✓ or DECLINED ($800 limit)
 - Database file created: `finshield_underwriting.db`
@@ -62,22 +64,26 @@ Should show all tests passed ✅
 ## 🆘 Troubleshooting
 
 ### Models not downloading?
+
 ```bash
 python -c "from deepface import DeepFace; DeepFace.build_model('Facenet512')"
 ```
 
 ### Port 8000 busy?
+
 ```bash
 uvicorn app.main:app --reload --port 8001
 # Then update demo_underwriting.py: API_BASE = "http://localhost:8001"
 ```
 
 ### Import errors?
+
 ```bash
 pip install --upgrade -r requirements.txt
 ```
 
 ### Database locked?
+
 ```bash
 rm finshield_underwriting.db
 # Restart server (will recreate)
@@ -96,11 +102,11 @@ rm finshield_underwriting.db
 
 ## 🎯 Key URLs
 
-| Service | URL | Description |
-|---------|-----|-------------|
-| **Backend** | http://localhost:8000 | API server |
-| **API Docs** | http://localhost:8000/docs | Interactive API documentation |
-| **Health Check** | http://localhost:8000/api/health | Service status |
+| Service          | URL                              | Description                   |
+| ---------------- | -------------------------------- | ----------------------------- |
+| **Backend**      | http://localhost:8000            | API server                    |
+| **API Docs**     | http://localhost:8000/docs       | Interactive API documentation |
+| **Health Check** | http://localhost:8000/api/health | Service status                |
 
 ---
 

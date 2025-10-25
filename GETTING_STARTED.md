@@ -1,4 +1,4 @@
-# 🚀 Getting Started with FinShield AI
+# 🚀 Getting Started with Durin
 
 **Welcome!** This guide will get you from zero to demo in **5 minutes**.
 
@@ -29,7 +29,6 @@ Before starting, ensure you have:
 
 - ✅ **Docker Desktop** installed and running
   - Download: https://www.docker.com/products/docker-desktop
-  
 - ✅ **OpenAI API Key** (for AI explanations)
   - Get one: https://platform.openai.com/api-keys
   - Free tier works fine for demos
@@ -80,10 +79,11 @@ OPENAI_API_KEY=sk-your-actual-key-here
 ```
 
 You'll see:
+
 ```
-🐳 Starting FinShield AI with Docker...
+🐳 Starting Durin with Docker...
 ✅ Backend is running at http://localhost:8000
-✅ FinShield AI is ready!
+✅ Durin is ready!
 
 📊 Frontend:  http://localhost:3000
 🔌 Backend:   http://localhost:8000
@@ -94,21 +94,24 @@ You'll see:
 
 Open your browser to: **http://localhost:3000**
 
-You should see the FinShield AI dashboard with a dark theme and gradient logo.
+You should see the Durin dashboard with a dark theme and gradient logo.
 
 ### Step 6: Run Your First Analysis
 
 1. **Upload Users Data:**
+
    - Click the "Users / KYC Data" upload box
    - Select `data/users.csv` from the project folder
    - You'll see a green checkmark ✅
 
 2. **Upload Transactions Data:**
+
    - Click the "Transactions Data" upload box
    - Select `data/transactions.csv`
    - Another green checkmark ✅
 
 3. **Run Analysis:**
+
    - Click the big blue **"Run Analysis"** button
    - Wait ~1 second
 
@@ -117,7 +120,6 @@ You should see the FinShield AI dashboard with a dark theme and gradient logo.
      - 🔴 Red = High risk (7-10)
      - 🟠 Orange = Medium risk (4-6)
      - 🟢 Green = Low risk (0-3)
-   
 5. **Get AI Explanation:**
    - Click any red (high-risk) node
    - Wait 2-3 seconds for GPT-4 to generate explanation
@@ -175,6 +177,7 @@ docker-compose restart
 ### Issue: "Port 3000 already in use"
 
 **Fix:**
+
 ```bash
 # Stop existing services
 docker-compose down
@@ -189,6 +192,7 @@ lsof -ti:3000 | xargs kill -9
 ### Issue: "OPENAI_API_KEY not found"
 
 **Fix:**
+
 ```bash
 # Check if .env exists
 cat .env
@@ -206,6 +210,7 @@ docker-compose restart
 ### Issue: "Docker daemon not running"
 
 **Fix:**
+
 1. Open Docker Desktop application
 2. Wait for it to fully start (whale icon in menu bar)
 3. Run `./run.sh` again
@@ -213,6 +218,7 @@ docker-compose restart
 ### Issue: Graph not showing
 
 **Fix:**
+
 - Try Chrome or Firefox (Safari sometimes has issues)
 - Clear browser cache (Cmd+Shift+R on Mac)
 - Check browser console for errors (F12)
@@ -221,6 +227,7 @@ docker-compose restart
 ### Issue: AI explanation stuck on "Generating..."
 
 **Fix:**
+
 - Check your OpenAI API key is valid
 - Check you have API credits (free tier works)
 - Wait up to 10 seconds (OpenAI can be slow)
@@ -231,17 +238,20 @@ docker-compose restart
 ## 📚 Next Steps
 
 ### Learn More
+
 - **Full Documentation:** [README.md](README.md)
 - **Demo Script:** [DEMO.md](DEMO.md) - 5-minute pitch
 - **Detailed Setup:** [SETUP.md](SETUP.md) - Advanced configuration
 - **Project Summary:** [PROJECT_SUMMARY.md](PROJECT_SUMMARY.md)
 
 ### Customize
+
 - **Change Colors:** Edit `frontend/tailwind.config.js`
 - **Adjust Risk Weights:** Edit `backend/app/graph_analyzer.py`
 - **Add New Signals:** Add detection methods in graph analyzer
 
 ### Deploy to Production
+
 - **AWS:** Use EC2 + RDS
 - **Heroku:** One-click deploy
 - **DigitalOcean:** App Platform
@@ -251,11 +261,13 @@ docker-compose restart
 ## 🎓 Understanding the Sample Data
 
 ### users.csv (15 users)
+
 - **Fraud Pattern:** Users U1, U2, U8 share device D1
 - **Fraud Pattern:** Users U4, U5, U12 share device D3
 - Shows account takeover or mule network behavior
 
 ### transactions.csv (30 transactions)
+
 - **Fraud Pattern:** Account A1 sends 4 small transactions (<$1k) - structuring
 - **Fraud Pattern:** Account A11 sends 4 small transactions - structuring
 - **Fraud Pattern:** A8 → A1 → ... creates circular flow
@@ -266,31 +278,34 @@ docker-compose restart
 ## 🎯 Quick Reference
 
 ### URLs
-| Service | URL |
-|---------|-----|
-| Dashboard | http://localhost:3000 |
-| API Server | http://localhost:8000 |
-| API Docs | http://localhost:8000/docs |
+
+| Service      | URL                              |
+| ------------ | -------------------------------- |
+| Dashboard    | http://localhost:3000            |
+| API Server   | http://localhost:8000            |
+| API Docs     | http://localhost:8000/docs       |
 | Health Check | http://localhost:8000/api/health |
 
 ### Commands
-| Action | Command |
-|--------|---------|
-| Start (Docker) | `./run.sh` |
-| Start (Local) | `./run-local.sh` |
-| Stop | `docker-compose down` |
-| Restart | `docker-compose restart` |
-| View Logs | `docker-compose logs -f` |
-| Verify Setup | `./verify.sh` |
+
+| Action         | Command                  |
+| -------------- | ------------------------ |
+| Start (Docker) | `./run.sh`               |
+| Start (Local)  | `./run-local.sh`         |
+| Stop           | `docker-compose down`    |
+| Restart        | `docker-compose restart` |
+| View Logs      | `docker-compose logs -f` |
+| Verify Setup   | `./verify.sh`            |
 
 ### Files
-| File | Purpose |
-|------|---------|
-| `.env` | Your OpenAI API key |
-| `data/users.csv` | Sample KYC data |
+
+| File                    | Purpose             |
+| ----------------------- | ------------------- |
+| `.env`                  | Your OpenAI API key |
+| `data/users.csv`        | Sample KYC data     |
 | `data/transactions.csv` | Sample transactions |
-| `README.md` | Full documentation |
-| `DEMO.md` | Demo script |
+| `README.md`             | Full documentation  |
+| `DEMO.md`               | Demo script         |
 
 ---
 
@@ -307,6 +322,7 @@ docker-compose restart
 ## 🆘 Get Help
 
 ### Check Logs
+
 ```bash
 # Backend logs
 docker-compose logs backend
@@ -319,6 +335,7 @@ docker-compose logs -f
 ```
 
 ### Test API Directly
+
 ```bash
 # Health check
 curl http://localhost:8000/api/health
@@ -328,6 +345,7 @@ open http://localhost:8000/docs
 ```
 
 ### Verify Services
+
 ```bash
 # Check if containers are running
 docker-compose ps

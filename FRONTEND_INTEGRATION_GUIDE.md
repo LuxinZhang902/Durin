@@ -1,4 +1,4 @@
-# Frontend Integration Guide - FinShield AI
+# Frontend Integration Guide - Durin
 
 This guide shows you **exactly** how to connect your frontend to the FinShield backend API.
 
@@ -44,7 +44,7 @@ Create an API client file:
 **`frontend/src/services/finshield-api.js`**
 
 ```javascript
-const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
+const API_BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:8000";
 
 class FinShieldAPI {
   constructor(baseURL = API_BASE_URL) {
@@ -56,7 +56,7 @@ class FinShieldAPI {
     const url = `${this.baseURL}${endpoint}`;
     const config = {
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
         ...options.headers,
       },
       ...options,
@@ -79,13 +79,13 @@ class FinShieldAPI {
 
   // Health check
   async healthCheck() {
-    return this.request('/api/health');
+    return this.request("/api/health");
   }
 
   // Step 1: Submit personal data
   async submitPersonalData(userData) {
-    return this.request('/api/underwrite/personal-data', {
-      method: 'POST',
+    return this.request("/api/underwrite/personal-data", {
+      method: "POST",
       body: JSON.stringify({
         personal_data: {
           user_id: userData.userId,
@@ -95,27 +95,27 @@ class FinShieldAPI {
           employment_status: userData.employmentStatus,
           monthly_income: parseFloat(userData.monthlyIncome),
           tenure_months: parseInt(userData.tenureMonths),
-        }
-      })
+        },
+      }),
     });
   }
 
   // Step 2: Upload transactions (CSV file)
   async uploadTransactionsCSV(userId, csvFile) {
     const formData = new FormData();
-    formData.append('user_id', userId);
-    formData.append('file', csvFile);
+    formData.append("user_id", userId);
+    formData.append("file", csvFile);
 
     const url = `${this.baseURL}/api/underwrite/transactions/csv`;
     const response = await fetch(url, {
-      method: 'POST',
+      method: "POST",
       body: formData,
       // Don't set Content-Type - browser will set it with boundary
     });
 
     if (!response.ok) {
       const error = await response.json();
-      throw new Error(error.detail || 'Failed to upload transactions');
+      throw new Error(error.detail || "Failed to upload transactions");
     }
 
     return await response.json();
@@ -123,38 +123,38 @@ class FinShieldAPI {
 
   // Step 2 Alternative: Upload transactions (JSON)
   async uploadTransactionsJSON(userId, transactions) {
-    return this.request('/api/underwrite/transactions', {
-      method: 'POST',
+    return this.request("/api/underwrite/transactions", {
+      method: "POST",
       body: JSON.stringify({
         user_id: userId,
-        transactions: transactions
-      })
+        transactions: transactions,
+      }),
     });
   }
 
   // Step 3: Liveness check (selfie + deepfake detection)
   async submitLivenessCheck(userId, imageDataURL, deviceFingerprint) {
-    return this.request('/api/underwrite/liveness', {
-      method: 'POST',
+    return this.request("/api/underwrite/liveness", {
+      method: "POST",
       body: JSON.stringify({
         liveness_check: {
           user_id: userId,
           image_data: imageDataURL,
           device_fingerprint: deviceFingerprint || navigator.userAgent,
-          timestamp: new Date().toISOString()
-        }
-      })
+          timestamp: new Date().toISOString(),
+        },
+      }),
     });
   }
 
   // Step 4: Run underwriting analysis
-  async runUnderwriting(userId, jurisdiction = 'US') {
-    return this.request('/api/underwrite/analyze', {
-      method: 'POST',
+  async runUnderwriting(userId, jurisdiction = "US") {
+    return this.request("/api/underwrite/analyze", {
+      method: "POST",
       body: JSON.stringify({
         user_id: userId,
-        jurisdiction: jurisdiction
-      })
+        jurisdiction: jurisdiction,
+      }),
     });
   }
 
@@ -171,7 +171,7 @@ class FinShieldAPI {
   // Delete user (GDPR)
   async deleteUser(userId) {
     return this.request(`/api/underwrite/user/${userId}`, {
-      method: 'DELETE'
+      method: "DELETE",
     });
   }
 }
@@ -188,17 +188,17 @@ export default new FinShieldAPI();
 **`frontend/src/components/PersonalDataForm.jsx`**
 
 ```jsx
-import React, { useState } from 'react';
-import finshieldAPI from '../services/finshield-api';
+import React, { useState } from "react";
+import finshieldAPI from "../services/finshield-api";
 
 export default function PersonalDataForm({ onComplete, userId }) {
   const [formData, setFormData] = useState({
-    fullName: '',
-    address: '',
-    country: 'US',
-    employmentStatus: 'full_time',
-    monthlyIncome: '',
-    tenureMonths: ''
+    fullName: "",
+    address: "",
+    country: "US",
+    employmentStatus: "full_time",
+    monthlyIncome: "",
+    tenureMonths: "",
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -211,10 +211,10 @@ export default function PersonalDataForm({ onComplete, userId }) {
     try {
       const result = await finshieldAPI.submitPersonalData({
         userId,
-        ...formData
+        ...formData,
       });
 
-      console.log('Personal data submitted:', result);
+      console.log("Personal data submitted:", result);
       onComplete(result);
     } catch (err) {
       setError(err.message);
@@ -231,7 +231,7 @@ export default function PersonalDataForm({ onComplete, userId }) {
         type="text"
         placeholder="Full Name"
         value={formData.fullName}
-        onChange={(e) => setFormData({...formData, fullName: e.target.value})}
+        onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
         required
         minLength={2}
       />
@@ -240,14 +240,16 @@ export default function PersonalDataForm({ onComplete, userId }) {
         type="text"
         placeholder="Address"
         value={formData.address}
-        onChange={(e) => setFormData({...formData, address: e.target.value})}
+        onChange={(e) => setFormData({ ...formData, address: e.target.value })}
         required
         minLength={10}
       />
 
       <select
         value={formData.employmentStatus}
-        onChange={(e) => setFormData({...formData, employmentStatus: e.target.value})}
+        onChange={(e) =>
+          setFormData({ ...formData, employmentStatus: e.target.value })
+        }
       >
         <option value="full_time">Full Time</option>
         <option value="part_time">Part Time</option>
@@ -260,7 +262,9 @@ export default function PersonalDataForm({ onComplete, userId }) {
         type="number"
         placeholder="Monthly Income"
         value={formData.monthlyIncome}
-        onChange={(e) => setFormData({...formData, monthlyIncome: e.target.value})}
+        onChange={(e) =>
+          setFormData({ ...formData, monthlyIncome: e.target.value })
+        }
         required
         min="0"
       />
@@ -269,7 +273,9 @@ export default function PersonalDataForm({ onComplete, userId }) {
         type="number"
         placeholder="Months at Current Job"
         value={formData.tenureMonths}
-        onChange={(e) => setFormData({...formData, tenureMonths: e.target.value})}
+        onChange={(e) =>
+          setFormData({ ...formData, tenureMonths: e.target.value })
+        }
         required
         min="0"
       />
@@ -277,7 +283,7 @@ export default function PersonalDataForm({ onComplete, userId }) {
       {error && <div className="error">{error}</div>}
 
       <button type="submit" disabled={loading}>
-        {loading ? 'Submitting...' : 'Next Step'}
+        {loading ? "Submitting..." : "Next Step"}
       </button>
     </form>
   );
@@ -291,8 +297,8 @@ export default function PersonalDataForm({ onComplete, userId }) {
 **`frontend/src/components/TransactionUploader.jsx`**
 
 ```jsx
-import React, { useState } from 'react';
-import finshieldAPI from '../services/finshield-api';
+import React, { useState } from "react";
+import finshieldAPI from "../services/finshield-api";
 
 export default function TransactionUploader({ onComplete, userId }) {
   const [file, setFile] = useState(null);
@@ -301,17 +307,17 @@ export default function TransactionUploader({ onComplete, userId }) {
 
   const handleFileChange = (e) => {
     const selectedFile = e.target.files[0];
-    if (selectedFile && selectedFile.type === 'text/csv') {
+    if (selectedFile && selectedFile.type === "text/csv") {
       setFile(selectedFile);
       setError(null);
     } else {
-      setError('Please select a valid CSV file');
+      setError("Please select a valid CSV file");
     }
   };
 
   const handleUpload = async () => {
     if (!file) {
-      setError('Please select a file');
+      setError("Please select a file");
       return;
     }
 
@@ -320,7 +326,7 @@ export default function TransactionUploader({ onComplete, userId }) {
 
     try {
       const result = await finshieldAPI.uploadTransactionsCSV(userId, file);
-      console.log('Transactions uploaded:', result);
+      console.log("Transactions uploaded:", result);
       onComplete(result);
     } catch (err) {
       setError(err.message);
@@ -333,23 +339,24 @@ export default function TransactionUploader({ onComplete, userId }) {
     <div>
       <h2>Upload Bank Transactions</h2>
 
-      <input
-        type="file"
-        accept=".csv"
-        onChange={handleFileChange}
-      />
+      <input type="file" accept=".csv" onChange={handleFileChange} />
 
       {file && <p>Selected: {file.name}</p>}
 
       {error && <div className="error">{error}</div>}
 
       <button onClick={handleUpload} disabled={loading || !file}>
-        {loading ? 'Uploading...' : 'Upload Transactions'}
+        {loading ? "Uploading..." : "Upload Transactions"}
       </button>
 
       <div className="help">
-        <p>CSV Format: txn_id, account_id, timestamp, amount, currency, merchant, transaction_type, mcc</p>
-        <a href="/sample_transactions.csv" download>Download Sample CSV</a>
+        <p>
+          CSV Format: txn_id, account_id, timestamp, amount, currency, merchant,
+          transaction_type, mcc
+        </p>
+        <a href="/sample_transactions.csv" download>
+          Download Sample CSV
+        </a>
       </div>
     </div>
   );
@@ -363,8 +370,8 @@ export default function TransactionUploader({ onComplete, userId }) {
 **`frontend/src/components/LivenessCheck.jsx`**
 
 ```jsx
-import React, { useState, useRef, useEffect } from 'react';
-import finshieldAPI from '../services/finshield-api';
+import React, { useState, useRef, useEffect } from "react";
+import finshieldAPI from "../services/finshield-api";
 
 export default function LivenessCheck({ onComplete, userId }) {
   const videoRef = useRef(null);
@@ -378,7 +385,7 @@ export default function LivenessCheck({ onComplete, userId }) {
     return () => {
       // Cleanup: stop camera when component unmounts
       if (stream) {
-        stream.getTracks().forEach(track => track.stop());
+        stream.getTracks().forEach((track) => track.stop());
       }
     };
   }, [stream]);
@@ -386,19 +393,19 @@ export default function LivenessCheck({ onComplete, userId }) {
   const startCamera = async () => {
     try {
       const mediaStream = await navigator.mediaDevices.getUserMedia({
-        video: { width: 1280, height: 720 }
+        video: { width: 1280, height: 720 },
       });
       videoRef.current.srcObject = mediaStream;
       setStream(mediaStream);
       setError(null);
     } catch (err) {
-      setError('Camera access denied. Please allow camera access.');
+      setError("Camera access denied. Please allow camera access.");
     }
   };
 
   const capturePhoto = async () => {
     if (!stream) {
-      setError('Please start camera first');
+      setError("Please start camera first");
       return;
     }
 
@@ -407,10 +414,10 @@ export default function LivenessCheck({ onComplete, userId }) {
     const video = videoRef.current;
     canvas.width = video.videoWidth;
     canvas.height = video.videoHeight;
-    canvas.getContext('2d').drawImage(video, 0, 0);
+    canvas.getContext("2d").drawImage(video, 0, 0);
 
     // Convert to base64
-    const imageDataURL = canvas.toDataURL('image/jpeg', 0.95);
+    const imageDataURL = canvas.toDataURL("image/jpeg", 0.95);
 
     setLoading(true);
     setError(null);
@@ -429,7 +436,7 @@ export default function LivenessCheck({ onComplete, userId }) {
       if (livenessResult.liveness_pass) {
         onComplete(livenessResult);
       } else {
-        setError(`Liveness check failed: ${livenessResult.flags.join(', ')}`);
+        setError(`Liveness check failed: ${livenessResult.flags.join(", ")}`);
       }
     } catch (err) {
       setError(err.message);
@@ -442,15 +449,19 @@ export default function LivenessCheck({ onComplete, userId }) {
     <div>
       <h2>Identity Verification</h2>
 
-      <video ref={videoRef} autoPlay style={{ width: '100%', maxWidth: '640px' }} />
-      <canvas ref={canvasRef} style={{ display: 'none' }} />
+      <video
+        ref={videoRef}
+        autoPlay
+        style={{ width: "100%", maxWidth: "640px" }}
+      />
+      <canvas ref={canvasRef} style={{ display: "none" }} />
 
       <div className="controls">
         <button onClick={startCamera} disabled={stream}>
           Start Camera
         </button>
         <button onClick={capturePhoto} disabled={!stream || loading}>
-          {loading ? 'Analyzing (10-20s)...' : 'Capture Photo'}
+          {loading ? "Analyzing (10-20s)..." : "Capture Photo"}
         </button>
       </div>
 
@@ -465,10 +476,8 @@ export default function LivenessCheck({ onComplete, userId }) {
         <div className="result">
           <h3>Liveness Results</h3>
           <p>Score: {(result.liveness_score * 100).toFixed(1)}%</p>
-          <p>Status: {result.liveness_pass ? '✅ Passed' : '❌ Failed'}</p>
-          {result.flags.length > 0 && (
-            <p>Flags: {result.flags.join(', ')}</p>
-          )}
+          <p>Status: {result.liveness_pass ? "✅ Passed" : "❌ Failed"}</p>
+          {result.flags.length > 0 && <p>Flags: {result.flags.join(", ")}</p>}
         </div>
       )}
 
@@ -485,8 +494,8 @@ export default function LivenessCheck({ onComplete, userId }) {
 **`frontend/src/components/DecisionResults.jsx`**
 
 ```jsx
-import React, { useState, useEffect } from 'react';
-import finshieldAPI from '../services/finshield-api';
+import React, { useState, useEffect } from "react";
+import finshieldAPI from "../services/finshield-api";
 
 export default function DecisionResults({ userId }) {
   const [decision, setDecision] = useState(null);
@@ -523,8 +532,13 @@ export default function DecisionResults({ userId }) {
         <div className="approved">
           <h2>🎉 Congratulations! You're Approved!</h2>
           <div className="offer">
-            <p><strong>Credit Limit:</strong> ${decision.credit_limit.toLocaleString()}</p>
-            <p><strong>APR:</strong> {decision.apr}%</p>
+            <p>
+              <strong>Credit Limit:</strong> $
+              {decision.credit_limit.toLocaleString()}
+            </p>
+            <p>
+              <strong>APR:</strong> {decision.apr}%
+            </p>
           </div>
         </div>
       ) : (
@@ -536,7 +550,10 @@ export default function DecisionResults({ userId }) {
 
       <div className="details">
         <h3>Risk Assessment</h3>
-        <p><strong>Default Probability:</strong> {(decision.pd_12m * 100).toFixed(2)}%</p>
+        <p>
+          <strong>Default Probability:</strong>{" "}
+          {(decision.pd_12m * 100).toFixed(2)}%
+        </p>
 
         {decision.reasons && decision.reasons.length > 0 && (
           <div className="risk-factors">
@@ -574,11 +591,11 @@ export default function DecisionResults({ userId }) {
 **`frontend/src/components/UnderwritingFlow.jsx`**
 
 ```jsx
-import React, { useState } from 'react';
-import PersonalDataForm from './PersonalDataForm';
-import TransactionUploader from './TransactionUploader';
-import LivenessCheck from './LivenessCheck';
-import DecisionResults from './DecisionResults';
+import React, { useState } from "react";
+import PersonalDataForm from "./PersonalDataForm";
+import TransactionUploader from "./TransactionUploader";
+import LivenessCheck from "./LivenessCheck";
+import DecisionResults from "./DecisionResults";
 
 export default function UnderwritingFlow() {
   const [step, setStep] = useState(1);
@@ -587,36 +604,31 @@ export default function UnderwritingFlow() {
   return (
     <div className="underwriting-flow">
       <div className="progress">
-        <div className={`step ${step >= 1 ? 'active' : ''}`}>1. Personal Info</div>
-        <div className={`step ${step >= 2 ? 'active' : ''}`}>2. Transactions</div>
-        <div className={`step ${step >= 3 ? 'active' : ''}`}>3. Verify Identity</div>
-        <div className={`step ${step >= 4 ? 'active' : ''}`}>4. Results</div>
+        <div className={`step ${step >= 1 ? "active" : ""}`}>
+          1. Personal Info
+        </div>
+        <div className={`step ${step >= 2 ? "active" : ""}`}>
+          2. Transactions
+        </div>
+        <div className={`step ${step >= 3 ? "active" : ""}`}>
+          3. Verify Identity
+        </div>
+        <div className={`step ${step >= 4 ? "active" : ""}`}>4. Results</div>
       </div>
 
       {step === 1 && (
-        <PersonalDataForm
-          userId={userId}
-          onComplete={() => setStep(2)}
-        />
+        <PersonalDataForm userId={userId} onComplete={() => setStep(2)} />
       )}
 
       {step === 2 && (
-        <TransactionUploader
-          userId={userId}
-          onComplete={() => setStep(3)}
-        />
+        <TransactionUploader userId={userId} onComplete={() => setStep(3)} />
       )}
 
       {step === 3 && (
-        <LivenessCheck
-          userId={userId}
-          onComplete={() => setStep(4)}
-        />
+        <LivenessCheck userId={userId} onComplete={() => setStep(4)} />
       )}
 
-      {step === 4 && (
-        <DecisionResults userId={userId} />
-      )}
+      {step === 4 && <DecisionResults userId={userId} />}
     </div>
   );
 }
@@ -629,6 +641,7 @@ export default function UnderwritingFlow() {
 ### Development
 
 **`.env.development`**
+
 ```bash
 REACT_APP_API_URL=http://localhost:8000
 ```
@@ -636,6 +649,7 @@ REACT_APP_API_URL=http://localhost:8000
 ### Production
 
 **`.env.production`**
+
 ```bash
 REACT_APP_API_URL=https://api.yourdomain.com
 ```
@@ -661,12 +675,14 @@ app.add_middleware(
 ## 7. Running Everything Together
 
 ### Terminal 1: Backend
+
 ```bash
 cd backend
 python -m uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 ```
 
 ### Terminal 2: Frontend (React)
+
 ```bash
 cd frontend
 npm start
@@ -674,6 +690,7 @@ npm start
 ```
 
 ### Terminal 3: Frontend (Next.js)
+
 ```bash
 cd frontend
 npm run dev
@@ -685,13 +702,15 @@ npm run dev
 ## 8. Testing the Integration
 
 ### Quick Test
+
 ```javascript
-import finshieldAPI from './services/finshield-api';
+import finshieldAPI from "./services/finshield-api";
 
 // Test connection
-finshieldAPI.healthCheck()
-  .then(data => console.log('API Connected:', data))
-  .catch(err => console.error('API Error:', err));
+finshieldAPI
+  .healthCheck()
+  .then((data) => console.log("API Connected:", data))
+  .catch((err) => console.error("API Error:", err));
 ```
 
 ---
@@ -701,18 +720,23 @@ finshieldAPI.healthCheck()
 ### Common Errors
 
 **CORS Error**:
+
 ```
 Access to fetch at 'http://localhost:8000/api/...' from origin 'http://localhost:3000' has been blocked by CORS policy
 ```
+
 **Solution**: CORS is already enabled. Make sure backend is running.
 
 **Connection Refused**:
+
 ```
 Failed to fetch
 ```
+
 **Solution**: Backend server is not running. Start it with `uvicorn app.main:app`
 
 **422 Validation Error**:
+
 ```json
 {
   "detail": [
@@ -723,6 +747,7 @@ Failed to fetch
   ]
 }
 ```
+
 **Solution**: Check your form data matches the API requirements.
 
 ---
@@ -739,6 +764,7 @@ web: uvicorn app.main:app --host 0.0.0.0 --port $PORT
 ### Frontend (Vercel/Netlify)
 
 Update API URL to your deployed backend:
+
 ```bash
 REACT_APP_API_URL=https://your-backend.onrender.com
 ```
@@ -756,6 +782,7 @@ REACT_APP_API_URL=https://your-backend.onrender.com
 **You're ready to integrate!** 🚀
 
 Need help? Check:
+
 - [API_DOCUMENTATION.md](./API_DOCUMENTATION.md) - Complete API reference
 - [API_READY.md](./API_READY.md) - Quick start guide
 - [backend/static/test_liveness.html](./backend/static/test_liveness.html) - Working webcam example
