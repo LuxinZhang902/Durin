@@ -37,15 +37,19 @@ export const analyzeData = async (usersFile, transactionsFile) => {
 }
 
 export const explainAccount = async (accountId) => {
-  const response = await axios.post(`${API_BASE_URL}/explain`, {
-    account_id: accountId
-  })
-  return response.data
+  try {
+    const response = await axios.post(`${API_BASE_URL}/api/explain`, {
+      account_id: accountId
+    })
+    return response.data
+  } catch (error) {
+    throw new Error(error.response?.data?.detail || 'Failed to get explanation')
+  }
 }
 
 export const chatAboutCompliance = async (country, question, conversationHistory = null) => {
   try {
-    const response = await axios.post(`${API_BASE_URL}/compliance-chat`, {
+    const response = await axios.post(`${API_BASE_URL}/api/compliance-chat`, {
       country,
       question,
       conversation_history: conversationHistory

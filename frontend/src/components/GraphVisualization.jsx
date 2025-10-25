@@ -9,9 +9,50 @@ function GraphVisualization({ data, onNodeClick, selectedNode, filter = 'all' })
 
   useEffect(() => {
     if (data && data.nodes && data.edges) {
+      // Define compliance groups
+      const complianceGroups = {
+        'FATF_STRICT': ['United States', 'United Kingdom', 'Singapore'],
+        'EU_FRAMEWORK': ['United Kingdom', 'France', 'Germany', 'Spain', 'Italy', 'Netherlands', 'Sweden'],
+        'NORTH_AMERICA': ['United States', 'Canada'],
+        'EU_CORE': ['France', 'Germany', 'Netherlands'],
+        'EU_SOUTH': ['Spain', 'Italy'],
+        'EU_NORTH': ['Sweden', 'United Kingdom']
+      }
+
       // Filter edges based on transaction type
       let filteredEdges = data.edges
-      if (filter !== 'all') {
+      let filteredNodes = data.nodes
+
+      if (filter === 'compliance_groups') {
+        // Show only country nodes and create edges between countries with similar compliance
+        const countryNodes = data.nodes.filter(node => node.type === 'country')
+        filteredNodes = countryNodes
+
+        // Create virtual edges between countries in same compliance groups
+        const complianceEdges = []
+        Object.entries(complianceGroups).forEach(([groupName, countries]) => {
+          const groupCountryNodes = countryNodes.filter(node => 
+            countries.includes(node.country)
+          )
+          
+          // Create edges between all countries in this group
+          for (let i = 0; i < groupCountryNodes.length; i++) {
+            for (let j = i + 1; j < groupCountryNodes.length; j++) {
+              complianceEdges.push({
+                source: groupCountryNodes[i].id,
+                target: groupCountryNodes[j].id,
+                transaction_type: 'compliance_group',
+                edge_type: 'compliance_similarity',
+                compliance_group: groupName,
+                count: 1,
+                total_amount: 0
+              })
+            }
+          }
+        })
+        
+        filteredEdges = complianceEdges
+      } else if (filter !== 'all') {
         filteredEdges = data.edges.filter(edge => {
           if (filter === 'user_to_user') {
             return edge.transaction_type === 'user_to_user' || edge.edge_type === 'located_in'
@@ -22,19 +63,17 @@ function GraphVisualization({ data, onNodeClick, selectedNode, filter = 'all' })
           }
           return true
         })
+
+        // Get nodes that are connected by filtered edges
+        const connectedNodeIds = new Set()
+        filteredEdges.forEach(edge => {
+          connectedNodeIds.add(edge.source)
+          connectedNodeIds.add(edge.target)
+        })
+
+        // Filter nodes to only show connected ones
+        filteredNodes = data.nodes.filter(node => connectedNodeIds.has(node.id))
       }
-
-      // Get nodes that are connected by filtered edges
-      const connectedNodeIds = new Set()
-      filteredEdges.forEach(edge => {
-        connectedNodeIds.add(edge.source)
-        connectedNodeIds.add(edge.target)
-      })
-
-      // Filter nodes to only show connected ones (unless showing all)
-      const filteredNodes = filter === 'all' 
-        ? data.nodes 
-        : data.nodes.filter(node => connectedNodeIds.has(node.id))
 
       // Transform data for react-force-graph
       const nodes = filteredNodes.map(node => ({
@@ -88,6 +127,28 @@ function GraphVisualization({ data, onNodeClick, selectedNode, filter = 'all' })
   }
 
   const getLinkColor = (link) => {
+    // Compliance group edges get special colors
+    if (link.edge_type === 'compliance_similarity') {
+      if (link.compliance_group === 'FATF_STRICT') {
+        return 'rgba(59, 130, 246, 0.6)' // Blue for FATF strict countries
+      } else if (link.compliance_group === 'EU_FRAMEWORK') {
+        return 'rgba(139, 92, 246, 0.6)' // Purple for EU framework
+      } else if (link.compliance_group === 'NORTH_AMERICA') {
+        return 'rgba(34, 197, 94, 0.6)' // Green for North America
+      } else if (link.compliance_group === 'EU_CORE') {
+        return 'rgba(251, 146, 60, 0.6)' // Orange for EU Core (France, Germany, Netherlands)
+      } else if (link.compliance_group === 'EU_SOUTH') {
+        return 'rgba(236, 72, 153, 0.6)' // Pink for EU South (Spain, Italy)
+      } else if (link.compliance_group === 'EU_NORTH') {
+        return 'rgba(14, 165, 233, 0.6)' // Sky blue for EU North (Sweden, UK)
+      }
+    }
+    
+    // Located_in edges are lighter
+    if (link.edge_type === 'located_in') {
+      return 'rgba(100, 100, 120, 0.2)'
+    }
+    
     return 'rgba(100, 100, 120, 0.3)'
   }
 
@@ -120,10 +181,44 @@ function GraphVisualization({ data, onNodeClick, selectedNode, filter = 'all' })
       {/* Header */}
       <div className="px-4 py-3 border-b border-dark-border flex items-center justify-between">
         <div>
-          <h3 className="font-semibold">Fraud Network Graph</h3>
+          <h3 className="font-semibold">
+            {filter === 'compliance_groups' ? 'Compliance Framework Groups' : 'Fraud Network Graph'}
+          </h3>
           <p className="text-xs text-gray-400">
             {graphData.nodes.length} nodes • {graphData.links.length} connections
           </p>
+          {filter === 'compliance_groups' && (
+            <div className="mt-2 space-y-1">
+              <div className="flex items-center flex-wrap gap-3">
+                <div className="flex items-center space-x-1">
+                  <div className="w-3 h-0.5 bg-blue-500"></div>
+                  <span className="text-xs text-gray-500">FATF Strict</span>
+                </div>
+                <div className="flex items-center space-x-1">
+                  <div className="w-3 h-0.5 bg-purple-500"></div>
+                  <span className="text-xs text-gray-500">EU Framework</span>
+                </div>
+                <div className="flex items-center space-x-1">
+                  <div className="w-3 h-0.5 bg-green-500"></div>
+                  <span className="text-xs text-gray-500">North America</span>
+                </div>
+              </div>
+              <div className="flex items-center flex-wrap gap-3">
+                <div className="flex items-center space-x-1">
+                  <div className="w-3 h-0.5 bg-orange-400"></div>
+                  <span className="text-xs text-gray-500">EU Core</span>
+                </div>
+                <div className="flex items-center space-x-1">
+                  <div className="w-3 h-0.5 bg-pink-500"></div>
+                  <span className="text-xs text-gray-500">EU South</span>
+                </div>
+                <div className="flex items-center space-x-1">
+                  <div className="w-3 h-0.5 bg-sky-500"></div>
+                  <span className="text-xs text-gray-500">EU North</span>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
         
         {/* Controls */}
@@ -158,7 +253,12 @@ function GraphVisualization({ data, onNodeClick, selectedNode, filter = 'all' })
           <ForceGraph2D
             ref={graphRef}
             graphData={graphData}
-            nodeLabel={(node) => `${node.id} (Risk: ${node.risk_score}/10)`}
+            nodeLabel={(node) => {
+              if (filter === 'compliance_groups' && node.type === 'country') {
+                return `${node.country} - Click to learn about compliance regulations`
+              }
+              return `${node.name || node.id} (Risk: ${node.risk_score}/10)`
+            }}
             nodeColor={getNodeColor}
             linkColor={getLinkColor}
             linkWidth={1}

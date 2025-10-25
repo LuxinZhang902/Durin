@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Upload, AlertTriangle, Shield, Network, FileText, Loader2, Sparkles, TrendingUp, Lock, Filter, Users, Globe2, ArrowRightLeft } from 'lucide-react'
+import { Upload, AlertTriangle, Shield, Network, FileText, Loader2, Sparkles, TrendingUp, Lock, Filter, Users, Globe2, ArrowRightLeft, Scale } from 'lucide-react'
 import FileUpload from './components/FileUpload'
 import GraphVisualization from './components/GraphVisualization'
 import RiskTable from './components/RiskTable'
@@ -15,7 +15,7 @@ function App() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
   const [activeView, setActiveView] = useState('graph') // 'graph' or 'table'
-  const [graphFilter, setGraphFilter] = useState('all') // 'all', 'user_to_user', 'cross_border', 'country_to_country'
+  const [graphFilter, setGraphFilter] = useState('all') // 'all', 'user_to_user', 'cross_border', 'country_to_country', 'compliance_groups'
 
   const handleAnalyze = async () => {
     if (!usersFile || !transactionsFile) {
@@ -312,6 +312,17 @@ function App() {
                     >
                       <Globe2 className="w-3.5 h-3.5" />
                       <span>Country→Country</span>
+                    </button>
+                    <button
+                      onClick={() => setGraphFilter('compliance_groups')}
+                      className={`px-3 py-1.5 rounded-md transition-colors flex items-center space-x-1.5 text-sm ${
+                        graphFilter === 'compliance_groups'
+                          ? 'bg-accent-purple text-white'
+                          : 'text-gray-400 hover:text-white'
+                      }`}
+                    >
+                      <Scale className="w-3.5 h-3.5" />
+                      <span>Compliance Groups</span>
                     </button>
                   </div>
                 </div>

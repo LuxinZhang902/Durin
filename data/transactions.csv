@@ -34,3 +34,23 @@ Singapore,United Kingdom,32000,2025-10-23T23:30:00Z,D13,192.168.1.116,Singapore,
 United Kingdom,Canada,28000,2025-10-24T00:00:00Z,D14,192.168.1.117,United Kingdom,Canada,country_to_country
 Canada,United States,51000,2025-10-24T00:30:00Z,D15,192.168.1.118,Canada,United States,country_to_country
 Singapore,United States,67000,2025-10-24T01:00:00Z,D16,192.168.1.119,Singapore,United States,country_to_country
+Pierre,Hans,5200,2025-10-24T02:00:00Z,D12,192.168.1.115,France,Germany,cross_border
+Hans,Maria,3800,2025-10-24T02:30:00Z,D13,192.168.1.116,Germany,Spain,cross_border
+Maria,Giovanni,4500,2025-10-24T03:00:00Z,D14,192.168.1.117,Spain,Italy,cross_border
+Giovanni,Lars,6200,2025-10-24T03:30:00Z,D15,192.168.1.118,Italy,Netherlands,cross_border
+Lars,Anna,3900,2025-10-24T04:00:00Z,D16,192.168.1.119,Netherlands,Sweden,cross_border
+Anna,Sophie,5500,2025-10-24T04:30:00Z,D17,192.168.1.120,Sweden,United Kingdom,cross_border
+Klaus,Francois,4100,2025-10-24T05:00:00Z,D18,192.168.1.121,Germany,France,cross_border
+Francois,Isabella,3700,2025-10-24T05:30:00Z,D19,192.168.1.122,France,Italy,cross_border
+Isabella,Oliver,5800,2025-10-24T06:00:00Z,D20,192.168.1.123,Italy,United Kingdom,cross_border
+Oliver,Emma,4200,2025-10-24T06:30:00Z,D21,192.168.1.124,United Kingdom,United Kingdom,user_to_user
+Pierre,Francois,2100,2025-10-24T07:00:00Z,D12,192.168.1.115,France,France,user_to_user
+Hans,Klaus,1800,2025-10-24T07:30:00Z,D13,192.168.1.116,Germany,Germany,user_to_user
+Giovanni,Isabella,2500,2025-10-24T08:00:00Z,D15,192.168.1.118,Italy,Italy,user_to_user
+France,Germany,85000,2025-10-24T09:00:00Z,D22,192.168.1.125,France,Germany,country_to_country
+Germany,Netherlands,72000,2025-10-24T09:30:00Z,D23,192.168.1.126,Germany,Netherlands,country_to_country
+Netherlands,France,68000,2025-10-24T10:00:00Z,D24,192.168.1.127,Netherlands,France,country_to_country
+Spain,Italy,55000,2025-10-24T10:30:00Z,D25,192.168.1.128,Spain,Italy,country_to_country
+Italy,Spain,61000,2025-10-24T11:00:00Z,D26,192.168.1.129,Italy,Spain,country_to_country
+United Kingdom,France,95000,2025-10-24T11:30:00Z,D27,192.168.1.130,United Kingdom,France,country_to_country
+Sweden,Germany,48000,2025-10-24T12:00:00Z,D28,192.168.1.131,Sweden,Germany,country_to_country
