@@ -1,8 +1,8 @@
 function Logo({ size = 'md', showText = true, className = '' }) {
   const sizes = {
-    sm: { height: 'h-8', text: 'text-lg' },
-    md: { height: 'h-10', text: 'text-2xl' },
-    lg: { height: 'h-16', text: 'text-3xl' }
+    sm: { height: 'h-10', text: 'text-xl' },
+    md: { height: 'h-14', text: 'text-3xl' },
+    lg: { height: 'h-20', text: 'text-4xl' }
   }
 
   const currentSize = sizes[size] || sizes.md
@@ -11,7 +11,7 @@ function Logo({ size = 'md', showText = true, className = '' }) {
     <div className={`flex items-center space-x-3 ${className}`}>
       {/* Durin Logo Image */}
       <img 
-        src="/assets/DurinLogo.png" 
+        src="/assets/DurinLogo_nobg.png" 
         alt="Durin Logo" 
         className={`${currentSize.height} w-auto object-contain`}
       />
